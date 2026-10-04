@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="el" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SteelCut — Steel Bar Cutting Optimizer</title>
+<meta name="description" content="SteelCut is a professional steel bar cutting optimizer for metal fabricators and construction professionals. Minimize waste, cut costs.">
+<meta name="keywords" content="steel cutting optimizer, rebar cutting optimization, bar cutting software, metal fabrication, cutting stock problem">
+<meta property="og:title" content="SteelCut — Steel Bar Cutting Optimizer">
+<meta property="og:description" content="Professional offline steel bar cutting optimizer. Minimize waste, cut costs.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23111827'/%3E%3Cpath d='M14 24h36v6H14zm0 10h28v6H14z' fill='%23f59e0b'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"SteelCut","applicationCategory":"BusinessApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0"},"description":"Professional steel bar cutting optimizer for fabricators and construction professionals."}
+</script>
+<style>
+:root{
+  --bg:#0b1220; --bg2:#0f172a; --panel:#111c30; --panel2:#1a2742; --panel3:#22314f;
+  --text:#f1f5f9; --muted:#94a3b8; --faint:#64748b;
+  --accent:#f59e0b; --accent2:#fbbf24; --accent-dim:rgba(245,158,11,.14);
+  --green:#22c55e; --red:#ef4444; --blue:#3b82f6; --purple:#a78bfa;
+  --radius:14px; --shadow:0 12px 32px rgba(0,0,0,.38);
+  --border:1px solid rgba(148,163,184,.14);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:linear-gradient(180deg,var(--bg),var(--bg2) 60%);color:var(--text);min-height:100vh}
+[dir="rtl"] body{font-family:Inter,system-ui,Tahoma,sans-serif}
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:50;background:rgba(11,18,32,.94);backdrop-filter:blur(14px);border-bottom:var(--border)}
+.topbar{display:flex;align-items:center;gap:14px;padding:12px 22px;max-width:1480px;margin:0 auto;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;margin-inline-end:auto}
+.logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#1c1206;font-weight:900;font-size:22px;box-shadow:0 4px 14px rgba(245,158,11,.35)}
+.brand h1{margin:0;font-size:21px;letter-spacing:.3px}
+.brand small{display:block;color:var(--muted);font-size:12px;font-weight:400}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+select,input[type="number"],input[type="text"],input[type="file"],textarea{background:var(--panel2);color:var(--text);border:var(--border);border-radius:10px;padding:9px 12px;font-size:14px;font-family:inherit}
+select:focus,input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+button{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1c1206;font-weight:700;border:none;border-radius:10px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:inherit;transition:transform .08s,box-shadow .15s;box-shadow:0 4px 14px rgba(245,158,11,.25)}
+button:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(245,158,11,.35)}
+button:active{transform:translateY(0)}
+button.secondary{background:var(--panel2);color:var(--text);box-shadow:none;border:var(--border)}
+button.secondary:hover{background:var(--panel3)}
+button.danger{background:rgba(239,68,68,.14);color:#fca5a5;border:1px solid rgba(239,68,68,.35);box-shadow:none}
+button.small{padding:6px 12px;font-size:13px}
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+/* ---------- tabs ---------- */
+.tabs{display:flex;gap:8px;padding:0 22px 14px;max-width:1480px;margin:0 auto;overflow-x:auto;scrollbar-width:thin}
+.tab{padding:9px 18px;border-radius:999px;background:transparent;color:var(--muted);white-space:nowrap;cursor:pointer;border:1px solid transparent;font-size:14px;font-weight:600}
+.tab:hover{color:var(--text);background:rgba(148,163,184,.08)}
+.tab.active{background:var(--accent-dim);color:var(--accent2);border-color:rgba(245,158,11,.4)}
+/* ---------- layout ---------- */
+main{padding:24px 22px 60px;max-width:1480px;margin:0 auto}
+.view{display:none;animation:fadeIn .25s ease}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:rgba(17,28,48,.85);border:var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:20px}
+.card h2{margin:0 0 6px;font-size:19px}
+.card h3{margin:18px 0 10px;font-size:15px;color:var(--accent2)}
+.card p.desc{color:var(--muted);font-size:14px;margin:0 0 16px;line-height:1.55}
+label.f{display:block;font-size:12.5px;color:var(--muted);margin:12px 0 5px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.mt{margin-top:16px}.mb{margin-bottom:16px}
+/* ---------- tables ---------- */
+table.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th,.tbl td{padding:10px 8px;border-bottom:1px solid rgba(148,163,184,.12);text-align:start;vertical-align:middle}
+.tbl th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.6px;font-weight:700}
+.tbl input[type="number"],.tbl input[type="text"]{width:100%;padding:7px 9px;font-size:13.5px}
+.tbl td.num{text-align:end;font-variant-numeric:tabular-nums}
+/* ---------- metrics ---------- */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:18px 0}
+.metric{background:var(--panel2);border:var(--border);border-radius:var(--radius);padding:15px 16px}
+.metric .k{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+.metric .v{font-size:26px;font-weight:800;margin-top:5px;font-variant-numeric:tabular-nums}
+.metric .v.good{color:var(--green)} .metric .v.warn{color:var(--accent2)} .metric .v.bad{color:var(--red)}
+/* ---------- cutting diagrams ---------- */
+.barvis{background:var(--panel2);border:var(--border);border-radius:12px;padding:14px 16px;margin:12px 0}
+.barvis .bh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:13.5px;font-weight:700}
+.barvis .bh .tag{font-weight:400;color:var(--muted);font-size:12.5px}
+.barrow{display:flex;height:38px;border-radius:9px;overflow:hidden;background:rgba(0,0,0,.35);border:1px solid rgba(148,163,184,.15)}
+.seg{display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;color:#101828;white-space:nowrap;overflow:hidden;min-width:0;border-inline-end:2px solid rgba(0,0,0,.45)}
+.seg.waste{background:repeating-linear-gradient(45deg,rgba(239,68,68,.35),rgba(239,68,68,.35) 6px,rgba(239,68,68,.18) 6px,rgba(239,68,68,.18) 12px);color:#fca5a5}
+.seg.offcut{background:rgba(34,197,94,.5);color:#d1fae5}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 4px;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-inline-end:6px;vertical-align:-1px}
+/* ---------- misc ---------- */
+.toast{position:fixed;bottom:26px;inset-inline-end:26px;background:#0f1b31;border:1px solid rgba(245,158,11,.4);color:var(--text);padding:13px 18px;border-radius:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(12px);transition:.3s;z-index:200;max-width:min(420px,90vw);font-size:14px}
+.toast.show{opacity:1;transform:none}
+.toast.err{border-color:rgba(239,68,68,.5)}
+.modal-back{position:fixed;inset:0;background:rgba(3,7,17,.7);backdrop-filter:blur(3px);display:none;place-items:center;z-index:150;padding:18px}
+.modal-back.open{display:grid}
+.modal{background:var(--panel);border:var(--border);border-radius:18px;box-shadow:var(--shadow);max-width:560px;width:100%;padding:26px;max-height:88vh;overflow:auto}
+.modal h2{margin-top:0}
+.badge{display:inline-block;padding:3px 11px;border-radius:999px;font-size:12px;font-weight:700}
+.badge.ok{background:rgba(34,197,94,.15);color:#86efac}
+.badge.warn{background:var(--accent-dim);color:var(--accent2)}
+.badge.info{background:rgba(59,130,246,.15);color:#93c5fd}
+.empty{color:var(--faint);text-align:center;padding:34px 10px;font-size:14px}
+.tour-spot{position:relative;z-index:120;box-shadow:0 0 0 3px var(--accent),0 0 0 9999px rgba(3,7,17,.72)!important;border-radius:12px}
+.tour-card{position:fixed;z-index:130;background:var(--panel);border:1px solid rgba(245,158,11,.5);border-radius:14px;padding:18px 20px;max-width:340px;box-shadow:var(--shadow);font-size:14px;line-height:1.55}
+.tour-card h3{margin:0 0 8px;color:var(--accent2)}
+.tour-card .row{justify-content:flex-end;margin-top:14px}
+.kbd{background:var(--panel3);border:1px solid rgba(148,163,184,.3);border-bottom-width:3px;border-radius:6px;padding:1px 7px;font-size:12px;font-family:monospace}
+.hero{text-align:center;padding:34px 10px 8px}
+.hero h2{font-size:30px;margin:0 0 10px}
+.hero p{color:var(--muted);max-width:640px;margin:0 auto 20px;line-height:1.6}
+.check{color:var(--green);font-weight:700}
+/* ---------- print ---------- */
+@media print{
+  header,.tabs,.no-print,.tour-card,.toast,.modal-back{display:none!important}
+  body{background:#fff;color:#000}
+  .card{background:#fff;border:1px solid #ccc;box-shadow:none;break-inside:avoid}
+  .metric,.barvis{background:#f8f8f8;border:1px solid #ddd}
+  .metric .v,.card h2,.card h3{color:#000}
+  .seg{color:#000;border:1px solid #999}
+  main{max-width:none;padding:0}
+}
+@media (max-width:960px){
+  .grid,.grid3{grid-template-columns:1fr}
+  .topbar{padding:12px 14px} main{padding:18px 14px 50px}
+  .tabs{padding:0 14px 12px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">S</div>
+      <div><h1>SteelCut<small data-i18n="tagline">Professional steel bar cutting optimizer</small></h1></div>
+    </div>
+    <div class="controls">
+      <select id="langSel" aria-label="Language"></select>
+      <button class="secondary small" id="tourBtn" data-i18n="tour">Guided tour</button>
+      <button class="secondary small" id="demoBtn" data-i18n="loadDemo">Load demo</button>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <div class="tab active" data-view="optimizer" data-i18n="navOptimizer">Cut Optimizer</div>
+    <div class="tab" data-view="warehouse" data-i18n="navWarehouse">Warehouse</div>
+    <div class="tab" data-view="jobs" data-i18n="navJobs">Jobs &amp; History</div>
+    <div class="tab" data-view="compare" data-i18n="navCompare">Compare</div>
+    <div class="tab" data-view="suppliers" data-i18n="navSuppliers">Suppliers</div>
+    <div class="tab" data-view="reports" data-i18n="navReports">Reports</div>
+    <div class="tab" data-view="pricing" data-i18n="navPricing">Pricing</div>
+  </nav>
+</header>
+
+<main>
+<!-- ================= OPTIMIZER ================= -->
+<section class="view active" id="v-optimizer">
+  <div class="hero no-print" id="heroBlock">
+    <h2 data-i18n="heroTitle">Cut less. Waste less. Save more.</h2>
+    <p data-i18n="heroSub">Enter your stock bars and required cuts — SteelCut computes the optimal cutting plan with minimal waste, in seconds.</p>
+    <div class="row" style="justify-content:center">
+      <button id="heroStart" data-i18n="heroStart">Start optimizing</button>
+      <button class="secondary" id="heroDemo" data-i18n="heroDemo">Try with demo data</button>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="card" id="cardStock">
+      <h2 data-i18n="stockBars">Stock bars</h2>
+      <p class="desc" data-i18n="stockDesc">Bars you have available (or plan to buy).</p>
+      <table class="tbl"><thead><tr>
+        <th data-i18n="length">Length</th><th data-i18n="qty">Qty</th><th data-i18n="unit">Unit</th><th></th>
+      </tr></thead><tbody id="stockBody"></tbody></table>
+      <div class="row mt"><button class="secondary small" id="addStock" data-i18n="addStock">+ Add stock bar</button>
+      <button class="secondary small" id="fromWarehouse" data-i18n="fromWarehouse">Import from warehouse</button></div>
+    </div>
+    <div class="card" id="cardCuts">
+      <h2 data-i18n="reqCuts">Required cuts</h2>
+      <p class="desc" data-i18n="cutsDesc">Pieces you need to cut.</p>
+      <table class="tbl"><thead><tr>
+        <th data-i18n="length">Length</th><th data-i18n="qty">Qty</th><th data-i18n="unit">Unit</th><th data-i18n="label">Label</th><th></th>
+      </tr></thead><tbody id="cutsBody"></tbody></table>
+      <div class="row mt"><button class="secondary small" id="addCut" data-i18n="addCut">+ Add cut</button>
+      <button class="secondary small" id="importExcelBtn" data-i18n="importExcel">Import Excel / CSV</button>
+      <input type="file" id="excelFile" accept=".csv,.xlsx,.xls,.txt" style="display:none"></div>
+    </div>
+  </div>
+  <div class="card" id="cardSettings">
+    <h2 data-i18n="settings">Settings</h2>
+    <div class="grid3">
+      <div><label class="f" data-i18n="kerf">Saw kerf (blade width)</label><div class="row"><input type="number" id="kerf" value="3" min="0" step="0.5" style="width:110px"><select id="kerfUnit"><option value="mm">mm</option><option value="cm">cm</option><option value="m">m</option><option value="in">in</option></select></div></div>
+      <div><label class="f" data-i18n="minOffcut">Min. reusable offcut</label><div class="row"><input type="number" id="minOffcut" value="300" min="0" step="10" style="width:110px"><select id="offcutUnit"><option value="mm">mm</option><option value="cm">cm</option><option value="m">m</option><option value="in">in</option></select></div></div>
+      <div><label class="f" data-i18n="rebarType">Rebar type (weight &amp; price)</label><select id="rebarSel" style="width:100%"></select></div>
+      <div><label class="f" data-i18n="pricePerM">Price per meter</label><input type="number" id="priceM" value="1.50" min="0" step="0.01" style="width:130px"></div>
+      <div><label class="f" data-i18n="currency">Currency</label><select id="currency"><option>€</option><option>$</option><option>£</option><option>CHF</option><option>د.إ</option></select></div>
+      <div><label class="f" data-i18n="jobNameL">Job name</label><input type="text" id="jobName" style="width:100%"></div>
+    </div>
+    <div class="row mt no-print">
+      <button id="calcBtn" data-i18n="calculate">Calculate cutting plan</button>
+      <button class="secondary" id="saveJobBtn" data-i18n="saveJob">Save job</button>
+      <button class="secondary" id="printBtn" data-i18n="print">Print</button>
+    </div>
+  </div>
+  <div class="card" id="cardResults" style="display:none">
+    <h2 data-i18n="results">Optimization results</h2>
+    <div class="metrics" id="metrics"></div>
+    <div class="legend">
+      <span><i style="background:#f59e0b"></i><span data-i18n="lgCut">Cut piece</span></span>
+      <span><i style="background:#22c55e"></i><span data-i18n="lgOffcut">Reusable offcut</span></span>
+      <span><i style="background:repeating-linear-gradient(45deg,rgba(239,68,68,.5),rgba(239,68,68,.5) 4px,transparent 4px,transparent 8px)"></i><span data-i18n="lgWaste">Waste</span></span>
+    </div>
+    <div id="diagrams"></div>
+    <h3 data-i18n="cutListTitle">Cut list per bar</h3>
+    <div id="cutTables"></div>
+  </div>
+</section>
+
+<!-- ================= WAREHOUSE ================= -->
+<section class="view" id="v-warehouse">
+  <div class="card">
+    <h2 data-i18n="whTitle">Offcut warehouse</h2>
+    <p class="desc" data-i18n="whDesc">Reusable leftovers are stored here and can be imported as stock in your next job.</p>
+    <table class="tbl"><thead><tr><th data-i18n="length">Length</th><th data-i18n="qty">Qty</th><th data-i18n="label">Label</th><th data-i18n="date">Date</th><th></th></tr></thead>
+    <tbody id="whBody"></tbody></table>
+    <div class="row mt"><button class="secondary small" id="whAdd" data-i18n="addOffcut">+ Add offcut manually</button></div>
+  </div>
+</section>
+
+<!-- ================= JOBS ================= -->
+<section class="view" id="v-jobs">
+  <div class="grid">
+    <div class="card"><h2 data-i18n="savedJobs">Saved jobs</h2><div id="jobsList"></div></div>
+    <div class="card"><h2 data-i18n="history">History</h2><p class="desc" data-i18n="historyDesc">Every calculation is logged automatically.</p><div id="histList"></div>
+    <div class="row mt"><button class="danger small" id="clearHist" data-i18n="clearHistory">Clear history</button></div></div>
+  </div>
+</section>
+
+<!-- ================= COMPARE ================= -->
+<section class="view" id="v-compare">
+  <div class="card">
+    <h2 data-i18n="cmpTitle">Compare scenarios</h2>
+    <p class="desc" data-i18n="cmpDesc">Pick two saved results and compare them side by side.</p>
+    <div class="row mb"><select id="cmpA"></select><select id="cmpB"></select><button class="secondary small" id="cmpGo" data-i18n="compareBtn">Compare</button></div>
+    <div id="cmpOut"></div>
+  </div>
+</section>
+
+<!-- ================= SUPPLIERS ================= -->
+<section class="view" id="v-suppliers">
+  <div class="card">
+    <h2 data-i18n="supTitle">Supplier comparison</h2>
+    <p class="desc" data-i18n="supDesc">Enter supplier prices to see who offers the best deal for your current job.</p>
+    <table class="tbl"><thead><tr><th data-i18n="supName">Supplier</th><th data-i18n="pricePerKg">Price / kg</th><th></th></tr></thead>
+    <tbody id="supBody"></tbody></table>
+    <div class="row mt"><button class="secondary small" id="supAdd" data-i18n="addSupplier">+ Add supplier</button>
+    <button class="small" id="supCalc" data-i18n="supCalcBtn">Evaluate for current results</button></div>
+    <div id="supOut" class="mt"></div>
+  </div>
+</section>
+
+<!-- ================= REPORTS ================= -->
+<section class="view" id="v-reports">
+  <div class="card">
+    <h2 data-i18n="repTitle">Reports &amp; data</h2>
+    <p class="desc" data-i18n="repDesc">Export your cutting plan or move a whole session to another device.</p>
+    <div class="row">
+      <button class="secondary small" id="csvBtn" data-i18n="dlCsv">Download CSV</button>
+      <button class="secondary small" id="sessDl" data-i18n="dlSession">Download session file</button>
+      <button class="secondary small" id="sessUpBtn" data-i18n="upSession">Upload session file</button>
+      <input type="file" id="sessUp" accept=".json" style="display:none">
+      <button class="secondary small" id="repPrint" data-i18n="printReport">Print workshop report</button>
+    </div>
+    <div id="qrBox" class="mt" style="display:none">
+      <h3 data-i18n="qrTitle">Job QR code</h3>
+      <p class="desc" data-i18n="qrDesc">Scan in the workshop to identify this cutting plan. (Needs internet connection.)</p>
+      <img id="qrImg" alt="QR code" style="background:#fff;padding:10px;border-radius:12px;max-width:180px">
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section class="view" id="v-pricing">
+  <div class="card" style="text-align:center">
+    <h2 data-i18n="prTitle">Simple pricing</h2>
+    <p class="desc" style="max-width:560px;margin:0 auto 22px" data-i18n="prSub">Start free. Upgrade when your workshop grows.</p>
+    <div class="grid" style="max-width:760px;margin:0 auto;text-align:start">
+      <div class="card" style="margin:0"><h3>Free</h3><div style="font-size:32px;font-weight:800;margin:8px 0">0 <span style="font-size:15px;color:var(--muted)" data-i18n="prForever">forever</span></div>
+        <p><span class="check">✓</span> <span data-i18n="prF1">Unlimited cutting optimizations</span></p>
+        <p><span class="check">✓</span> <span data-i18n="prF2">Cutting diagrams &amp; CSV export</span></p>
+        <p><span class="check">✓</span> <span data-i18n="prF3">Warehouse &amp; history</span></p>
+        <div class="row mt"><button class="secondary" data-i18n="prChooseFree">You are on Free</button></div></div>
+      <div class="card" style="margin:0;border-color:rgba(245,158,11,.5)"><h3><span class="badge warn">PRO</span></h3><div style="font-size:32px;font-weight:800;margin:8px 0">—<span style="font-size:15px;color:var(--muted)" data-i18n="prSoon">coming soon</span></div>
+        <p><span class="check">✓</span> <span data-i18n="prP1">Everything in Free</span></p>
+        <p><span class="check">✓</span> <span data-i18n="prP2">Cloud sync across devices</span></p>
+        <p><span class="check">✓</span> <span data-i18n="prP3">Team workspaces &amp; priority support</span></p>
+        <div class="row mt"><button data-i18n="prNotify">Notify me</button></div></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="toast" id="toast"></div>
+<div class="modal-back" id="modalBack"><div class="modal" id="modalBox"></div></div>
+<div id="tourLayer" style="display:none"></div>
+
+<script>
+"use strict";
+/* ============================================================
+   SteelCut — single-file steel bar cutting optimizer
+   ============================================================ */
+/* ---------------- i18n ---------------- */
+const LANGS=[
+ {c:'en',n:'English'},{c:'el',n:'Ελληνικά'},{c:'de',n:'Deutsch'},{c:'fr',n:'Français'},
+ {c:'es',n:'Español'},{c:'it',n:'Italiano'},{c:'pt',n:'Português'},{c:'nl',n:'Nederlands'},
+ {c:'pl',n:'Polski'},{c:'tr',n:'Türkçe'},{c:'ar',n:'العربية',d:'rtl'},{c:'ro',n:'Română'}
+];
+const I18N={
+en:{tagline:"Professional steel bar cutting optimizer",tour:"Guided tour",loadDemo:"Load demo",
+navOptimizer:"Cut Optimizer",navWarehouse:"Warehouse",navJobs:"Jobs & History",navCompare:"Compare",navSuppliers:"Suppliers",navReports:"Reports",navPricing:"Pricing",
+heroTitle:"Cut less. Waste less. Save more.",heroSub:"Enter your stock bars and required cuts — SteelCut computes the optimal cutting plan with minimal waste, in seconds.",heroStart:"Start optimizing",heroDemo:"Try with demo data",
+stockBars:"Stock bars",stockDesc:"Bars you have available (or plan to buy).",length:"Length",qty:"Qty",unit:"Unit",label:"Label",addStock:"+ Add stock bar",fromWarehouse:"Import from warehouse",
+reqCuts:"Required cuts",cutsDesc:"Pieces you need to cut.",addCut:"+ Add cut",importExcel:"Import Excel / CSV",
+settings:"Settings",kerf:"Saw kerf (blade width)",minOffcut:"Min. reusable offcut",rebarType:"Rebar type (weight & price)",pricePerM:"Price per meter",currency:"Currency",jobNameL:"Job name",calculate:"Calculate cutting plan",saveJob:"Save job",print:"Print",
+results:"Optimization results",lgCut:"Cut piece",lgOffcut:"Reusable offcut",lgWaste:"Waste",cutListTitle:"Cut list per bar",
+barsNeeded:"Bars needed",efficiency:"Efficiency",waste:"Waste",totalMaterial:"Total material",totalCost:"Total cost",totalWeight:"Total weight",offcutsKept:"Offcuts kept",
+whTitle:"Offcut warehouse",whDesc:"Reusable leftovers are stored here and can be imported as stock in your next job.",addOffcut:"+ Add offcut manually",date:"Date",noData:"Nothing here yet.",
+savedJobs:"Saved jobs",history:"History",historyDesc:"Every calculation is logged automatically.",clearHistory:"Clear history",noJobs:"No saved jobs yet.",load:"Load",del:"Delete",savedAt:"Saved",
+cmpTitle:"Compare scenarios",cmpDesc:"Pick two saved results and compare them side by side.",compareBtn:"Compare",selectResult:"— select result —",
+supTitle:"Supplier comparison",supDesc:"Enter supplier prices to see who offers the best deal for your current job.",supName:"Supplier",pricePerKg:"Price / kg",addSupplier:"+ Add supplier",supCalcBtn:"Evaluate for current results",cheapest:"Cheapest",totalForJob:"Total for this job",noResults:"Calculate a cutting plan first.",
+repTitle:"Reports & data",repDesc:"Export your cutting plan or move a whole session to another device.",dlCsv:"Download CSV",dlSession:"Download session file",upSession:"Upload session file",printReport:"Print workshop report",qrTitle:"Job QR code",qrDesc:"Scan in the workshop to identify this cutting plan. (Needs internet connection.)",
+prTitle:"Simple pricing",prSub:"Start free. Upgrade when your workshop grows.",prForever:"forever",prF1:"Unlimited cutting optimizations",prF2:"Cutting diagrams & CSV export",prF3:"Warehouse & history",prChooseFree:"You are on Free",prSoon:"coming soon",prP1:"Everything in Free",prP2:"Cloud sync across devices",prP3:"Team workspaces & priority support",prNotify:"Notify me",
+tourSkip:"Skip",tourNext:"Next →",tourBack:"← Back",tourDone:"Finish",
+msgNeedCuts:"Add at least one required cut first.",msgNeedStock:"Add at least one stock bar first.",msgCalcDone:"Cutting plan calculated.",msgSaved:"Job saved.",msgLoaded:"Job loaded.",msgDeleted:"Deleted.",msgImported:"Imported.",msgExported:"File downloaded.",msgLang:"Language changed.",msgDemoLoaded:"Demo data loaded.",msgJobNameReq:"Give the job a name first.",msgInvalidNum:"Check the numbers you entered.",msgWhImported:"Warehouse offcuts imported as stock.",msgSessionLoaded:"Session loaded.",msgNoResults:"No results to use yet.",msgCleared:"History cleared.",msgNotifyThanks:"Thanks! We will notify you.",
+confirmDelete:"Delete this item?",yes:"Yes",no:"No",closeBtn:"Close",
+bar:"Bar",offcut:"Offcut",pieces:"pieces",custom:"Custom",rebar:"Rebar",none:"None",
+tour1t:"Welcome to SteelCut",tour1b:"This short tour shows the workflow: stock in, cuts in, optimal plan out. Takes 30 seconds.",
+tour2t:"1 · Stock bars",tour2b:"List the bars you own or plan to buy — length and quantity. You can also import reusable offcuts from the warehouse.",
+tour3t:"2 · Required cuts",tour3b:"List every piece you must cut. Tip: import a whole bar bending schedule from Excel/CSV in one click.",
+tour4t:"3 · Calculate",tour4b:"Set saw kerf and rebar type, then hit Calculate. SteelCut packs every bar for minimum waste and draws the cutting diagrams.",
+tour5t:"4 · Use the results",tour5b:"Print the workshop report, download the CSV, save the job, or send offcuts to the warehouse. That's it!",supNeedRebar:"Select a rebar type in Settings first."},
+el:{tagline:"Επαγγελματικός βελτιστοποιητής κοπής χαλύβδινων ράβδων",tour:"Ξενάγηση",loadDemo:"Φόρτωση demo",
+navOptimizer:"Βελτιστοποίηση κοπής",navWarehouse:"Αποθήκη",navJobs:"Δουλειές & Ιστορικό",navCompare:"Σύγκριση",navSuppliers:"Προμηθευτές",navReports:"Αναφορές",navPricing:"Τιμές",
+heroTitle:"Κόψε λιγότερο. Πέταξε λιγότερο. Κέρδισε περισσότερο.",heroSub:"Βάλε τις ράβδους που έχεις και τις κοπές που χρειάζεσαι — το SteelCut υπολογίζει το βέλτιστο πλάνο κοπής με ελάχιστη φύρα, σε δευτερόλεπτα.",heroStart:"Ξεκίνα βελτιστοποίηση",heroDemo:"Δοκίμασε με demo δεδομένα",
+stockBars:"Διαθέσιμες ράβδοι",stockDesc:"Ράβδοι που έχεις (ή σκοπεύεις να αγοράσεις).",length:"Μήκος",qty:"Τεμ.",unit:"Μονάδα",label:"Ετικέτα",addStock:"+ Προσθήκη ράβδου",fromWarehouse:"Εισαγωγή από αποθήκη",
+reqCuts:"Απαιτούμενες κοπές",cutsDesc:"Τα τεμάχια που πρέπει να κόψεις.",addCut:"+ Προσθήκη κοπής",importExcel:"Εισαγωγή Excel / CSV",
+settings:"Ρυθμίσεις",kerf:"Φάρδος λάμας (kerf)",minOffcut:"Ελάχ. αξιοποιήσιμο ρέταλο",rebarType:"Τύπος οπλισμού (βάρος & τιμή)",pricePerM:"Τιμή ανά μέτρο",currency:"Νόμισμα",jobNameL:"Όνομα δουλειάς",calculate:"Υπολογισμός πλάνου κοπής",saveJob:"Αποθήκευση δουλειάς",print:"Εκτύπωση",
+results:"Αποτελέσματα βελτιστοποίησης",lgCut:"Τεμάχιο",lgOffcut:"Αξιοποιήσιμο ρέταλο",lgWaste:"Φύρα",cutListTitle:"Λίστα κοπών ανά ράβδο",
+barsNeeded:"Ράβδοι που χρειάζονται",efficiency:"Απόδοση",waste:"Φύρα",totalMaterial:"Συνολικό υλικό",totalCost:"Συνολικό κόστος",totalWeight:"Συνολικό βάρος",offcutsKept:"Ρέταλα που κρατήθηκαν",
+whTitle:"Αποθήκη ρετάλων",whDesc:"Τα αξιοποιήσιμα ρέταλα αποθηκεύονται εδώ και μπορείς να τα φέρεις ως διαθέσιμες ράβδους στην επόμενη δουλειά.",addOffcut:"+ Χειροκίνητη προσθήκη",date:"Ημερομηνία",noData:"Δεν υπάρχει τίποτα ακόμα.",
+savedJobs:"Αποθηκευμένες δουλειές",history:"Ιστορικό",historyDesc:"Κάθε υπολογισμός καταγράφεται αυτόματα.",clearHistory:"Καθαρισμός ιστορικού",noJobs:"Καμία αποθηκευμένη δουλειά.",load:"Φόρτωση",del:"Διαγραφή",savedAt:"Αποθηκεύτηκε",
+cmpTitle:"Σύγκριση σεναρίων",cmpDesc:"Διάλεξε δύο αποθηκευμένα αποτελέσματα και σύγκρινέ τα δίπλα-δίπλα.",compareBtn:"Σύγκριση",selectResult:"— διάλεξε αποτέλεσμα —",
+supTitle:"Σύγκριση προμηθευτών",supDesc:"Βάλε τις τιμές των προμηθευτών για να δεις ποιος συμφέρει για τη δουλειά σου.",supName:"Προμηθευτής",pricePerKg:"Τιμή / κιλό",addSupplier:"+ Προσθήκη προμηθευτή",supCalcBtn:"Αξιολόγηση για το τρέχον αποτέλεσμα",cheapest:"Φθηνότερος",totalForJob:"Σύνολο για αυτή τη δουλειά",noResults:"Υπολόγισε πρώτα ένα πλάνο κοπής.",
+repTitle:"Αναφορές & δεδομένα",repDesc:"Εξαγωγή του πλάνου κοπής ή μεταφορά ολόκληρης της συνεδρίας σε άλλη συσκευή.",dlCsv:"Λήψη CSV",dlSession:"Λήψη αρχείου συνεδρίας",upSession:"Φόρτωση αρχείου συνεδρίας",printReport:"Εκτύπωση αναφοράς συνεργείου",qrTitle:"QR code δουλειάς",qrDesc:"Σκάναρέ το στο συνεργείο για αναγνώριση του πλάνου κοπής. (Χρειάζεται σύνδεση στο internet.)",
+prTitle:"Απλές τιμές",prSub:"Ξεκίνα δωρεάν. Αναβάθμισε όταν μεγαλώσει το συνεργείο σου.",prForever:"για πάντα",prF1:"Απεριόριστες βελτιστοποιήσεις",prF2:"Διαγράμματα κοπής & εξαγωγή CSV",prF3:"Αποθήκη & ιστορικό",prChooseFree:"Είσαι στο Free",prSoon:"σύντομα",prP1:"Όλα του Free",prP2:"Συγχρονισμός σε όλες τις συσκευές",prP3:"Ομαδικοί χώροι & προτεραιότητα στην υποστήριξη",prNotify:"Ειδοποίησέ με",
+tourSkip:"Παράλειψη",tourNext:"Επόμενο →",tourBack:"← Πίσω",tourDone:"Τέλος",
+msgNeedCuts:"Πρόσθεσε πρώτα τουλάχιστον μία απαιτούμενη κοπή.",msgNeedStock:"Πρόσθεσε πρώτα τουλάχιστον μία διαθέσιμη ράβδο.",msgCalcDone:"Το πλάνο κοπής υπολογίστηκε.",msgSaved:"Η δουλειά αποθηκεύτηκε.",msgLoaded:"Η δουλειά φορτώθηκε.",msgDeleted:"Διαγράφηκε.",msgImported:"Έγινε εισαγωγή.",msgExported:"Το αρχείο κατέβηκε.",msgLang:"Η γλώσσα άλλαξε.",msgDemoLoaded:"Τα demo δεδομένα φορτώθηκαν.",msgJobNameReq:"Δώσε πρώτα όνομα στη δουλειά.",msgInvalidNum:"Έλεγξε τους αριθμούς που έβαλες.",msgWhImported:"Τα ρέταλα της αποθήκης μπήκαν ως διαθέσιμες ράβδοι.",msgSessionLoaded:"Η συνεδρία φορτώθηκε.",msgNoResults:"Δεν υπάρχουν ακόμα αποτελέσματα.",msgCleared:"Το ιστορικό καθαρίστηκε.",msgNotifyThanks:"Ευχαριστούμε! Θα σε ειδοποιήσουμε.",
+confirmDelete:"Διαγραφή αυτού του στοιχείου;",yes:"Ναι",no:"Όχι",closeBtn:"Κλείσιμο",
+bar:"Ράβδος",offcut:"Ρέταλο",pieces:"τεμάχια",custom:"Προσαρμογή",rebar:"Οπλισμός",none:"Καμία",
+tour1t:"Καλώς ήρθες στο SteelCut",tour1b:"Αυτή η σύντομη ξενάγηση δείχνει τη ροή: ράβδοι μέσα, κοπές μέσα, βέλτιστο πλάνο έξω. Κρατάει 30 δευτερόλεπτα.",
+tour2t:"1 · Διαθέσιμες ράβδοι",tour2b:"Καταχώρησε τις ράβδους που έχεις ή θα αγοράσεις — μήκος και ποσότητα. Μπορείς και να φέρεις ρέταλα από την αποθήκη.",
+tour3t:"2 · Απαιτούμενες κοπές",tour3b:"Καταχώρησε κάθε τεμάχιο που πρέπει να κόψεις. Συμβουλή: φέρε ολόκληρο πίνακα οπλισμών από Excel/CSV με ένα κλικ.",
+tour4t:"3 · Υπολογισμός",tour4b:"Ρύθμισε το φάρδος λάμας και τον τύπο οπλισμού, και πάτα Υπολογισμός. Το SteelCut γεμίζει κάθε ράβδο με ελάχιστη φύρα και σχεδιάζει τα διαγράμματα.",
+tour5t:"4 · Χρησιμοποίησε τα αποτελέσματα",tour5b:"Εκτύπωσε την αναφορά συνεργείου, κατέβασε το CSV, αποθήκευσε τη δουλειά ή στείλε τα ρέταλα στην αποθήκη. Αυτό ήταν!",supNeedRebar:"Διάλεξε πρώτα τύπο οπλισμού στις Ρυθμίσεις."}};
+/* ---------------- state & storage ---------------- */
+const LSKEY='steelcut_v1';
+let S={lang:'el',stock:[],cuts:[],warehouse:[],jobs:[],history:[],suppliers:[],results:null};
+function persist(){try{localStorage.setItem(LSKEY,JSON.stringify({lang:S.lang,stock:S.stock,cuts:S.cuts,warehouse:S.warehouse,jobs:S.jobs.slice(-50),history:S.history.slice(-80),suppliers:S.suppliers}))}catch(e){}}
+function restore(){try{const d=JSON.parse(localStorage.getItem(LSKEY)||'{}');for(const k of['lang','stock','cuts','warehouse','jobs','history','suppliers'])if(d[k]!==undefined)S[k]=d[k]}catch(e){}}
+/* ---------------- i18n runtime ---------------- */
+let LANG='el';
+function t(k){const d=I18N[LANG]||{};return d[k]!==undefined?d[k]:(I18N.en[k]!==undefined?I18N.en[k]:k)}
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.getAttribute('data-i18n'))});
+  document.documentElement.lang=LANG;
+  document.documentElement.dir=(LANG==='ar')?'rtl':'ltr';
+  document.title='SteelCut — '+t('tagline');
+}
+function buildLangSel(){
+  const s=document.getElementById('langSel');s.innerHTML='';
+  LANGS.forEach(l=>{const o=document.createElement('option');o.value=l.c;o.textContent=l.n;if(l.c===LANG)o.selected=true;s.appendChild(o)});
+}
+/* ---------------- units & rebar ---------------- */
+const UF={mm:1,cm:10,m:1000,in:25.4};
+const UNAME={mm:'mm',cm:'cm',m:'m',in:'in'};
+const toMM=(v,u)=>v*(UF[u]||1);
+const fromMM=(mm,u)=>mm/(UF[u]||1);
+const REBAR=[{d:'Φ8',kgm:0.395},{d:'Φ10',kgm:0.617},{d:'Φ12',kgm:0.888},{d:'Φ14',kgm:1.210},{d:'Φ16',kgm:1.580},{d:'Φ18',kgm:2.000},{d:'Φ20',kgm:2.470},{d:'Φ22',kgm:2.980},{d:'Φ25',kgm:3.850},{d:'Φ28',kgm:4.830},{d:'Φ32',kgm:6.310},{d:'Φ40',kgm:9.860}];
+function fmt(n,d=1){if(!isFinite(n))return'—';return Number(n).toLocaleString(LANG,{minimumFractionDigits:d,maximumFractionDigits:d})}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+/* ---------------- optimizer (Best-Fit Decreasing) ----------------
+   Pure function: stock=[{lenMM,qty,label}], cuts=[{lenMM,qty,label}],
+   kerfMM, minOffMM. Returns {bars, stats}. */
+function optimize(stock,cuts,kerfMM,minOffMM){
+  const pieces=[];
+  cuts.forEach(c=>{const n=Math.max(0,Math.floor(c.qty));for(let i=0;i<n;i++)pieces.push({len:c.lenMM,label:c.label||''})});
+  pieces.sort((a,b)=>b.len-a.len);
+  const pool=[];
+  stock.forEach(s=>{const n=Math.max(0,Math.floor(s.qty));for(let i=0;i<n;i++)pool.push({len:s.lenMM,label:s.label||''})});
+  const open=[],unplaced=[];
+  for(const p of pieces){
+    const need=p.len+kerfMM; /* each cut consumes its length + one kerf */
+    let best=null,bestAfter=Infinity;
+    for(const b of open){
+      const after=b.len-b.fill-need;
+      if(after>=-1e-9&&after<bestAfter){bestAfter=after;best=b}
+    }
+    if(!best){
+      let cand=null,candAfter=Infinity;
+      for(const b of pool){
+        if(b.taken)continue;
+        const after=b.len-need;
+        if(after>=-1e-9&&after<candAfter){candAfter=after;cand=b}
+      }
+      if(!cand){unplaced.push(p);continue}
+      cand.taken=true;cand.fill=0;cand.cuts=[];
+      open.push(cand);best=cand;
+    }
+    best.cuts.push({len:p.len,label:p.label,kerf:kerfMM});
+    best.fill+=need;
+  }
+  let totalStock=0,totalCut=0,totalKerf=0;
+  open.forEach((b,i)=>{
+    b.no=i+1;
+    const rem=Math.max(0,b.len-b.fill);
+    b.remaining=rem;
+    if(rem>=minOffMM&&minOffMM>0){b.offcut=rem;b.waste=0}else{b.offcut=0;b.waste=rem}
+    totalStock+=b.len;totalCut+=b.cuts.reduce((a,c)=>a+c.len,0);totalKerf+=b.cuts.reduce((a,c)=>a+c.kerf,0);
+  });
+  const wasteLen=open.reduce((a,b)=>a+b.waste,0)+totalKerf;
+  const offcuts=open.filter(b=>b.offcut>0).map(b=>({lenMM:b.offcut,label:((b.label?b.label+' \u00b7 ':'')+t('offcut')+' #'+b.no)}));
+  const stats={bars:open.length,stockLen:totalStock,cutLen:totalCut,kerfLen:totalKerf,
+    wasteLen:wasteLen,eff:totalStock>0?100*totalCut/totalStock:0,offcuts:offcuts,unplaced:unplaced.length};
+  return {bars:open,stats:stats};
+}
+/* color per label */
+function hue(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%360;return h}
+function segColor(label,i){if(!label)return'var(--accent)';const pal=['#f59e0b','#3b82f6','#22c55e','#a78bfa','#f472b6','#2dd4bf','#fb923c','#e879f9'];let h=0;const s=label;for(let i=0;i<s.length;i++)h+=s.charCodeAt(i);return pal[h%pal.length]}
+I18N.de={tagline:"Professioneller Stahlschnitt-Optimierer",tour:"Rundgang",loadDemo:"Demo laden",navOptimizer:"Schnittoptimierung",navWarehouse:"Lager",navJobs:"Aufträge & Verlauf",navCompare:"Vergleich",navSuppliers:"Lieferanten",navReports:"Berichte",navPricing:"Preise",heroTitle:"Weniger schneiden. Weniger Abfall. Mehr sparen.",heroSub:"Geben Sie Ihre Vorratsstangen und benötigten Schnitte ein — SteelCut berechnet in Sekunden den optimalen Schnittplan mit minimalem Verschnitt.",heroStart:"Optimierung starten",heroDemo:"Mit Demodaten testen",stockBars:"Vorratsstangen",stockDesc:"Stangen, die Sie haben (oder kaufen möchten).",length:"Länge",qty:"Stk.",unit:"Einheit",label:"Bezeichnung",addStock:"+ Stange hinzufügen",fromWarehouse:"Aus Lager übernehmen",reqCuts:"Benötigte Schnitte",cutsDesc:"Teile, die Sie schneiden müssen.",addCut:"+ Schnitt hinzufügen",importExcel:"Excel / CSV importieren",settings:"Einstellungen",kerf:"Schnittfuge (Blattbreite)",minOffcut:"Min. wiederverwendbarer Rest",rebarType:"Bewehrungstyp (Gewicht & Preis)",pricePerM:"Preis pro Meter",currency:"Währung",jobNameL:"Auftragsname",calculate:"Schnittplan berechnen",saveJob:"Auftrag speichern",print:"Drucken",results:"Optimierungsergebnisse",lgCut:"Schnittteil",lgOffcut:"Wiederverwendbarer Rest",lgWaste:"Abfall",cutListTitle:"Schnittliste pro Stange",barsNeeded:"Benötigte Stangen",efficiency:"Effizienz",waste:"Abfall",totalMaterial:"Gesamtmaterial",totalCost:"Gesamtkosten",totalWeight:"Gesamtgewicht",offcutsKept:"Behaltene Reste",whTitle:"Restelager",whDesc:"Wiederverwendbare Reste werden hier gelagert und können im nächsten Auftrag als Vorrat übernommen werden.",addOffcut:"+ Rest manuell hinzufügen",date:"Datum",noData:"Noch nichts vorhanden.",savedJobs:"Gespeicherte Aufträge",history:"Verlauf",historyDesc:"Jede Berechnung wird automatisch protokolliert.",clearHistory:"Verlauf löschen",noJobs:"Keine gespeicherten Aufträge.",load:"Laden",del:"Löschen",savedAt:"Gespeichert",cmpTitle:"Szenarien vergleichen",cmpDesc:"Wählen Sie zwei gespeicherte Ergebnisse und vergleichen Sie sie nebeneinander.",compareBtn:"Vergleichen",selectResult:"— Ergebnis wählen —",supTitle:"Lieferantenvergleich",supDesc:"Geben Sie Lieferantenpreise ein, um das beste Angebot für Ihren Auftrag zu sehen.",supName:"Lieferant",pricePerKg:"Preis / kg",addSupplier:"+ Lieferant hinzufügen",supCalcBtn:"Für aktuelles Ergebnis auswerten",cheapest:"Günstigster",totalForJob:"Summe für diesen Auftrag",noResults:"Berechnen Sie zuerst einen Schnittplan.",repTitle:"Berichte & Daten",repDesc:"Exportieren Sie Ihren Schnittplan oder übertragen Sie eine Sitzung auf ein anderes Gerät.",dlCsv:"CSV herunterladen",dlSession:"Sitzungsdatei herunterladen",upSession:"Sitzungsdatei hochladen",printReport:"Werkstattbericht drucken",qrTitle:"Auftrags-QR-Code",qrDesc:"In der Werkstatt scannen zur Identifizierung des Schnittplans. (Internetverbindung erforderlich.)",prTitle:"Einfache Preise",prSub:"Kostenlos starten. Upgraden, wenn Ihre Werkstatt wächst.",prForever:"für immer",prF1:"Unbegrenzte Schnittoptimierungen",prF2:"Schnittdiagramme & CSV-Export",prF3:"Lager & Verlauf",prChooseFree:"Sie nutzen Free",prSoon:"bald",prP1:"Alles aus Free",prP2:"Cloud-Sync auf allen Geräten",prP3:"Team-Arbeitsbereiche & Priority-Support",prNotify:"Benachrichtigen",tourSkip:"Überspringen",tourNext:"Weiter →",tourBack:"← Zurück",tourDone:"Fertig",msgNeedCuts:"Fügen Sie zuerst mindestens einen benötigten Schnitt hinzu.",msgNeedStock:"Fügen Sie zuerst mindestens eine Vorratsstange hinzu.",msgCalcDone:"Schnittplan berechnet.",msgSaved:"Auftrag gespeichert.",msgLoaded:"Auftrag geladen.",msgDeleted:"Gelöscht.",msgImported:"Importiert.",msgExported:"Datei heruntergeladen.",msgLang:"Sprache geändert.",msgDemoLoaded:"Demodaten geladen.",msgJobNameReq:"Geben Sie dem Auftrag zuerst einen Namen.",msgInvalidNum:"Prüfen Sie die eingegebenen Zahlen.",msgWhImported:"Lagerreste als Vorrat übernommen.",msgSessionLoaded:"Sitzung geladen.",msgNoResults:"Noch keine Ergebnisse.",msgCleared:"Verlauf gelöscht.",msgNotifyThanks:"Danke! Wir benachrichtigen Sie.",confirmDelete:"Dieses Element löschen?",yes:"Ja",no:"Nein",closeBtn:"Schließen",bar:"Stange",offcut:"Rest",pieces:"Stück",custom:"Benutzerdefiniert",rebar:"Bewehrung",none:"Keine",tour1t:"Willkommen bei SteelCut",tour1b:"Dieser kurze Rundgang zeigt den Ablauf: Stangen rein, Schnitte rein, optimaler Plan raus. Dauert 30 Sekunden.",tour2t:"1 · Vorratsstangen",tour2b:"Listen Sie Stangen auf — Länge und Menge. Auch Reste aus dem Lager übernehmbar.",tour3t:"2 · Benötigte Schnitte",tour3b:"Listen Sie jedes zu schneidende Teil auf. Tipp: Ganze Bewehrungsliste per Excel/CSV mit einem Klick importieren.",tour4t:"3 · Berechnen",tour4b:"Schnittfuge und Bewehrungstyp einstellen, dann Berechnen drücken. SteelCut packt jede Stange mit minimalem Verschnitt.",tour5t:"4 · Ergebnisse nutzen",tour5b:"Werkstattbericht drucken, CSV laden, Auftrag speichern oder Reste ins Lager geben. Fertig!",supNeedRebar:"Wählen Sie zuerst einen Bewehrungstyp in den Einstellungen."};
+I18N.fr={tagline:"Optimiseur professionnel de coupe de barres d'acier",tour:"Visite guidée",loadDemo:"Charger la démo",navOptimizer:"Optimisation de coupe",navWarehouse:"Stock",navJobs:"Chantiers & Historique",navCompare:"Comparer",navSuppliers:"Fournisseurs",navReports:"Rapports",navPricing:"Tarifs",heroTitle:"Coupez moins. Gaspillez moins. Économisez plus.",heroSub:"Saisissez vos barres en stock et vos coupes requises — SteelCut calcule en quelques secondes le plan de coupe optimal avec un minimum de chutes.",heroStart:"Lancer l'optimisation",heroDemo:"Essayer avec la démo",stockBars:"Barres en stock",stockDesc:"Barres disponibles (ou à acheter).",length:"Longueur",qty:"Qté",unit:"Unité",label:"Étiquette",addStock:"+ Ajouter une barre",fromWarehouse:"Importer du stock",reqCuts:"Coupes requises",cutsDesc:"Pièces à découper.",addCut:"+ Ajouter une coupe",importExcel:"Importer Excel / CSV",settings:"Paramètres",kerf:"Trait de scie (largeur de lame)",minOffcut:"Chute réutilisable min.",rebarType:"Type d'armature (poids & prix)",pricePerM:"Prix au mètre",currency:"Devise",jobNameL:"Nom du chantier",calculate:"Calculer le plan de coupe",saveJob:"Enregistrer",print:"Imprimer",results:"Résultats d'optimisation",lgCut:"Pièce coupée",lgOffcut:"Chute réutilisable",lgWaste:"Perte",cutListTitle:"Liste de coupe par barre",barsNeeded:"Barres nécessaires",efficiency:"Rendement",waste:"Perte",totalMaterial:"Matière totale",totalCost:"Coût total",totalWeight:"Poids total",offcutsKept:"Chutes conservées",whTitle:"Stock de chutes",whDesc:"Les chutes réutilisables sont stockées ici et peuvent être reprises comme barres au prochain chantier.",addOffcut:"+ Ajouter une chute",date:"Date",noData:"Rien pour le moment.",savedJobs:"Chantiers enregistrés",history:"Historique",historyDesc:"Chaque calcul est enregistré automatiquement.",clearHistory:"Effacer l'historique",noJobs:"Aucun chantier enregistré.",load:"Charger",del:"Supprimer",savedAt:"Enregistré",cmpTitle:"Comparer des scénarios",cmpDesc:"Choisissez deux résultats enregistrés et comparez-les côte à côte.",compareBtn:"Comparer",selectResult:"— choisir un résultat —",supTitle:"Comparaison fournisseurs",supDesc:"Saisissez les prix des fournisseurs pour voir la meilleure offre pour votre chantier.",supName:"Fournisseur",pricePerKg:"Prix / kg",addSupplier:"+ Ajouter un fournisseur",supCalcBtn:"Évaluer pour le résultat actuel",cheapest:"Moins cher",totalForJob:"Total pour ce chantier",noResults:"Calculez d'abord un plan de coupe.",repTitle:"Rapports & données",repDesc:"Exportez votre plan de coupe ou transférez une session vers un autre appareil.",dlCsv:"Télécharger CSV",dlSession:"Télécharger la session",upSession:"Charger la session",printReport:"Imprimer le rapport d'atelier",qrTitle:"QR code du chantier",qrDesc:"Scannez à l'atelier pour identifier le plan de coupe. (Connexion internet requise.)",prTitle:"Tarifs simples",prSub:"Commencez gratuitement. Passez au niveau supérieur quand votre atelier grandit.",prForever:"pour toujours",prF1:"Optimisations illimitées",prF2:"Schémas de coupe & export CSV",prF3:"Stock & historique",prChooseFree:"Vous êtes en Free",prSoon:"bientôt",prP1:"Tout le Free",prP2:"Synchro cloud multi-appareils",prP3:"Espaces d'équipe & support prioritaire",prNotify:"Me notifier",tourSkip:"Passer",tourNext:"Suivant →",tourBack:"← Retour",tourDone:"Terminer",msgNeedCuts:"Ajoutez d'abord au moins une coupe requise.",msgNeedStock:"Ajoutez d'abord au moins une barre en stock.",msgCalcDone:"Plan de coupe calculé.",msgSaved:"Chantier enregistré.",msgLoaded:"Chantier chargé.",msgDeleted:"Supprimé.",msgImported:"Importé.",msgExported:"Fichier téléchargé.",msgLang:"Langue modifiée.",msgDemoLoaded:"Données démo chargées.",msgJobNameReq:"Nommez d'abord le chantier.",msgInvalidNum:"Vérifiez les nombres saisis.",msgWhImported:"Chutes importées comme barres.",msgSessionLoaded:"Session chargée.",msgNoResults:"Aucun résultat pour le moment.",msgCleared:"Historique effacé.",msgNotifyThanks:"Merci ! Nous vous préviendrons.",confirmDelete:"Supprimer cet élément ?",yes:"Oui",no:"Non",closeBtn:"Fermer",bar:"Barre",offcut:"Chute",pieces:"pièces",custom:"Personnalisé",rebar:"Armature",none:"Aucune",tour1t:"Bienvenue sur SteelCut",tour1b:"Cette visite montre le flux : barres en entrée, coupes en entrée, plan optimal en sortie. 30 secondes.",tour2t:"1 · Barres en stock",tour2b:"Listez vos barres — longueur et quantité. Vous pouvez aussi importer des chutes du stock.",tour3t:"2 · Coupes requises",tour3b:"Listez chaque pièce à découper. Astuce : importez tout un bordereau d'armatures Excel/CSV en un clic.",tour4t:"3 · Calculer",tour4b:"Réglez le trait de scie et le type d'armature, puis calculez. SteelCut remplit chaque barre avec un minimum de chutes.",tour5t:"4 · Exploiter les résultats",tour5b:"Imprimez le rapport d'atelier, téléchargez le CSV, enregistrez le chantier ou envoyez les chutes au stock. C'est tout !",supNeedRebar:"Sélectionnez d'abord un type d'armature dans les paramètres."};
+I18N.es={tagline:"Optimizador profesional de corte de barras de acero",tour:"Visita guiada",loadDemo:"Cargar demo",navOptimizer:"Optimizar corte",navWarehouse:"Almacén",navJobs:"Trabajos e historial",navCompare:"Comparar",navSuppliers:"Proveedores",navReports:"Informes",navPricing:"Precios",heroTitle:"Corta menos. Desperdicia menos. Ahorra más.",heroSub:"Introduce tus barras en stock y los cortes necesarios — SteelCut calcula en segundos el plan de corte óptimo con el mínimo desperdicio.",heroStart:"Empezar a optimizar",heroDemo:"Probar con demo",stockBars:"Barras en stock",stockDesc:"Barras disponibles (o por comprar).",length:"Longitud",qty:"Cant.",unit:"Unidad",label:"Etiqueta",addStock:"+ Añadir barra",fromWarehouse:"Importar del almacén",reqCuts:"Cortes necesarios",cutsDesc:"Piezas que debes cortar.",addCut:"+ Añadir corte",importExcel:"Importar Excel / CSV",settings:"Ajustes",kerf:"Ancho de corte (sierra)",minOffcut:"Retal reutilizable mín.",rebarType:"Tipo de barra (peso y precio)",pricePerM:"Precio por metro",currency:"Moneda",jobNameL:"Nombre del trabajo",calculate:"Calcular plan de corte",saveJob:"Guardar trabajo",print:"Imprimir",results:"Resultados de optimización",lgCut:"Pieza cortada",lgOffcut:"Retal reutilizable",lgWaste:"Desperdicio",cutListTitle:"Lista de cortes por barra",barsNeeded:"Barras necesarias",efficiency:"Eficiencia",waste:"Desperdicio",totalMaterial:"Material total",totalCost:"Coste total",totalWeight:"Peso total",offcutsKept:"Retales guardados",whTitle:"Almacén de retales",whDesc:"Los retales reutilizables se guardan aquí y puedes usarlos como barras en el próximo trabajo.",addOffcut:"+ Añadir retal",date:"Fecha",noData:"Nada por aquí todavía.",savedJobs:"Trabajos guardados",history:"Historial",historyDesc:"Cada cálculo se registra automáticamente.",clearHistory:"Borrar historial",noJobs:"Sin trabajos guardados.",load:"Cargar",del:"Eliminar",savedAt:"Guardado",cmpTitle:"Comparar escenarios",cmpDesc:"Elige dos resultados guardados y compáralos lado a lado.",compareBtn:"Comparar",selectResult:"— elegir resultado —",supTitle:"Comparar proveedores",supDesc:"Introduce precios de proveedores para ver la mejor oferta para tu trabajo.",supName:"Proveedor",pricePerKg:"Precio / kg",addSupplier:"+ Añadir proveedor",supCalcBtn:"Evaluar para el resultado actual",cheapest:"Más barato",totalForJob:"Total para este trabajo",noResults:"Calcula primero un plan de corte.",repTitle:"Informes y datos",repDesc:"Exporta tu plan de corte o traslada una sesión a otro dispositivo.",dlCsv:"Descargar CSV",dlSession:"Descargar sesión",upSession:"Subir sesión",printReport:"Imprimir informe de taller",qrTitle:"Código QR del trabajo",qrDesc:"Escanéalo en el taller para identificar el plan de corte. (Requiere internet.)",prTitle:"Precios sencillos",prSub:"Empieza gratis. Mejora cuando tu taller crezca.",prForever:"para siempre",prF1:"Optimizaciones ilimitadas",prF2:"Diagramas de corte y CSV",prF3:"Almacén e historial",prChooseFree:"Estás en Free",prSoon:"próximamente",prP1:"Todo lo de Free",prP2:"Sincronización en la nube",prP3:"Espacios de equipo y soporte prioritario",prNotify:"Avísame",tourSkip:"Omitir",tourNext:"Siguiente →",tourBack:"← Atrás",tourDone:"Terminar",msgNeedCuts:"Añade primero al menos un corte necesario.",msgNeedStock:"Añade primero al menos una barra en stock.",msgCalcDone:"Plan de corte calculado.",msgSaved:"Trabajo guardado.",msgLoaded:"Trabajo cargado.",msgDeleted:"Eliminado.",msgImported:"Importado.",msgExported:"Archivo descargado.",msgLang:"Idioma cambiado.",msgDemoLoaded:"Datos demo cargados.",msgJobNameReq:"Ponle un nombre al trabajo primero.",msgInvalidNum:"Revisa los números introducidos.",msgWhImported:"Retales importados como barras.",msgSessionLoaded:"Sesión cargada.",msgNoResults:"Aún no hay resultados.",msgCleared:"Historial borrado.",msgNotifyThanks:"¡Gracias! Te avisaremos.",confirmDelete:"¿Eliminar este elemento?",yes:"Sí",no:"No",closeBtn:"Cerrar",bar:"Barra",offcut:"Retal",pieces:"piezas",custom:"Personalizado",rebar:"Armadura",none:"Ninguna",tour1t:"Bienvenido a SteelCut",tour1b:"Esta visita muestra el flujo: barras dentro, cortes dentro, plan óptimo fuera. 30 segundos.",tour2t:"1 · Barras en stock",tour2b:"Lista tus barras — longitud y cantidad. También puedes importar retales del almacén.",tour3t:"2 · Cortes necesarios",tour3b:"Lista cada pieza a cortar. Consejo: importa una planilla completa de Excel/CSV con un clic.",tour4t:"3 · Calcular",tour4b:"Ajusta el ancho de sierra y el tipo de barra, y calcula. SteelCut llena cada barra con el mínimo desperdicio.",tour5t:"4 · Usa los resultados",tour5b:"Imprime el informe de taller, descarga el CSV, guarda el trabajo o envía los retales al almacén. ¡Listo!",supNeedRebar:"Selecciona primero un tipo de barra en Ajustes."};
+I18N.it={tagline:"Ottimizzatore professionale per il taglio di barre d'acciaio",tour:"Tour guidato",loadDemo:"Carica demo",navOptimizer:"Ottimizza taglio",navWarehouse:"Magazzino",navJobs:"Lavori e cronologia",navCompare:"Confronta",navSuppliers:"Fornitori",navReports:"Report",navPricing:"Prezzi",heroTitle:"Taglia di meno. Spreca di meno. Risparmia di più.",heroSub:"Inserisci le barre disponibili e i tagli richiesti — SteelCut calcola in pochi secondi il piano di taglio ottimale con il minimo scarto.",heroStart:"Inizia l'ottimizzazione",heroDemo:"Prova con la demo",stockBars:"Barre disponibili",stockDesc:"Barre che hai (o vuoi acquistare).",length:"Lunghezza",qty:"Qtà",unit:"Unità",label:"Etichetta",addStock:"+ Aggiungi barra",fromWarehouse:"Importa dal magazzino",reqCuts:"Tagli richiesti",cutsDesc:"Pezzi da tagliare.",addCut:"+ Aggiungi taglio",importExcel:"Importa Excel / CSV",settings:"Impostazioni",kerf:"Larghezza lama (kerf)",minOffcut:"Sfrido riutilizzabile min.",rebarType:"Tipo di armatura (peso e prezzo)",pricePerM:"Prezzo al metro",currency:"Valuta",jobNameL:"Nome lavoro",calculate:"Calcola piano di taglio",saveJob:"Salva lavoro",print:"Stampa",results:"Risultati ottimizzazione",lgCut:"Pezzo tagliato",lgOffcut:"Sfrido riutilizzabile",lgWaste:"Scarto",cutListTitle:"Lista tagli per barra",barsNeeded:"Barre necessarie",efficiency:"Efficienza",waste:"Scarto",totalMaterial:"Materiale totale",totalCost:"Costo totale",totalWeight:"Peso totale",offcutsKept:"Sfridi conservati",whTitle:"Magazzino sfridi",whDesc:"Gli sfridi riutilizzabili sono qui e puoi usarli come barre nel prossimo lavoro.",addOffcut:"+ Aggiungi sfrido",date:"Data",noData:"Ancora niente qui.",savedJobs:"Lavori salvati",history:"Cronologia",historyDesc:"Ogni calcolo viene registrato automaticamente.",clearHistory:"Cancella cronologia",noJobs:"Nessun lavoro salvato.",load:"Carica",del:"Elimina",savedAt:"Salvato",cmpTitle:"Confronta scenari",cmpDesc:"Scegli due risultati salvati e confrontali fianco a fianco.",compareBtn:"Confronta",selectResult:"— scegli risultato —",supTitle:"Confronto fornitori",supDesc:"Inserisci i prezzi dei fornitori per vedere l'offerta migliore per il tuo lavoro.",supName:"Fornitore",pricePerKg:"Prezzo / kg",addSupplier:"+ Aggiungi fornitore",supCalcBtn:"Valuta per il risultato attuale",cheapest:"Più economico",totalForJob:"Totale per questo lavoro",noResults:"Calcola prima un piano di taglio.",repTitle:"Report e dati",repDesc:"Esporta il piano di taglio o trasferisci una sessione su un altro dispositivo.",dlCsv:"Scarica CSV",dlSession:"Scarica sessione",upSession:"Carica sessione",printReport:"Stampa report officina",qrTitle:"QR code lavoro",qrDesc:"Scansiona in officina per identificare il piano di taglio. (Serve internet.)",prTitle:"Prezzi semplici",prSub:"Inizia gratis. Passa a Pro quando l'officina cresce.",prForever:"per sempre",prF1:"Ottimizzazioni illimitate",prF2:"Diagrammi di taglio ed export CSV",prF3:"Magazzino e cronologia",prChooseFree:"Sei su Free",prSoon:"a breve",prP1:"Tutto di Free",prP2:"Sincronizzazione cloud",prP3:"Aree team e supporto prioritario",prNotify:"Avvisami",tourSkip:"Salta",tourNext:"Avanti →",tourBack:"← Indietro",tourDone:"Fine",msgNeedCuts:"Aggiungi prima almeno un taglio richiesto.",msgNeedStock:"Aggiungi prima almeno una barra disponibile.",msgCalcDone:"Piano di taglio calcolato.",msgSaved:"Lavoro salvato.",msgLoaded:"Lavoro caricato.",msgDeleted:"Eliminato.",msgImported:"Importato.",msgExported:"File scaricato.",msgLang:"Lingua cambiata.",msgDemoLoaded:"Dati demo caricati.",msgJobNameReq:"Dai prima un nome al lavoro.",msgInvalidNum:"Controlla i numeri inseriti.",msgWhImported:"Sfridi importati come barre.",msgSessionLoaded:"Sessione caricata.",msgNoResults:"Ancora nessun risultato.",msgCleared:"Cronologia cancellata.",msgNotifyThanks:"Grazie! Ti avviseremo.",confirmDelete:"Eliminare questo elemento?",yes:"Sì",no:"No",closeBtn:"Chiudi",bar:"Barra",offcut:"Sfrido",pieces:"pezzi",custom:"Personalizzato",rebar:"Armatura",none:"Nessuna",tour1t:"Benvenuto in SteelCut",tour1b:"Questo tour mostra il flusso: barre dentro, tagli dentro, piano ottimale fuori. 30 secondi.",tour2t:"1 · Barre disponibili",tour2b:"Elenca le tue barre — lunghezza e quantità. Puoi anche importare sfridi dal magazzino.",tour3t:"2 · Tagli richiesti",tour3b:"Elenca ogni pezzo da tagliare. Suggerimento: importa un'intera distinta Excel/CSV con un clic.",tour4t:"3 · Calcola",tour4b:"Imposta larghezza lama e tipo di armatura, poi calcola. SteelCut riempie ogni barra con il minimo scarto.",tour5t:"4 · Usa i risultati",tour5b:"Stampa il report officina, scarica il CSV, salva il lavoro o manda gli sfridi in magazzino. Fatto!",supNeedRebar:"Seleziona prima un tipo di armatura nelle impostazioni."};
+I18N.pt={tagline:"Otimizador profissional de corte de barras de aço",tour:"Visita guiada",loadDemo:"Carregar demo",navOptimizer:"Otimizar corte",navWarehouse:"Armazém",navJobs:"Obras e histórico",navCompare:"Comparar",navSuppliers:"Fornecedores",navReports:"Relatórios",navPricing:"Preços",heroTitle:"Corte menos. Desperdice menos. Poupe mais.",heroSub:"Introduza as suas barras em stock e os cortes necessários — o SteelCut calcula em segundos o plano de corte ideal com o mínimo desperdício.",heroStart:"Começar a otimizar",heroDemo:"Experimentar com demo",stockBars:"Barras em stock",stockDesc:"Barras disponíveis (ou a comprar).",length:"Comprimento",qty:"Qtd.",unit:"Unidade",label:"Etiqueta",addStock:"+ Adicionar barra",fromWarehouse:"Importar do armazém",reqCuts:"Cortes necessários",cutsDesc:"Peças a cortar.",addCut:"+ Adicionar corte",importExcel:"Importar Excel / CSV",settings:"Definições",kerf:"Largura da lâmina (kerf)",minOffcut:"Retalho reutilizável mín.",rebarType:"Tipo de varão (peso e preço)",pricePerM:"Preço por metro",currency:"Moeda",jobNameL:"Nome da obra",calculate:"Calcular plano de corte",saveJob:"Guardar obra",print:"Imprimir",results:"Resultados da otimização",lgCut:"Peça cortada",lgOffcut:"Retalho reutilizável",lgWaste:"Desperdício",cutListTitle:"Lista de cortes por barra",barsNeeded:"Barras necessárias",efficiency:"Eficiência",waste:"Desperdício",totalMaterial:"Material total",totalCost:"Custo total",totalWeight:"Peso total",offcutsKept:"Retalhos guardados",whTitle:"Armazém de retalhos",whDesc:"Os retalhos reutilizáveis ficam aqui e podem ser usados como barras na próxima obra.",addOffcut:"+ Adicionar retalho",date:"Data",noData:"Nada aqui ainda.",savedJobs:"Obras guardadas",history:"Histórico",historyDesc:"Cada cálculo é registado automaticamente.",clearHistory:"Limpar histórico",noJobs:"Sem obras guardadas.",load:"Carregar",del:"Apagar",savedAt:"Guardada",cmpTitle:"Comparar cenários",cmpDesc:"Escolha dois resultados guardados e compare-os lado a lado.",compareBtn:"Comparar",selectResult:"— escolher resultado —",supTitle:"Comparar fornecedores",supDesc:"Introduza preços de fornecedores para ver a melhor oferta para a sua obra.",supName:"Fornecedor",pricePerKg:"Preço / kg",addSupplier:"+ Adicionar fornecedor",supCalcBtn:"Avaliar para o resultado atual",cheapest:"Mais barato",totalForJob:"Total para esta obra",noResults:"Calcule primeiro um plano de corte.",repTitle:"Relatórios e dados",repDesc:"Exporte o seu plano de corte ou transfira uma sessão para outro dispositivo.",dlCsv:"Descarregar CSV",dlSession:"Descarregar sessão",upSession:"Carregar sessão",printReport:"Imprimir relatório de oficina",qrTitle:"QR code da obra",qrDesc:"Digitalize na oficina para identificar o plano de corte. (Precisa de internet.)",prTitle:"Preços simples",prSub:"Comece grátis. Melhore quando a sua oficina crescer.",prForever:"para sempre",prF1:"Otimizações ilimitadas",prF2:"Diagramas de corte e CSV",prF3:"Armazém e histórico",prChooseFree:"Está no Free",prSoon:"em breve",prP1:"Tudo do Free",prP2:"Sincronização na nuvem",prP3:"Espaços de equipa e suporte prioritário",prNotify:"Avise-me",tourSkip:"Saltar",tourNext:"Seguinte →",tourBack:"← Voltar",tourDone:"Terminar",msgNeedCuts:"Adicione primeiro pelo menos um corte necessário.",msgNeedStock:"Adicione primeiro pelo menos uma barra em stock.",msgCalcDone:"Plano de corte calculado.",msgSaved:"Obra guardada.",msgLoaded:"Obra carregada.",msgDeleted:"Apagado.",msgImported:"Importado.",msgExported:"Ficheiro descarregado.",msgLang:"Idioma alterado.",msgDemoLoaded:"Dados demo carregados.",msgJobNameReq:"Dê primeiro um nome à obra.",msgInvalidNum:"Verifique os números introduzidos.",msgWhImported:"Retalhos importados como barras.",msgSessionLoaded:"Sessão carregada.",msgNoResults:"Ainda sem resultados.",msgCleared:"Histórico limpo.",msgNotifyThanks:"Obrigado! Avisaremos.",confirmDelete:"Apagar este item?",yes:"Sim",no:"Não",closeBtn:"Fechar",bar:"Barra",offcut:"Retalho",pieces:"peças",custom:"Personalizado",rebar:"Varão",none:"Nenhuma",tour1t:"Bem-vindo ao SteelCut",tour1b:"Esta visita mostra o fluxo: barras dentro, cortes dentro, plano ideal fora. 30 segundos.",tour2t:"1 · Barras em stock",tour2b:"Liste as suas barras — comprimento e quantidade. Também pode importar retalhos do armazém.",tour3t:"2 · Cortes necessários",tour3b:"Liste cada peça a cortar. Dica: importe uma lista completa de Excel/CSV com um clique.",tour4t:"3 · Calcular",tour4b:"Ajuste a largura da lâmina e o tipo de varão e calcule. O SteelCut enche cada barra com o mínimo desperdício.",tour5t:"4 · Use os resultados",tour5b:"Imprima o relatório de oficina, descarregue o CSV, guarde a obra ou envie os retalhos para o armazém. Pronto!",supNeedRebar:"Selecione primeiro um tipo de varão nas definições."};
+I18N.nl={tagline:"Professionele optimizer voor het zagen van stalen staven",tour:"Rondleiding",loadDemo:"Demo laden",navOptimizer:"Zaagoptimalisatie",navWarehouse:"Magazijn",navJobs:"Klussen & Geschiedenis",navCompare:"Vergelijken",navSuppliers:"Leveranciers",navReports:"Rapporten",navPricing:"Prijzen",heroTitle:"Zaag minder. Verspil minder. Bespaar meer.",heroSub:"Voer je voorraadstaven en benodigde zaagsneden in — SteelCut berekent in seconden het optimale zaagplan met minimaal verlies.",heroStart:"Start optimalisatie",heroDemo:"Probeer met demo",stockBars:"Voorraadstaven",stockDesc:"Staven die je hebt (of wilt kopen).",length:"Lengte",qty:"Aantal",unit:"Eenheid",label:"Label",addStock:"+ Staaf toevoegen",fromWarehouse:"Uit magazijn importeren",reqCuts:"Benodigde sneden",cutsDesc:"Stukken die je moet zagen.",addCut:"+ Snede toevoegen",importExcel:"Excel / CSV importeren",settings:"Instellingen",kerf:"Zaagsnede (bladbreedte)",minOffcut:"Min. herbruikbaar reststuk",rebarType:"Wapeningstype (gewicht & prijs)",pricePerM:"Prijs per meter",currency:"Valuta",jobNameL:"Klusnaam",calculate:"Zaagplan berekenen",saveJob:"Klus opslaan",print:"Afdrukken",results:"Optimalisatieresultaten",lgCut:"Gezaagd stuk",lgOffcut:"Herbruikbaar reststuk",lgWaste:"Verlies",cutListTitle:"Zaaglijst per staaf",barsNeeded:"Benodigde staven",efficiency:"Efficiëntie",waste:"Verlies",totalMaterial:"Totaal materiaal",totalCost:"Totale kosten",totalWeight:"Totaal gewicht",offcutsKept:"Bewaard restmateriaal",whTitle:"Restmateriaal-magazijn",whDesc:"Herbruikbare reststukken worden hier bewaard en kunnen bij de volgende klus als voorraad worden gebruikt.",addOffcut:"+ Reststuk toevoegen",date:"Datum",noData:"Nog niets hier.",savedJobs:"Opgeslagen klussen",history:"Geschiedenis",historyDesc:"Elke berekening wordt automatisch gelogd.",clearHistory:"Geschiedenis wissen",noJobs:"Geen opgeslagen klussen.",load:"Laden",del:"Verwijderen",savedAt:"Opgeslagen",cmpTitle:"Scenario's vergelijken",cmpDesc:"Kies twee opgeslagen resultaten en vergelijk ze naast elkaar.",compareBtn:"Vergelijken",selectResult:"— kies resultaat —",supTitle:"Leveranciers vergelijken",supDesc:"Voer leveranciersprijzen in om de beste deal voor je klus te zien.",supName:"Leverancier",pricePerKg:"Prijs / kg",addSupplier:"+ Leverancier toevoegen",supCalcBtn:"Evalueren voor huidig resultaat",cheapest:"Goedkoopste",totalForJob:"Totaal voor deze klus",noResults:"Bereken eerst een zaagplan.",repTitle:"Rapporten & gegevens",repDesc:"Exporteer je zaagplan of verplaats een sessie naar een ander apparaat.",dlCsv:"CSV downloaden",dlSession:"Sessie downloaden",upSession:"Sessie uploaden",printReport:"Werkplaatsrapport afdrukken",qrTitle:"Klus-QR-code",qrDesc:"Scan in de werkplaats om het zaagplan te herkennen. (Internet vereist.)",prTitle:"Eenvoudige prijzen",prSub:"Gratis starten. Upgraden als je werkplaats groeit.",prForever:"voor altijd",prF1:"Onbeperkt optimalisaties",prF2:"Zaagdiagrammen & CSV-export",prF3:"Magazijn & geschiedenis",prChooseFree:"Je gebruikt Free",prSoon:"binnenkort",prP1:"Alles van Free",prP2:"Cloudsync op alle apparaten",prP3:"Teamruimtes & prioriteitsupport",prNotify:"Waarschuw mij",tourSkip:"Overslaan",tourNext:"Volgende →",tourBack:"← Terug",tourDone:"Klaar",msgNeedCuts:"Voeg eerst minimaal één benodigde snede toe.",msgNeedStock:"Voeg eerst minimaal één voorraadstaaf toe.",msgCalcDone:"Zaagplan berekend.",msgSaved:"Klus opgeslagen.",msgLoaded:"Klus geladen.",msgDeleted:"Verwijderd.",msgImported:"Geïmporteerd.",msgExported:"Bestand gedownload.",msgLang:"Taal gewijzigd.",msgDemoLoaded:"Demogegevens geladen.",msgJobNameReq:"Geef de klus eerst een naam.",msgInvalidNum:"Controleer de ingevoerde getallen.",msgWhImported:"Restmateriaal als voorraad geïmporteerd.",msgSessionLoaded:"Sessie geladen.",msgNoResults:"Nog geen resultaten.",msgCleared:"Geschiedenis gewist.",msgNotifyThanks:"Bedankt! We waarschuwen je.",confirmDelete:"Dit item verwijderen?",yes:"Ja",no:"Nee",closeBtn:"Sluiten",bar:"Staaf",offcut:"Reststuk",pieces:"stuks",custom:"Aangepast",rebar:"Wapening",none:"Geen",tour1t:"Welkom bij SteelCut",tour1b:"Deze rondleiding toont de workflow: staven erin, sneden erin, optimaal plan eruit. 30 seconden.",tour2t:"1 · Voorraadstaven",tour2b:"Vermeld je staven — lengte en aantal. Je kunt ook reststukken uit het magazijn importeren.",tour3t:"2 · Benodigde sneden",tour3b:"Vermeld elk te zagen stuk. Tip: importeer een complete buigstaat uit Excel/CSV met één klik.",tour4t:"3 · Berekenen",tour4b:"Stel zaagsnede en wapeningstype in en bereken. SteelCut vult elke staaf met minimaal verlies.",tour5t:"4 · Resultaten gebruiken",tour5b:"Druk het werkplaatsrapport af, download de CSV, sla de klus op of stuur reststukken naar het magazijn. Klaar!",supNeedRebar:"Selecteer eerst een wapeningstype bij Instellingen."};
+I18N.pl={tagline:"Profesjonalny optymalizator cięcia prętów stalowych",tour:"Przewodnik",loadDemo:"Wczytaj demo",navOptimizer:"Optymalizacja cięcia",navWarehouse:"Magazyn",navJobs:"Zlecenia i historia",navCompare:"Porównaj",navSuppliers:"Dostawcy",navReports:"Raporty",navPricing:"Cennik",heroTitle:"Tnij mniej. Marnuj mniej. Oszczędzaj więcej.",heroSub:"Wpisz pręty magazynowe i potrzebne cięcia — SteelCut w kilka sekund obliczy optymalny plan cięcia przy minimalnym odpadzie.",heroStart:"Rozpocznij optymalizację",heroDemo:"Wypróbuj demo",stockBars:"Pręty magazynowe",stockDesc:"Pręty, które masz (lub kupisz).",length:"Długość",qty:"Szt.",unit:"Jedn.",label:"Etykieta",addStock:"+ Dodaj pręt",fromWarehouse:"Importuj z magazynu",reqCuts:"Wymagane cięcia",cutsDesc:"Elementy do wycięcia.",addCut:"+ Dodaj cięcie",importExcel:"Importuj Excel / CSV",settings:"Ustawienia",kerf:"Szerokość rzazu (piły)",minOffcut:"Min. odpad użytkowy",rebarType:"Typ zbrojenia (waga i cena)",pricePerM:"Cena za metr",currency:"Waluta",jobNameL:"Nazwa zlecenia",calculate:"Oblicz plan cięcia",saveJob:"Zapisz zlecenie",print:"Drukuj",results:"Wyniki optymalizacji",lgCut:"Wycięty element",lgOffcut:"Odpad użytkowy",lgWaste:"Odpad",cutListTitle:"Lista cięć na pręt",barsNeeded:"Potrzebne pręty",efficiency:"Wydajność",waste:"Odpad",totalMaterial:"Materiał łącznie",totalCost:"Koszt całkowity",totalWeight:"Waga całkowita",offcutsKept:"Zachowane odpady",whTitle:"Magazyn odpadów",whDesc:"Odpady użytkowe trafiają tutaj i możesz je użyć jako pręty w kolejnym zleceniu.",addOffcut:"+ Dodaj odpad",date:"Data",noData:"Na razie pusto.",savedJobs:"Zapisane zlecenia",history:"Historia",historyDesc:"Każde obliczenie jest zapisywane automatycznie.",clearHistory:"Wyczyść historię",noJobs:"Brak zapisanych zleceń.",load:"Wczytaj",del:"Usuń",savedAt:"Zapisano",cmpTitle:"Porównaj scenariusze",cmpDesc:"Wybierz dwa zapisane wyniki i porównaj je obok siebie.",compareBtn:"Porównaj",selectResult:"— wybierz wynik —",supTitle:"Porównanie dostawców",supDesc:"Wpisz ceny dostawców, aby zobaczyć najlepszą ofertę dla swojego zlecenia.",supName:"Dostawca",pricePerKg:"Cena / kg",addSupplier:"+ Dodaj dostawcę",supCalcBtn:"Oceń dla bieżącego wyniku",cheapest:"Najtańszy",totalForJob:"Razem za to zlecenie",noResults:"Najpierw oblicz plan cięcia.",repTitle:"Raporty i dane",repDesc:"Eksportuj plan cięcia lub przenieś sesję na inne urządzenie.",dlCsv:"Pobierz CSV",dlSession:"Pobierz sesję",upSession:"Wczytaj sesję",printReport:"Drukuj raport warsztatowy",qrTitle:"Kod QR zlecenia",qrDesc:"Zeskanuj w warsztacie, aby rozpoznać plan cięcia. (Wymagany internet.)",prTitle:"Prosty cennik",prSub:"Zacznij za darmo. Przejdź wyżej, gdy warsztat urośnie.",prForever:"na zawsze",prF1:"Nielimitowane optymalizacje",prF2:"Schematy cięcia i eksport CSV",prF3:"Magazyn i historia",prChooseFree:"Korzystasz z Free",prSoon:"wkrótce",prP1:"Wszystko z Free",prP2:"Synchronizacja w chmurze",prP3:"Przestrzenie zespołowe i priorytetowe wsparcie",prNotify:"Powiadom mnie",tourSkip:"Pomiń",tourNext:"Dalej →",tourBack:"← Wstecz",tourDone:"Koniec",msgNeedCuts:"Dodaj najpierw co najmniej jedno wymagane cięcie.",msgNeedStock:"Dodaj najpierw co najmniej jeden pręt magazynowy.",msgCalcDone:"Obliczono plan cięcia.",msgSaved:"Zapisano zlecenie.",msgLoaded:"Wczytano zlecenie.",msgDeleted:"Usunięto.",msgImported:"Zaimportowano.",msgExported:"Pobrano plik.",msgLang:"Zmieniono język.",msgDemoLoaded:"Wczytano dane demo.",msgJobNameReq:"Najpierw nazwij zlecenie.",msgInvalidNum:"Sprawdź wpisane liczby.",msgWhImported:"Odpady zaimportowane jako pręty.",msgSessionLoaded:"Wczytano sesję.",msgNoResults:"Brak wyników.",msgCleared:"Wyczyszczono historię.",msgNotifyThanks:"Dziękujemy! Powiadomimy Cię.",confirmDelete:"Usunąć ten element?",yes:"Tak",no:"Nie",closeBtn:"Zamknij",bar:"Pręt",offcut:"Odpad",pieces:"szt.",custom:"Własny",rebar:"Zbrojenie",none:"Brak",tour1t:"Witaj w SteelCut",tour1b:"Ten przewodnik pokazuje przepływ: pręty wchodzą, cięcia wchodzą, optymalny plan wychodzi. 30 sekund.",tour2t:"1 · Pręty magazynowe",tour2b:"Wpisz swoje pręty — długość i liczbę. Możesz też importować odpady z magazynu.",tour3t:"2 · Wymagane cięcia",tour3b:"Wpisz każdy element do wycięcia. Wskazówka: zaimportuj całe zestawienie stali z Excela jednym klikiem.",tour4t:"3 · Oblicz",tour4b:"Ustaw szerokość rzazu i typ zbrojenia, potem oblicz. SteelCut wypełni każdy pręt przy minimalnym odpadzie.",tour5t:"4 · Wykorzystaj wyniki",tour5b:"Wydrukuj raport warsztatowy, pobierz CSV, zapisz zlecenie lub wyślij odpady do magazynu. Gotowe!",supNeedRebar:"Najpierw wybierz typ zbrojenia w Ustawieniach."};
+I18N.tr={tagline:"Profesyonel çelik çubuk kesim optimize edici",tour:"Rehberli tur",loadDemo:"Demoyu yükle",navOptimizer:"Kesim Optimizasyonu",navWarehouse:"Depo",navJobs:"İşler ve Geçmiş",navCompare:"Karşılaştır",navSuppliers:"Tedarikçiler",navReports:"Raporlar",navPricing:"Fiyatlar",heroTitle:"Daha az kes. Daha az fire ver. Daha çok kazan.",heroSub:"Stok çubuklarını ve gereken kesimleri gir — SteelCut saniyeler içinde minimum fireyle en uygun kesim planını hesaplar.",heroStart:"Optimizasyona başla",heroDemo:"Demoyla dene",stockBars:"Stok çubuklar",stockDesc:"Elindeki (veya alacağın) çubuklar.",length:"Uzunluk",qty:"Adet",unit:"Birim",label:"Etiket",addStock:"+ Çubuk ekle",fromWarehouse:"Depodan aktar",reqCuts:"Gereken kesimler",cutsDesc:"Kesmen gereken parçalar.",addCut:"+ Kesim ekle",importExcel:"Excel / CSV aktar",settings:"Ayarlar",kerf:"Testere payı (kerf)",minOffcut:"Min. kullanılabilir parça",rebarType:"Donatı tipi (ağırlık ve fiyat)",pricePerM:"Metre fiyatı",currency:"Para birimi",jobNameL:"İş adı",calculate:"Kesim planını hesapla",saveJob:"İşi kaydet",print:"Yazdır",results:"Optimizasyon sonuçları",lgCut:"Kesilen parça",lgOffcut:"Kullanılabilir parça",lgWaste:"Fire",cutListTitle:"Çubuk başına kesim listesi",barsNeeded:"Gereken çubuk",efficiency:"Verimlilik",waste:"Fire",totalMaterial:"Toplam malzeme",totalCost:"Toplam maliyet",totalWeight:"Toplam ağırlık",offcutsKept:"Saklanan parçalar",whTitle:"Parça deposu",whDesc:"Kullanılabilir parçalar burada saklanır ve sonraki işte çubuk olarak kullanılabilir.",addOffcut:"+ Manuel parça ekle",date:"Tarih",noData:"Henüz bir şey yok.",savedJobs:"Kaydedilmiş işler",history:"Geçmiş",historyDesc:"Her hesaplama otomatik kaydedilir.",clearHistory:"Geçmişi temizle",noJobs:"Kaydedilmiş iş yok.",load:"Yükle",del:"Sil",savedAt:"Kaydedildi",cmpTitle:"Senaryoları karşılaştır",cmpDesc:"Kaydedilmiş iki sonucu seçip yan yana karşılaştır.",compareBtn:"Karşılaştır",selectResult:"— sonuç seç —",supTitle:"Tedarikçi karşılaştırma",supDesc:"Tedarikçi fiyatlarını gir, işin için en uygun teklifi gör.",supName:"Tedarikçi",pricePerKg:"Fiyat / kg",addSupplier:"+ Tedarikçi ekle",supCalcBtn:"Mevcut sonuç için değerlendir",cheapest:"En ucuz",totalForJob:"Bu işin toplamı",noResults:"Önce bir kesim planı hesapla.",repTitle:"Raporlar ve veriler",repDesc:"Kesim planını dışa aktar veya oturumu başka cihaza taşı.",dlCsv:"CSV indir",dlSession:"Oturumu indir",upSession:"Oturum yükle",printReport:"Atölye raporunu yazdır",qrTitle:"İş QR kodu",qrDesc:"Kesim planını tanımak için atölyede okut. (İnternet gerekir.)",prTitle:"Basit fiyatlar",prSub:"Ücretsiz başla. Atölyen büyüyünce yükselt.",prForever:"sonsuza dek",prF1:"Sınırsız optimizasyon",prF2:"Kesim şemaları ve CSV",prF3:"Depo ve geçmiş",prChooseFree:"Free kullanıyorsun",prSoon:"yakında",prP1:"Free'deki her şey",prP2:"Bulut senkronizasyonu",prP3:"Ekip alanları ve öncelikli destek",prNotify:"Bana haber ver",tourSkip:"Atla",tourNext:"İleri →",tourBack:"← Geri",tourDone:"Bitir",msgNeedCuts:"Önce en az bir kesim ekle.",msgNeedStock:"Önce en az bir stok çubuk ekle.",msgCalcDone:"Kesim planı hesaplandı.",msgSaved:"İş kaydedildi.",msgLoaded:"İş yüklendi.",msgDeleted:"Silindi.",msgImported:"Aktarıldı.",msgExported:"Dosya indirildi.",msgLang:"Dil değiştirildi.",msgDemoLoaded:"Demo veriler yüklendi.",msgJobNameReq:"Önce işe bir ad ver.",msgInvalidNum:"Girdiğin sayıları kontrol et.",msgWhImported:"Parçalar çubuk olarak aktarıldı.",msgSessionLoaded:"Oturum yüklendi.",msgNoResults:"Henüz sonuç yok.",msgCleared:"Geçmiş temizlendi.",msgNotifyThanks:"Teşekkürler! Sana haber vereceğiz.",confirmDelete:"Bu öğe silinsin mi?",yes:"Evet",no:"Hayır",closeBtn:"Kapat",bar:"Çubuk",offcut:"Parça",pieces:"adet",custom:"Özel",rebar:"Donatı",none:"Yok",tour1t:"SteelCut'a hoş geldin",tour1b:"Bu tur akışı gösterir: çubuklar girer, kesimler girer, en uygun plan çıkar. 30 saniye.",tour2t:"1 · Stok çubuklar",tour2b:"Çubuklarını listele — uzunluk ve adet. Depodaki parçaları da aktarabilirsin.",tour3t:"2 · Gereken kesimler",tour3b:"Kesilecek her parçayı listele. İpucu: tüm donatı listesini Excel/CSV'den tek tıkla aktar.",tour4t:"3 · Hesapla",tour4b:"Testere payını ve donatı tipini ayarla, sonra hesapla. SteelCut her çubuğu minimum fireyle doldurur.",tour5t:"4 · Sonuçları kullan",tour5b:"Atölye raporunu yazdır, CSV'yi indir, işi kaydet veya parçaları depoya gönder. Bu kadar!",supNeedRebar:"Önce Ayarlar'dan donatı tipi seçin."};
+I18N.ar={tagline:"محسّن احترافي لقص قضبان الصلب",tour:"جولة إرشادية",loadDemo:"تحميل العرض",navOptimizer:"تحسين القص",navWarehouse:"المخزن",navJobs:"الأعمال والسجل",navCompare:"مقارنة",navSuppliers:"المورّدون",navReports:"التقارير",navPricing:"الأسعار",heroTitle:"قصّ أقل. اهدر أقل. وفّر أكثر.",heroSub:"أدخل القضبان المتوفرة والقصّات المطلوبة — يحسب SteelCut في ثوانٍ خطة القص المثلى بأقل هدر.",heroStart:"ابدأ التحسين",heroDemo:"جرّب بالبيانات التجريبية",stockBars:"القضبان المتوفرة",stockDesc:"القضبان التي لديك (أو ستشتريها).",length:"الطول",qty:"العدد",unit:"الوحدة",label:"التسمية",addStock:"+ إضافة قضيب",fromWarehouse:"استيراد من المخزن",reqCuts:"القصّات المطلوبة",cutsDesc:"القطع التي يجب قصّها.",addCut:"+ إضافة قصّة",importExcel:"استيراد Excel / CSV",settings:"الإعدادات",kerf:"عرض الشفرة (kerf)",minOffcut:"أقل بقايا قابلة للاستخدام",rebarType:"نوع حديد التسليح (الوزن والسعر)",pricePerM:"السعر للمتر",currency:"العملة",jobNameL:"اسم العمل",calculate:"احسب خطة القص",saveJob:"حفظ العمل",print:"طباعة",results:"نتائج التحسين",lgCut:"قطعة مقصوصة",lgOffcut:"بقايا قابلة للاستخدام",lgWaste:"هدر",cutListTitle:"قائمة القص لكل قضيب",barsNeeded:"القضبان اللازمة",efficiency:"الكفاءة",waste:"الهدر",totalMaterial:"إجمالي المواد",totalCost:"التكلفة الإجمالية",totalWeight:"الوزن الإجمالي",offcutsKept:"البقايا المحفوظة",whTitle:"مخزن البقايا",whDesc:"تُحفظ البقايا القابلة للاستخدام هنا ويمكن استخدامها كقضبان في العمل التالي.",addOffcut:"+ إضافة بقايا يدويًا",date:"التاريخ",noData:"لا شيء هنا بعد.",savedJobs:"الأعمال المحفوظة",history:"السجل",historyDesc:"يُسجَّل كل حساب تلقائيًا.",clearHistory:"مسح السجل",noJobs:"لا أعمال محفوظة.",load:"تحميل",del:"حذف",savedAt:"حُفظ",cmpTitle:"مقارنة السيناريوهات",cmpDesc:"اختر نتيجتين محفوظتين وقارنهما جنبًا إلى جنب.",compareBtn:"قارن",selectResult:"— اختر نتيجة —",supTitle:"مقارنة المورّدين",supDesc:"أدخل أسعار المورّدين لترى أفضل عرض لعملك.",supName:"المورّد",pricePerKg:"السعر / كغ",addSupplier:"+ إضافة مورّد",supCalcBtn:"قيّم للنتيجة الحالية",cheapest:"الأرخص",totalForJob:"الإجمالي لهذا العمل",noResults:"احسب خطة قص أولًا.",repTitle:"التقارير والبيانات",repDesc:"صدّر خطة القص أو انقل جلسة كاملة إلى جهاز آخر.",dlCsv:"تنزيل CSV",dlSession:"تنزيل ملف الجلسة",upSession:"رفع ملف الجلسة",printReport:"طباعة تقرير الورشة",qrTitle:"رمز QR للعمل",qrDesc:"امسحه في الورشة للتعرف على خطة القص. (يحتاج إنترنت.)",prTitle:"أسعار بسيطة",prSub:"ابدأ مجانًا. رقِّ عندما تكبر ورشتك.",prForever:"للأبد",prF1:"تحسينات غير محدودة",prF2:"مخططات القص وتصدير CSV",prF3:"المخزن والسجل",prChooseFree:"أنت على Free",prSoon:"قريبًا",prP1:"كل مزايا Free",prP2:"مزامنة سحابية",prP3:"مساحات فريق ودعم ذو أولوية",prNotify:"أعلمني",tourSkip:"تخطَّ",tourNext:"التالي →",tourBack:"← رجوع",tourDone:"إنهاء",msgNeedCuts:"أضف قصّة مطلوبة واحدة على الأقل أولًا.",msgNeedStock:"أضف قضيبًا متوفرًا واحدًا على الأقل أولًا.",msgCalcDone:"تم حساب خطة القص.",msgSaved:"حُفظ العمل.",msgLoaded:"حُمّل العمل.",msgDeleted:"حُذف.",msgImported:"تم الاستيراد.",msgExported:"تم تنزيل الملف.",msgLang:"تم تغيير اللغة.",msgDemoLoaded:"حُمّلت البيانات التجريبية.",msgJobNameReq:"سمِّ العمل أولًا.",msgInvalidNum:"تحقق من الأرقام المدخلة.",msgWhImported:"استُوردت البقايا كقضبان.",msgSessionLoaded:"حُمّلت الجلسة.",msgNoResults:"لا نتائج بعد.",msgCleared:"مُسح السجل.",msgNotifyThanks:"شكرًا! سنعلمك.",confirmDelete:"حذف هذا العنصر؟",yes:"نعم",no:"لا",closeBtn:"إغلاق",bar:"قضيب",offcut:"بقايا",pieces:"قطع",custom:"مخصص",rebar:"تسليح",none:"لا شيء",tour1t:"مرحبًا بك في SteelCut",tour1b:"هذه الجولة تعرض التدفق: قضبان تدخل، قصّات تدخل، خطة مثلى تخرج. ٣٠ ثانية.",tour2t:"١ · القضبان المتوفرة",tour2b:"اسرد قضبانك — الطول والعدد. يمكنك أيضًا استيراد البقايا من المخزن.",tour3t:"٢ · القصّات المطلوبة",tour3b:"اسرد كل قطعة يجب قصّها. تلميح: استورد جدول التسليح كاملًا من Excel بنقرة.",tour4t:"٣ · احسب",tour4b:"اضبط عرض الشفرة ونوع التسليح ثم احسب. يملأ SteelCut كل قضيب بأقل هدر.",tour5t:"٤ · استخدم النتائج",tour5b:"اطبع تقرير الورشة، نزّل CSV، احفظ العمل أو أرسل البقايا للمخزن. انتهى!",supNeedRebar:"اختر نوع التسليح من الإعدادات أولًا."};
+I18N.ro={tagline:"Optimizator profesional pentru tăierea barelor de oțel",tour:"Tur ghidat",loadDemo:"Încarcă demo",navOptimizer:"Optimizare tăiere",navWarehouse:"Depozit",navJobs:"Lucrări și istoric",navCompare:"Compară",navSuppliers:"Furnizori",navReports:"Rapoarte",navPricing:"Prețuri",heroTitle:"Taie mai puțin. Risipește mai puțin. Economisește mai mult.",heroSub:"Introdu barele din stoc și tăieturile necesare — SteelCut calculează în câteva secunde planul optim de tăiere cu risipă minimă.",heroStart:"Începe optimizarea",heroDemo:"Încearcă cu demo",stockBars:"Bare în stoc",stockDesc:"Bare pe care le ai (sau vrei să cumperi).",length:"Lungime",qty:"Buc.",unit:"Unitate",label:"Etichetă",addStock:"+ Adaugă bară",fromWarehouse:"Importă din depozit",reqCuts:"Tăieturi necesare",cutsDesc:"Piese de tăiat.",addCut:"+ Adaugă tăietură",importExcel:"Importă Excel / CSV",settings:"Setări",kerf:"Lățime pânză (kerf)",minOffcut:"Rest reutilizabil min.",rebarType:"Tip armătură (greutate și preț)",pricePerM:"Preț pe metru",currency:"Monedă",jobNameL:"Nume lucrare",calculate:"Calculează planul",saveJob:"Salvează lucrarea",print:"Tipărește",results:"Rezultate optimizare",lgCut:"Piesă tăiată",lgOffcut:"Rest reutilizabil",lgWaste:"Risipă",cutListTitle:"Listă tăieturi per bară",barsNeeded:"Bare necesare",efficiency:"Eficiență",waste:"Risipă",totalMaterial:"Material total",totalCost:"Cost total",totalWeight:"Greutate totală",offcutsKept:"Resturi păstrate",whTitle:"Depozit resturi",whDesc:"Resturile reutilizabile se păstrează aici și pot fi folosite ca bare la următoarea lucrare.",addOffcut:"+ Adaugă rest manual",date:"Data",noData:"Nimic aici încă.",savedJobs:"Lucrări salvate",history:"Istoric",historyDesc:"Fiecare calcul este înregistrat automat.",clearHistory:"Șterge istoricul",noJobs:"Nicio lucrare salvată.",load:"Încarcă",del:"Șterge",savedAt:"Salvată",cmpTitle:"Compară scenarii",cmpDesc:"Alege două rezultate salvate și compară-le alăturat.",compareBtn:"Compară",selectResult:"— alege rezultat —",supTitle:"Comparare furnizori",supDesc:"Introdu prețurile furnizorilor ca să vezi cea mai bună ofertă pentru lucrarea ta.",supName:"Furnizor",pricePerKg:"Preț / kg",addSupplier:"+ Adaugă furnizor",supCalcBtn:"Evaluează pentru rezultatul curent",cheapest:"Cel mai ieftin",totalForJob:"Total pentru lucrare",noResults:"Calculează mai întâi un plan de tăiere.",repTitle:"Rapoarte și date",repDesc:"Exportă planul de tăiere sau mută o sesiune pe alt dispozitiv.",dlCsv:"Descarcă CSV",dlSession:"Descarcă sesiunea",upSession:"Încarcă sesiunea",printReport:"Tipărește raportul de atelier",qrTitle:"Cod QR lucrare",qrDesc:"Scanează în atelier pentru identificarea planului. (Necesită internet.)",prTitle:"Prețuri simple",prSub:"Începe gratuit. Fă upgrade când atelierul crește.",prForever:"pentru totdeauna",prF1:"Optimizări nelimitate",prF2:"Diagrame de tăiere și CSV",prF3:"Depozit și istoric",prChooseFree:"Ești pe Free",prSoon:"în curând",prP1:"Tot din Free",prP2:"Sincronizare cloud",prP3:"Spații de echipă și suport prioritar",prNotify:"Anunță-mă",tourSkip:"Sari",tourNext:"Înainte →",tourBack:"← Înapoi",tourDone:"Gata",msgNeedCuts:"Adaugă mai întâi cel puțin o tăietură necesară.",msgNeedStock:"Adaugă mai întâi cel puțin o bară în stoc.",msgCalcDone:"Planul a fost calculat.",msgSaved:"Lucrare salvată.",msgLoaded:"Lucrare încărcată.",msgDeleted:"Șters.",msgImported:"Importat.",msgExported:"Fișier descărcat.",msgLang:"Limba schimbată.",msgDemoLoaded:"Date demo încărcate.",msgJobNameReq:"Dă mai întâi un nume lucrării.",msgInvalidNum:"Verifică numerele introduse.",msgWhImported:"Resturi importate ca bare.",msgSessionLoaded:"Sesiune încărcată.",msgNoResults:"Niciun rezultat încă.",msgCleared:"Istoric șters.",msgNotifyThanks:"Mulțumim! Te vom anunța.",confirmDelete:"Ștergi acest element?",yes:"Da",no:"Nu",closeBtn:"Închide",bar:"Bară",offcut:"Rest",pieces:"buc.",custom:"Personalizat",rebar:"Armătură",none:"Niciuna",tour1t:"Bine ai venit la SteelCut",tour1b:"Acest tur arată fluxul: bare intră, tăieturi intră, plan optim iese. 30 de secunde.",tour2t:"1 · Bare în stoc",tour2b:"Listează barele — lungime și cantitate. Poți importa și resturi din depozit.",tour3t:"2 · Tăieturi necesare",tour3b:"Listează fiecare piesă de tăiat. Sfat: importă tot extrasul de armătură din Excel cu un clic.",tour4t:"3 · Calculează",tour4b:"Setează lățimea pânzei și tipul de armătură, apoi calculează. SteelCut umple fiecare bară cu risipă minimă.",tour5t:"4 · Folosește rezultatele",tour5b:"Tipărește raportul de atelier, descarcă CSV-ul, salvează lucrarea sau trimite resturile în depozit. Gata!",supNeedRebar:"Selectează mai întâi tipul de armătură din Setări."};
+/* ---------------- UI helpers ---------------- */
+function toast(msg,err){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show'+(err?' err':'');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2600)}
+function confirmBox(msg,onYes){const back=document.getElementById('modalBack'),box=document.getElementById('modalBox');
+  box.innerHTML='<h2>'+esc(msg)+'</h2><div class="row" style="justify-content:flex-end;margin-top:18px"><button class="secondary small" id="mNo">'+esc(t('no'))+'</button> <button class="small" id="mYes">'+esc(t('yes'))+'</button></div>';
+  back.classList.add('open');
+  document.getElementById('mNo').onclick=()=>back.classList.remove('open');
+  document.getElementById('mYes').onclick=()=>{back.classList.remove('open');onYes()};
+  back.onclick=e=>{if(e.target===back)back.classList.remove('open')}}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function download(name,content,mime){const b=new Blob([content],{type:mime||'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},400)}
+/* ---------------- tabs ---------------- */
+if(typeof document!=='undefined')document.querySelectorAll('#tabs .tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('#tabs .tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('main .view').forEach(v=>v.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('v-'+tab.dataset.view).classList.add('active');
+    if(tab.dataset.view==='jobs')renderJobs();
+    if(tab.dataset.view==='warehouse')renderWarehouse();
+    if(tab.dataset.view==='compare')renderCompare();
+    if(tab.dataset.view==='suppliers')renderSuppliers();
+  });
+});
+/* ---------------- stock & cuts tables ---------------- */
+function unitOpts(sel){return ['mm','cm','m','in'].map(u=>'<option value="'+u+'"'+(u===sel?' selected':'')+'>'+u+'</option>').join('')}
+function renderStock(){
+  const tb=document.getElementById('stockBody');tb.innerHTML='';
+  S.stock.forEach((r,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td><input type="number" min="0" step="any" value="'+esc(r.len)+'" data-i="'+i+'" data-f="len"></td>'+
+      '<td><input type="number" min="0" step="1" value="'+esc(r.qty)+'" data-i="'+i+'" data-f="qty" style="width:70px"></td>'+
+      '<td><select data-i="'+i+'" data-f="unit">'+unitOpts(r.unit)+'</select></td>'+
+      '<td class="num"><button class="danger small" data-del="'+i+'">✕</button></td>';
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll('input,select').forEach(el=>{
+    el.addEventListener('change',()=>{const r=S.stock[+el.dataset.i];r[el.dataset.f]=el.dataset.f==='label'?el.value:parseFloat(el.value)||0;persist()});
+  });
+  tb.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{S.stock.splice(+b.dataset.del,1);persist();renderStock()}));
+}
+function renderCuts(){
+  const tb=document.getElementById('cutsBody');tb.innerHTML='';
+  S.cuts.forEach((r,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td><input type="number" min="0" step="any" value="'+esc(r.len)+'" data-i="'+i+'" data-f="len"></td>'+
+      '<td><input type="number" min="0" step="1" value="'+esc(r.qty)+'" data-i="'+i+'" data-f="qty" style="width:70px"></td>'+
+      '<td><select data-i="'+i+'" data-f="unit">'+unitOpts(r.unit)+'</select></td>'+
+      '<td><input type="text" value="'+esc(r.label||'')+'" data-i="'+i+'" data-f="label" placeholder="—"></td>'+
+      '<td class="num"><button class="danger small" data-del="'+i+'">✕</button></td>';
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll('input,select').forEach(el=>{
+    el.addEventListener('change',()=>{const r=S.cuts[+el.dataset.i];r[el.dataset.f]=el.dataset.f==='label'?el.value:parseFloat(el.value)||0;persist()});
+  });
+  tb.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{S.cuts.splice(+b.dataset.del,1);persist();renderCuts()}));
+}
+function buildRebarSel(){
+  const s=document.getElementById('rebarSel');
+  s.innerHTML='<option value="">'+esc(t('custom'))+'</option>'+REBAR.map((r,i)=>'<option value="'+i+'">'+r.d+' — '+r.kgm+' kg/m</option>').join('');
+  s.addEventListener('change',()=>{
+    if(s.value==='')return;
+    const r=REBAR[+s.value];
+    const pm=parseFloat(document.getElementById('priceM').value)||0;
+    toast(r.d+' · '+r.kgm+' kg/m');
+  });
+}
+function rebarKgm(){const s=document.getElementById('rebarSel');return s.value===''?0:REBAR[+s.value].kgm}
+/* ---------------- calculate & results ---------------- */
+function readInputs(){
+  const stock=S.stock.filter(r=>r.len>0&&r.qty>0).map(r=>({lenMM:toMM(r.len,r.unit),qty:Math.floor(r.qty),label:r.label||''}));
+  const cuts=S.cuts.filter(r=>r.len>0&&r.qty>0).map(r=>({lenMM:toMM(r.len,r.unit),qty:Math.floor(r.qty),label:r.label||''}));
+  const kerfMM=toMM(parseFloat(document.getElementById('kerf').value)||0,document.getElementById('kerfUnit').value);
+  const minOffMM=toMM(parseFloat(document.getElementById('minOffcut').value)||0,document.getElementById('offcutUnit').value);
+  return {stock:stock,cuts:cuts,kerfMM:kerfMM,minOffMM:minOffMM};
+}
+function doCalculate(){
+  const inp=readInputs();
+  if(!inp.cuts.length){toast(t('msgNeedCuts'),1);return}
+  if(!inp.stock.length){toast(t('msgNeedStock'),1);return}
+  const res=optimize(inp.stock,inp.cuts,inp.kerfMM,inp.minOffMM);
+  const priceM=parseFloat(document.getElementById('priceM').value)||0;
+  const cur=document.getElementById('currency').value;
+  const kgm=rebarKgm();
+  res.meta={name:document.getElementById('jobName').value||('Job '+(S.jobs.length+1)),date:new Date().toISOString(),priceM:priceM,currency:cur,kgm:kgm,kerfMM:inp.kerfMM,minOffMM:inp.minOffMM,inputs:{stock:S.stock,cuts:S.cuts}};
+  S.results=res;
+  S.history.push({name:res.meta.name,date:res.meta.date,bars:res.stats.bars,eff:res.stats.eff,cost:res.stats.stockLen/1000*priceM,currency:cur});
+  persist();renderResults();toast(t('msgCalcDone'));
+  var _r=document.getElementById('cardResults');if(_r.scrollIntoView)_r.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function renderResults(){
+  const res=S.results;if(!res)return;
+  const st=res.stats,m=res.meta;
+  document.getElementById('cardResults').style.display='block';
+  const cost=st.stockLen/1000*m.priceM, weight=st.stockLen/1000*m.kgm;
+  const effCls=st.eff>=90?'good':(st.eff>=75?'warn':'bad');
+  document.getElementById('metrics').innerHTML=
+    metric('barsNeeded',st.bars,'')+
+    metric('efficiency',fmt(st.eff,1)+'%',effCls)+
+    metric('waste',fmt(st.wasteLen,0)+' mm',st.wasteLen>st.stockLen*0.15?'bad':'')+
+    metric('totalMaterial',fmt(st.stockLen/1000,1)+' m','')+
+    metric('totalCost',m.currency+' '+fmt(cost,2),'')+
+    (m.kgm?metric('totalWeight',fmt(weight,1)+' kg',''):'')+
+    metric('offcutsKept',st.offcuts.length,'good');
+  function metric(k,v,cls){return '<div class="metric"><div class="k">'+esc(t(k))+'</div><div class="v '+cls+'">'+esc(v)+'</div></div>'}
+  // diagrams
+  const dg=document.getElementById('diagrams');dg.innerHTML='';
+  res.bars.forEach(b=>{
+    const div=document.createElement('div');div.className='barvis';
+    const segs=b.cuts.map(c=>{
+      const w=Math.max(0.5,100*c.len/b.len);
+      return '<div class="seg" style="width:'+w+'%;background:'+segColor(c.label)+'" title="'+esc(c.label||'')+' '+c.len+' mm">'+(w>7?esc(c.len):'')+'</div>';
+    }).join('');
+    const rw=b.remaining>0.5?'<div class="seg '+(b.offcut>0?'offcut':'waste')+'" style="width:'+Math.max(0.5,100*b.remaining/b.len)+'%">'+(100*b.remaining/b.len>9?Math.round(b.remaining):'')+'</div>':'';
+    div.innerHTML='<div class="bh"><span>'+esc(t('bar'))+' #'+b.no+' — '+b.len+' mm'+(b.label?' · '+esc(b.label):'')+'</span><span class="tag">'+b.cuts.length+' '+esc(t('pieces'))+' · '+esc(t('efficiency'))+' '+fmt(100*(b.fill-b.cuts.reduce((a,c)=>a+c.kerf,0))/b.len,1)+'%</span></div>'+
+      '<div class="barrow">'+segs+rw+'</div>';
+    dg.appendChild(div);
+  });
+  // cut tables
+  const ct=document.getElementById('cutTables');ct.innerHTML='';
+  res.bars.forEach(b=>{
+    const counts={};
+    b.cuts.forEach(c=>{const k=c.len+'|'+(c.label||'');counts[k]=counts[k]||{len:c.len,label:c.label,qty:0};counts[k].qty++});
+    let rows=Object.values(counts).map(c=>'<tr><td class="num">'+c.len+' mm</td><td class="num">'+c.qty+'</td><td>'+esc(c.label||'—')+'</td></tr>').join('');
+    if(b.offcut>0)rows+='<tr><td class="num">'+Math.round(b.offcut)+' mm</td><td class="num">1</td><td><span class="badge ok">'+esc(t('offcut'))+'</span></td></tr>';
+    if(b.waste>0)rows+='<tr><td class="num">'+Math.round(b.waste)+' mm</td><td class="num">—</td><td><span class="badge warn">'+esc(t('waste'))+'</span></td></tr>';
+    const h=document.createElement('div');
+    h.innerHTML='<h3>'+esc(t('bar'))+' #'+b.no+' <span style="color:var(--muted);font-weight:400">('+b.len+' mm)</span></h3><table class="tbl"><thead><tr><th>'+esc(t('length'))+'</th><th>'+esc(t('qty'))+'</th><th>'+esc(t('label'))+'</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    ct.appendChild(h);
+  });
+  if(st.unplaced)toast(st.unplaced+' '+t('pieces')+' — '+t('msgNoResults'),1);
+}
+/* ---------------- warehouse ---------------- */
+function renderWarehouse(){
+  const tb=document.getElementById('whBody');tb.innerHTML='';
+  if(!S.warehouse.length){tb.innerHTML='<tr><td colspan="5"><div class="empty">'+esc(t('noData'))+'</div></td></tr>';return}
+  S.warehouse.forEach((w,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td class="num">'+Math.round(w.lenMM)+' mm</td><td class="num">'+w.qty+'</td><td>'+esc(w.label||'—')+'</td><td>'+esc(new Date(w.date).toLocaleDateString(LANG))+'</td>'+
+      '<td class="num"><button class="danger small" data-i="'+i+'">✕</button></td>';
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll('[data-i]').forEach(b=>b.addEventListener('click',()=>{S.warehouse.splice(+b.dataset.i,1);persist();renderWarehouse()}));
+}
+function sendOffcutsToWarehouse(){
+  const res=S.results;if(!res||!res.stats.offcuts.length){toast(t('msgNoResults'),1);return}
+  res.stats.offcuts.forEach(o=>{S.warehouse.push({lenMM:o.lenMM,qty:1,label:o.label,date:new Date().toISOString()})});
+  persist();renderWarehouse();toast(t('msgSaved'));
+}
+function importWarehouse(){
+  if(!S.warehouse.length){toast(t('noData'),1);return}
+  S.warehouse.forEach(w=>{S.stock.push({len:w.lenMM,qty:w.qty,unit:'mm',label:w.label})});
+  persist();renderStock();toast(t('msgWhImported'));
+}
+/* ---------------- jobs & history ---------------- */
+function renderJobs(){
+  const jl=document.getElementById('jobsList');jl.innerHTML='';
+  if(!S.jobs.length){jl.innerHTML='<div class="empty">'+esc(t('noJobs'))+'</div>'}
+  S.jobs.forEach((j,i)=>{
+    const d=document.createElement('div');d.className='row';d.style.cssText='justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(148,163,184,.12)';
+    d.innerHTML='<div><strong>'+esc(j.name)+'</strong><div style="color:var(--muted);font-size:12.5px">'+esc(new Date(j.date).toLocaleString(LANG))+' · '+j.stats.bars+' '+esc(t('barsNeeded')).toLowerCase()+' · '+fmt(j.stats.eff,1)+'%</div></div>'+
+      '<div class="row"><button class="secondary small" data-l="'+i+'">'+esc(t('load'))+'</button><button class="danger small" data-d="'+i+'">✕</button></div>';
+    jl.appendChild(d);
+  });
+  jl.querySelectorAll('[data-l]').forEach(b=>b.addEventListener('click',()=>loadJob(+b.dataset.l)));
+  jl.querySelectorAll('[data-d]').forEach(b=>b.addEventListener('click',()=>confirmBox(t('confirmDelete'),()=>{S.jobs.splice(+b.dataset.d,1);persist();renderJobs();toast(t('msgDeleted'))})));
+  const hl=document.getElementById('histList');hl.innerHTML='';
+  if(!S.history.length){hl.innerHTML='<div class="empty">'+esc(t('noData'))+'</div>';return}
+  [...S.history].reverse().slice(0,30).forEach(h=>{
+    const d=document.createElement('div');d.style.cssText='padding:8px 0;border-bottom:1px solid rgba(148,163,184,.1);font-size:13.5px';
+    d.innerHTML='<strong>'+esc(h.name)+'</strong> <span style="color:var(--muted)">'+esc(new Date(h.date).toLocaleString(LANG))+' · '+h.bars+' '+esc(t('barsNeeded')).toLowerCase()+' · '+fmt(h.eff,1)+'% · '+(h.currency||'')+' '+fmt(h.cost||0,2)+'</span>';
+    hl.appendChild(d);
+  });
+}
+function saveJob(){
+  const res=S.results;if(!res){toast(t('msgNoResults'),1);return}
+  const name=(document.getElementById('jobName').value||'').trim();
+  if(!name){toast(t('msgJobNameReq'),1);document.getElementById('jobName').focus();return}
+  res.meta.name=name;res.meta.date=new Date().toISOString();
+  S.jobs.push(JSON.parse(JSON.stringify(res)));
+  persist();renderJobs();toast(t('msgSaved'));
+}
+function loadJob(i){
+  const j=S.jobs[i];if(!j)return;
+  S.stock=JSON.parse(JSON.stringify(j.meta.inputs.stock));
+  S.cuts=JSON.parse(JSON.stringify(j.meta.inputs.cuts));
+  document.getElementById('jobName').value=j.meta.name;
+  document.getElementById('priceM').value=j.meta.priceM;
+  document.getElementById('currency').value=j.meta.currency;
+  document.getElementById('kerf').value=j.meta.kerfMM;
+  document.getElementById('kerfUnit').value='mm';
+  document.getElementById('minOffcut').value=j.meta.minOffMM;
+  document.getElementById('offcutUnit').value='mm';
+  S.results=JSON.parse(JSON.stringify(j));
+  persist();renderStock();renderCuts();renderResults();
+  document.querySelector('[data-view="optimizer"]').click();
+  toast(t('msgLoaded'));
+}
+/* ---------------- compare ---------------- */
+function renderCompare(){
+  const a=document.getElementById('cmpA'),b=document.getElementById('cmpB');
+  const opts='<option value="">'+esc(t('selectResult'))+'</option>'+S.jobs.map((j,i)=>'<option value="'+i+'">'+esc(j.name)+' — '+esc(new Date(j.date).toLocaleDateString(LANG))+'</option>').join('');
+  a.innerHTML=opts;b.innerHTML=opts;
+}
+function doCompare(){
+  const a=S.jobs[+document.getElementById('cmpA').value],b=S.jobs[+document.getElementById('cmpB').value];
+  const out=document.getElementById('cmpOut');
+  if(!a||!b){out.innerHTML='<div class="empty">'+esc(t('selectResult'))+'</div>';return}
+  const rows=[
+    [t('barsNeeded'),a.stats.bars,b.stats.bars,'low'],
+    [t('efficiency'),fmt(a.stats.eff,1)+'%',fmt(b.stats.eff,1)+'%','high'],
+    [t('waste'),fmt(a.stats.wasteLen,0)+' mm',fmt(b.stats.wasteLen,0)+' mm','low'],
+    [t('totalCost'),a.meta.currency+' '+fmt(a.stats.stockLen/1000*a.meta.priceM,2),b.meta.currency+' '+fmt(b.stats.stockLen/1000*b.meta.priceM,2),'low']
+  ];
+  out.innerHTML='<table class="tbl"><thead><tr><th></th><th>'+esc(a.meta.name)+'</th><th>'+esc(b.meta.name)+'</th></tr></thead><tbody>'+
+    rows.map(r=>'<tr><td><strong>'+esc(r[0])+'</strong></td><td class="num">'+esc(String(r[1]))+'</td><td class="num">'+esc(String(r[2]))+'</td></tr>').join('')+'</tbody></table>';
+}
+/* ---------------- suppliers ---------------- */
+function renderSuppliers(){
+  const tb=document.getElementById('supBody');tb.innerHTML='';
+  S.suppliers.forEach((s,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td><input type="text" value="'+esc(s.name)+'" data-i="'+i+'" data-f="name"></td>'+
+      '<td><input type="number" min="0" step="any" value="'+esc(s.perKg)+'" data-i="'+i+'" data-f="perKg" style="width:110px"></td>'+
+      '<td class="num"><button class="danger small" data-d="'+i+'">✕</button></td>';
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll('input').forEach(el=>el.addEventListener('change',()=>{const s=S.suppliers[+el.dataset.i];s[el.dataset.f]=el.dataset.f==='name'?el.value:parseFloat(el.value)||0;persist()}));
+  tb.querySelectorAll('[data-d]').forEach(x=>x.addEventListener('click',()=>{S.suppliers.splice(+x.dataset.d,1);persist();renderSuppliers()}));
+}
+function evalSuppliers(){
+  const res=S.results,out=document.getElementById('supOut');
+  if(!res){out.innerHTML='<div class="empty">'+esc(t('noResults'))+'</div>';return}
+  const kgm=rebarKgm()||res.meta.kgm||0;
+  const cur=document.getElementById('currency').value||res.meta.currency||'€';
+  const kg=res.stats.stockLen/1000*kgm;
+  if(!kg){out.innerHTML='<div class="empty">'+esc(t('supNeedRebar'))+'</div>';return}
+  const rows=S.suppliers.filter(s=>s.perKg>0).map(s=>({name:s.name,total:kg*s.perKg})).sort((a,b)=>a.total-b.total);
+  if(!rows.length){out.innerHTML='<div class="empty">'+esc(t('noData'))+'</div>';return}
+  out.innerHTML='<table class="tbl"><thead><tr><th>'+esc(t('supName'))+'</th><th>'+esc(t('totalForJob'))+' ('+fmt(kg,1)+' kg)</th><th></th></tr></thead><tbody>'+
+    rows.map((r,i)=>'<tr><td><strong>'+esc(r.name)+'</strong></td><td class="num">'+esc(cur)+' '+fmt(r.total,2)+'</td><td>'+(i===0?'<span class="badge ok">'+esc(t('cheapest'))+'</span>':'')+'</td></tr>').join('')+'</tbody></table>';
+}
+/* ---------------- CSV / import / session ---------------- */
+function downloadCSV(){
+  const res=S.results;if(!res){toast(t('msgNoResults'),1);return}
+  const st=res.stats;
+  let csv='bar_no;bar_length_mm;piece_length_mm;qty;label;type\n';
+  res.bars.forEach(b=>{
+    const counts={};
+    b.cuts.forEach(c=>{const k=c.len+'|'+(c.label||'');counts[k]=counts[k]||{len:c.len,label:c.label,qty:0};counts[k].qty++});
+    Object.values(counts).forEach(c=>{csv+=b.no+';'+b.len+';'+c.len+';'+c.qty+';"'+(c.label||'').replace(/"/g,'""')+'";cut\n'});
+    if(b.offcut>0)csv+=b.no+';'+b.len+';'+Math.round(b.offcut)+';1;"";offcut\n';
+    if(b.waste>0)csv+=b.no+';'+b.len+';'+Math.round(b.waste)+';1;"";waste\n';
+  });
+  csv+='SUMMARY;bars;'+st.bars+';efficiency%;'+st.eff.toFixed(1)+';waste_mm;'+Math.round(st.wasteLen)+'\n';
+  download((res.meta.name||'steelcut').replace(/[^\w\-]+/g,'_')+'.csv','\ufeff'+csv,'text/csv;charset=utf-8');
+  toast(t('msgExported'));
+}
+function parseImportText(text){
+  const lines=text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l);
+  const out=[];
+  lines.forEach((l,idx)=>{
+    const cells=l.split(/[,;\t]/).map(c=>c.trim().replace(/^"|"$/g,''));
+    if(!cells.length)return;
+    const len=parseFloat(cells[0].replace(',','.'));
+    if(!isFinite(len)||len<=0)return; // skips header rows
+    const qty=cells.length>1?(parseInt(cells[1],10)||1):1;
+    const label=cells.length>2?cells.slice(2).join(' '):'';
+    out.push({len:len,qty:Math.max(1,qty),unit:'mm',label:label});
+  });
+  return out;
+}
+function downloadSession(){
+  download('steelcut-session.json',JSON.stringify({app:'steelcut',v:1,lang:S.lang,stock:S.stock,cuts:S.cuts,warehouse:S.warehouse,jobs:S.jobs,history:S.history,suppliers:S.suppliers},null,1),'application/json');
+  toast(t('msgExported'));
+}
+function uploadSession(file){
+  const rd=new FileReader();
+  rd.onload=()=>{try{
+    const d=JSON.parse(rd.result);
+    for(const k of['lang','stock','cuts','warehouse','jobs','history','suppliers'])if(d[k]!==undefined)S[k]=d[k];
+    LANG=S.lang||'el';buildLangSel();applyI18n();renderStock();renderCuts();refreshWhBtn();
+    persist();toast(t('msgSessionLoaded'));
+  }catch(e){toast(t('msgInvalidNum'),1)}};
+  rd.readAsText(file);
+}
+/* ---------------- QR ---------------- */
+function refreshQR(){
+  const res=S.results,box=document.getElementById('qrBox');
+  if(!res){box.style.display='none';return}
+  box.style.display='block';
+  const data='SteelCut | '+(res.meta.name||'')+' | '+res.stats.bars+' bars | '+res.stats.eff.toFixed(1)+'% eff | '+new Date(res.meta.date).toLocaleDateString();
+  const img=document.getElementById('qrImg');
+  img.onerror=()=>{img.style.display='none'};
+  img.style.display='block';
+  img.src='https://api.qrserver.com/v1/create-qr-code/?size=180x180&data='+encodeURIComponent(data);
+}
+/* ---------------- demo & tour ---------------- */
+function loadDemo(){
+  S.stock=[{len:6000,qty:10,unit:'mm',label:'6 m'},{len:12000,qty:5,unit:'mm',label:'12 m'}];
+  S.cuts=[{len:2500,qty:8,unit:'mm',label:'Column'},{len:1800,qty:12,unit:'mm',label:'Beam'},{len:1200,qty:20,unit:'mm',label:'Stirrup'}];
+  document.getElementById('kerf').value=3;document.getElementById('kerfUnit').value='mm';
+  document.getElementById('minOffcut').value=300;document.getElementById('offcutUnit').value='mm';
+  document.getElementById('jobName').value='Demo project';
+  persist();renderStock();renderCuts();toast(t('msgDemoLoaded'));
+  var _el=document.getElementById('cardStock');if(_el.scrollIntoView)_el.scrollIntoView({behavior:'smooth'});
+}
+const TOUR=[
+ {sel:null,k1:'tour1t',k2:'tour1b'},
+ {sel:'#cardStock',k1:'tour2t',k2:'tour2b'},
+ {sel:'#cardCuts',k1:'tour3t',k2:'tour3b'},
+ {sel:'#cardSettings',k1:'tour4t',k2:'tour4b'},
+ {sel:'#cardResults',k1:'tour5t',k2:'tour5b'}
+];
+let tourIdx=-1;
+function startTour(){
+  document.querySelector('[data-view="optimizer"]').click();
+  tourIdx=0;showTourStep();
+}
+function endTour(){tourIdx=-1;document.getElementById('tourLayer').style.display='none';document.getElementById('tourLayer').innerHTML='';document.querySelectorAll('.tour-spot').forEach(e=>e.classList.remove('tour-spot'))}
+function showTourStep(){
+  document.querySelectorAll('.tour-spot').forEach(e=>e.classList.remove('tour-spot'));
+  const layer=document.getElementById('tourLayer');layer.style.display='block';
+  const st=TOUR[tourIdx];
+  let html='';
+  if(st.sel){
+    const el=document.querySelector(st.sel);if(!el){endTour();return}
+    el.classList.add('tour-spot');
+    const r=el.getBoundingClientRect();
+    const top=Math.min(window.innerHeight-260,r.bottom+14+window.scrollY>window.innerHeight?Math.max(10,r.top-240):r.bottom+14);
+    html='<div class="tour-card" style="top:'+Math.max(10,Math.min(window.innerHeight-260,(r.bottom+14))) +'px;left:'+Math.max(10,Math.min(window.innerWidth-360,r.left))+'px">';
+  }else{
+    html='<div class="tour-card" style="top:50%;left:50%;transform:translate(-50%,-50%)">';
+  }
+  html+='<h3>'+esc(t(st.k1))+'</h3><div>'+esc(t(st.k2))+'</div>'+
+    '<div class="row"><button class="secondary small" id="tourSkip">'+esc(t('tourSkip'))+'</button>'+
+    (tourIdx>0?'<button class="secondary small" id="tourBack">'+esc(t('tourBack'))+'</button>':'')+
+    (tourIdx<TOUR.length-1?'<button class="small" id="tourNext">'+esc(t('tourNext'))+'</button>':'<button class="small" id="tourNext">'+esc(t('tourDone'))+'</button>')+'</div></div>';
+  layer.innerHTML=html;
+  document.getElementById('tourSkip').onclick=endTour;
+  const nx=document.getElementById('tourNext');
+  if(nx)nx.onclick=()=>{tourIdx++;if(tourIdx>=TOUR.length){endTour();toast(t('tourDone'))}else showTourStep()};
+  const bk=document.getElementById('tourBack');
+  if(bk)bk.onclick=()=>{tourIdx--;showTourStep()};
+  // if last step needs results, calculate demo quickly when empty
+  if(st.sel==='#cardResults'&&!S.results&&S.cuts.length&&S.stock.length){doCalculate();setTimeout(showTourStep,350);return}
+}
+/* ---------------- warehouse modal ---------------- */
+function whModal(){
+  const back=document.getElementById('modalBack'),box=document.getElementById('modalBox');
+  box.innerHTML='<h2>'+esc(t('addOffcut'))+'</h2>'+
+    '<label class="f">'+esc(t('length'))+' (mm)</label><input type="number" id="wLen" value="1000" min="1" style="width:100%">'+
+    '<label class="f">'+esc(t('qty'))+'</label><input type="number" id="wQty" value="1" min="1" style="width:100%">'+
+    '<label class="f">'+esc(t('label'))+'</label><input type="text" id="wLab" style="width:100%">'+
+    '<div class="row" style="justify-content:flex-end;margin-top:18px"><button class="secondary small" id="wCancel">'+esc(t('closeBtn'))+'</button> <button class="small" id="wOk">'+esc(t('addOffcut'))+'</button></div>';
+  back.classList.add('open');
+  document.getElementById('wCancel').onclick=()=>back.classList.remove('open');
+  back.onclick=e=>{if(e.target===back)back.classList.remove('open')};
+  document.getElementById('wOk').onclick=()=>{
+    const l=parseFloat(document.getElementById('wLen').value)||0,q=Math.max(1,parseInt(document.getElementById('wQty').value)||1);
+    if(l<=0){toast(t('msgInvalidNum'),1);return}
+    S.warehouse.push({lenMM:l,qty:q,label:document.getElementById('wLab').value,date:new Date().toISOString()});
+    persist();renderWarehouse();back.classList.remove('open');toast(t('msgSaved'));
+  };
+}
+/* ---------------- send offcuts button ---------------- */
+function refreshWhBtn(){
+  let b=document.getElementById('whSendBtn');
+  if(!b){b=document.createElement('button');b.id='whSendBtn';b.className='secondary small';b.style.marginInlineStart='10px';
+    b.onclick=()=>{sendOffcutsToWarehouse()};document.querySelector('#cardResults h2').appendChild(b)}
+  b.textContent='→ '+t('whTitle');
+}
+/* ---------------- events & init ---------------- */
+function bindEvents(){
+  document.getElementById('addStock').onclick=()=>{S.stock.push({len:6000,qty:1,unit:'mm',label:''});persist();renderStock()};
+  document.getElementById('addCut').onclick=()=>{S.cuts.push({len:1000,qty:1,unit:'mm',label:''});persist();renderCuts()};
+  document.getElementById('calcBtn').onclick=doCalculate;
+  document.getElementById('saveJobBtn').onclick=saveJob;
+  document.getElementById('printBtn').onclick=()=>window.print();
+  document.getElementById('fromWarehouse').onclick=importWarehouse;
+  document.getElementById('importExcelBtn').onclick=()=>document.getElementById('excelFile').click();
+  document.getElementById('excelFile').addEventListener('change',e=>{
+    const f=e.target.files[0];if(!f)return;
+    const rd=new FileReader();
+    rd.onload=()=>{const rows=parseImportText(String(rd.result));if(!rows.length){toast(t('msgInvalidNum'),1);return}
+      rows.forEach(r=>S.cuts.push(r));persist();renderCuts();toast(t('msgImported')+' ('+rows.length+')')};
+    rd.readAsText(f);e.target.value='';
+  });
+  document.getElementById('whAdd').onclick=whModal;
+  document.getElementById('clearHist').onclick=()=>confirmBox(t('clearHistory'),()=>{S.history=[];persist();renderJobs();toast(t('msgCleared'))});
+  document.getElementById('cmpGo').onclick=doCompare;
+  document.getElementById('supAdd').onclick=()=>{S.suppliers.push({name:'',perKg:0});persist();renderSuppliers()};
+  document.getElementById('supCalc').onclick=evalSuppliers;
+  document.getElementById('csvBtn').onclick=downloadCSV;
+  document.getElementById('sessDl').onclick=downloadSession;
+  document.getElementById('sessUpBtn').onclick=()=>document.getElementById('sessUp').click();
+  document.getElementById('sessUp').addEventListener('change',e=>{if(e.target.files[0])uploadSession(e.target.files[0]);e.target.value=''});
+  document.getElementById('repPrint').onclick=()=>window.print();
+  document.getElementById('tourBtn').onclick=startTour;
+  document.getElementById('demoBtn').onclick=loadDemo;
+  document.getElementById('heroDemo').onclick=loadDemo;
+  document.getElementById('heroStart').onclick=()=>{var _e=document.getElementById('cardStock');if(_e.scrollIntoView)_e.scrollIntoView({behavior:'smooth'})};
+  document.getElementById('langSel').addEventListener('change',e=>{
+    LANG=e.target.value;S.lang=LANG;persist();applyI18n();buildRebarSel();refreshWhBtn();
+    if(S.results)renderResults();renderWarehouse();renderJobs();renderCompare();renderSuppliers();
+    toast(t('msgLang'));
+  });
+  document.querySelectorAll('[data-i18n="prNotify"]').forEach(b=>b.addEventListener('click',()=>toast(t('msgNotifyThanks'))));
+  document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName!=='TEXTAREA'&&e.target.tagName!=='BUTTON'){const v=document.querySelector('.view.active');if(v&&v.id==='v-optimizer')doCalculate()}});
+}
+function init(){
+  restore();
+  LANG=S.lang||'el';S.lang=LANG;
+  buildLangSel();applyI18n();buildRebarSel();
+  if(!S.stock.length)S.stock.push({len:6000,qty:2,unit:'mm',label:''});
+  if(!S.cuts.length)S.cuts.push({len:1500,qty:4,unit:'mm',label:''});
+  renderStock();renderCuts();refreshWhBtn();
+  bindEvents();
+  if(S.results){renderResults()}
+  refreshQR();
+}
+if(typeof document!=='undefined'){document.addEventListener('DOMContentLoaded',init)}
+</script>
+</body>
+</html>
