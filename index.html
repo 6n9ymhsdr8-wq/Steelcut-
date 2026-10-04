@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="el" dir="ltr">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -359,11 +359,11 @@ tour4t:"3 · Υπολογισμός",tour4b:"Ρύθμισε το φάρδος λ
 tour5t:"4 · Χρησιμοποίησε τα αποτελέσματα",tour5b:"Εκτύπωσε την αναφορά συνεργείου, κατέβασε το CSV, αποθήκευσε τη δουλειά ή στείλε τα ρέταλα στην αποθήκη. Αυτό ήταν!",supNeedRebar:"Διάλεξε πρώτα τύπο οπλισμού στις Ρυθμίσεις."}};
 /* ---------------- state & storage ---------------- */
 const LSKEY='steelcut_v1';
-let S={lang:'el',stock:[],cuts:[],warehouse:[],jobs:[],history:[],suppliers:[],results:null};
+let S={lang:'en',stock:[],cuts:[],warehouse:[],jobs:[],history:[],suppliers:[],results:null};
 function persist(){try{localStorage.setItem(LSKEY,JSON.stringify({lang:S.lang,stock:S.stock,cuts:S.cuts,warehouse:S.warehouse,jobs:S.jobs.slice(-50),history:S.history.slice(-80),suppliers:S.suppliers}))}catch(e){}}
 function restore(){try{const d=JSON.parse(localStorage.getItem(LSKEY)||'{}');for(const k of['lang','stock','cuts','warehouse','jobs','history','suppliers'])if(d[k]!==undefined)S[k]=d[k]}catch(e){}}
 /* ---------------- i18n runtime ---------------- */
-let LANG='el';
+let LANG='en';
 function t(k){const d=I18N[LANG]||{};return d[k]!==undefined?d[k]:(I18N.en[k]!==undefined?I18N.en[k]:k)}
 function applyI18n(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.getAttribute('data-i18n'))});
@@ -721,7 +721,7 @@ function uploadSession(file){
   rd.onload=()=>{try{
     const d=JSON.parse(rd.result);
     for(const k of['lang','stock','cuts','warehouse','jobs','history','suppliers'])if(d[k]!==undefined)S[k]=d[k];
-    LANG=S.lang||'el';buildLangSel();applyI18n();renderStock();renderCuts();refreshWhBtn();
+    LANG=S.lang||'en';buildLangSel();applyI18n();renderStock();renderCuts();refreshWhBtn();
     persist();toast(t('msgSessionLoaded'));
   }catch(e){toast(t('msgInvalidNum'),1)}};
   rd.readAsText(file);
@@ -852,7 +852,7 @@ function bindEvents(){
 }
 function init(){
   restore();
-  LANG=S.lang||'el';S.lang=LANG;
+  LANG=S.lang||'en';S.lang=LANG;
   buildLangSel();applyI18n();buildRebarSel();
   if(!S.stock.length)S.stock.push({len:6000,qty:2,unit:'mm',label:''});
   if(!S.cuts.length)S.cuts.push({len:1500,qty:4,unit:'mm',label:''});
