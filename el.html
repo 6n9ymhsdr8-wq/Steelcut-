@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SteelCut — Βελτιστοποίηση Κοπής Οπλισμού | Λιγότερο Waste, Περισσότερο Κέρδος</title>
+<meta name="description" content="Το SteelCut υπολογίζει το βέλτιστο πλάνο κοπής χαλύβδινων ράβδων σε δευτερόλεπτα. Για συνεργεία οπλισμού, εργολάβους και μάντρες σιδήρου. Δωρεάν, χωρίς εγκατάσταση, στα ελληνικά.">
+<meta name="keywords" content="κοπή οπλισμού, βελτιστοποίηση κοπής, waste οπλισμός, ράβδοι χάλυβα, cutting optimizer, μπετόβεργες, συνεργείο οπλισμού">
+<meta property="og:title" content="SteelCut — Βελτιστοποίηση Κοπής Οπλισμού">
+<meta property="og:description" content="Βρες το βέλτιστο πλάνο κοπής για τις ράβδους σου σε δευτερόλεπτα. Λιγότερο waste, χαμηλότερο κόστος. Δωρεάν.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="el_GR">
+<link rel="alternate" hreflang="en" href="index.html">
+<link rel="alternate" hreflang="el" href="el.html">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--blue:#0e4d8a;--navy:#0d2b4d;--light:#e8f0f9;--bg:#f7f9fb;--txt:#1c2b3a;--muted:#5b6b7d;--accent:#f5a623;--green:#1e9e6a}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--txt);background:var(--bg);line-height:1.6}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+header{background:#fff;border-bottom:1px solid #d5dce3;position:sticky;top:0;z-index:50}
+header .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 24px}
+.logo{font-weight:800;font-size:22px;color:var(--navy);text-decoration:none}
+.logo span{color:var(--blue)}
+nav a{margin-left:22px;text-decoration:none;color:var(--muted);font-weight:500;font-size:15px}
+nav a:hover{color:var(--blue)}
+.btn{display:inline-block;background:var(--blue);color:#fff!important;text-decoration:none;padding:13px 30px;border-radius:8px;font-weight:700;font-size:16px;border:none;cursor:pointer;transition:.2s}
+.btn:hover{background:var(--navy);transform:translateY(-1px)}
+.btn.ghost{background:#fff;color:var(--blue)!important;border:2px solid var(--blue)}
+.btn.ghost:hover{background:var(--light)}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);color:#fff;padding:80px 0 70px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 18px,rgba(255,255,255,.03) 18px,rgba(255,255,255,.03) 20px)}
+.hero .wrap{position:relative;z-index:1}
+.hero h1{font-size:44px;line-height:1.2;margin-bottom:18px;max-width:700px}
+.hero h1 .hl{color:var(--accent)}
+.hero p.sub{font-size:19px;opacity:.92;max-width:640px;margin-bottom:32px}
+.hero .cta-row{display:flex;gap:14px;flex-wrap:wrap}
+.hero .btn.ghost{border-color:#fff;color:#fff!important;background:transparent}
+.hero .btn.ghost:hover{background:rgba(255,255,255,.12)}
+.stats{display:flex;gap:36px;margin-top:44px;flex-wrap:wrap}
+.stat b{font-size:32px;display:block;color:var(--accent)}
+.stat span{font-size:14px;opacity:.85}
+.trust{background:#fff;border-bottom:1px solid #d5dce3;padding:20px 0}
+.trust .wrap{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center}
+.chip{background:var(--light);color:var(--navy);padding:8px 18px;border-radius:20px;font-size:14px;font-weight:600}
+section{padding:70px 0}
+h2.sec{font-size:32px;color:var(--navy);text-align:center;margin-bottom:14px}
+p.lead{text-align:center;color:var(--muted);max-width:680px;margin:0 auto 44px;font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px}
+.card{background:#fff;border:1px solid #d5dce3;border-radius:12px;padding:28px;transition:.2s}
+.card:hover{box-shadow:0 8px 28px rgba(14,77,138,.12);transform:translateY(-3px)}
+.card .icon{font-size:34px;margin-bottom:12px}
+.card h3{color:var(--navy);margin-bottom:10px;font-size:19px}
+.card p{color:var(--muted);font-size:15px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;counter-reset:step}
+.step{background:#fff;border:1px solid #d5dce3;border-radius:12px;padding:28px;position:relative}
+.step::before{counter-increment:step;content:counter(step);position:absolute;top:-18px;left:24px;background:var(--accent);color:var(--navy);font-weight:800;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px}
+.step h3{color:var(--navy);margin:8px 0 10px}
+.step p{color:var(--muted);font-size:15px}
+.example{background:var(--navy);color:#fff;border-radius:16px;padding:44px;display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+.example h3{font-size:24px;margin-bottom:14px}
+.example p{opacity:.88;margin-bottom:8px}
+.example .numbers{background:rgba(255,255,255,.07);border-radius:12px;padding:28px}
+.num-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.12);font-size:15px}
+.num-row:last-child{border:none}
+.num-row b{color:var(--accent);font-size:19px}
+.faq{max-width:760px;margin:0 auto}
+.faq details{background:#fff;border:1px solid #d5dce3;border-radius:10px;margin-bottom:12px;padding:18px 22px}
+.faq summary{font-weight:700;color:var(--navy);cursor:pointer;font-size:16px}
+.faq p{color:var(--muted);margin-top:10px;font-size:15px}
+.final{background:linear-gradient(135deg,var(--blue),var(--navy));color:#fff;text-align:center;border-radius:16px;padding:60px 30px}
+.final h2{font-size:32px;margin-bottom:14px}
+.final p{opacity:.9;margin-bottom:28px;font-size:17px}
+footer{background:var(--navy);color:#9fb0c3;padding:34px 0;font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+footer a{color:#c9d8e8;text-decoration:none}
+footer a:hover{color:#fff}
+@media(max-width:700px){.hero h1{font-size:32px}.example{grid-template-columns:1fr}nav a:not(.btn){display:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="el.html">Steel<span>Cut</span></a>
+    <nav>
+      <a href="#features">Χαρακτηριστικά</a>
+      <a href="#how">Πώς δουλεύει</a>
+      <a href="#faq">Συχνές ερωτήσεις</a>
+      <a href="index.html" title="English version">EN</a>
+      <a class="btn" href="index.html" style="padding:10px 22px;margin-left:22px">Άνοιγμα εφαρμογής</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>Κόψε το <span class="hl">waste οπλισμού</span> — όχι το κέρδος σου.</h1>
+    <p class="sub">Το SteelCut υπολογίζει αυτόματα το βέλτιστο πλάνο κοπής για τις ράβδους σου σε δευτερόλεπτα. Λιγότερα ρετάλια, χαμηλότερο κόστος, έτοιμες αναφορές για το συνεργείο.</p>
+    <div class="cta-row">
+      <a class="btn" href="index.html">Δοκίμασέ το δωρεάν →</a>
+      <a class="btn ghost" href="#how">Δες πώς δουλεύει</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>Φ8–Φ40</b><span>διαμέτρους σε μία δουλειά</span></div>
+      <div class="stat"><b>Δευτερόλεπτα</b><span>για το βέλτιστο πλάνο κοπής</span></div>
+      <div class="stat"><b>100% δωρεάν</b><span>χωρίς λογαριασμό, χωρίς εγκατάσταση</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="trust">
+  <div class="wrap">
+    <span class="chip">🔧 Συνεργεία οπλισμού</span>
+    <span class="chip">🏗️ Εργολάβοι</span>
+    <span class="chip">🏭 Μάντρες σιδήρου</span>
+    <span class="chip">⚙️ Μεταλλικές κατασκευές</span>
+  </div>
+</div>
+
+<section id="features">
+  <div class="wrap">
+    <h2 class="sec">Ό,τι χρειάζεται το συνεργείο σου</h2>
+    <p class="lead">Φτιαγμένο από μηχανικό, για ανθρώπους που δουλεύουν με σίδερο κάθε μέρα.</p>
+    <div class="grid">
+      <div class="card"><div class="icon">📐</div><h3>Βέλτιστο πλάνο κοπής</h3><p>Δώσε τα μήκη που θέλεις και τις ράβδους που έχεις — το SteelCut βρίσκει τον συνδυασμό με το ελάχιστο ρετάλι, αυτόματα.</p></div>
+      <div class="card"><div class="icon">🔩</div><h3>Πολλές διάμετροι μαζί</h3><p>Ανάμειξε Φ8 έως Φ40 στην ίδια δουλειά. Κάθε διάμετρος βελτιστοποιείται ξεχωριστά, όλα σε μία οθόνη.</p></div>
+      <div class="card"><div class="icon">🖨️</div><h3>Αναφορές PDF &amp; ετικέτες</h3><p>Εκτύπωσε το πλάνο κοπής για το συνεργείο και ετικέτες για κάθε δέμα — τέλος τα λάθη στην κοπή.</p></div>
+      <div class="card"><div class="icon">📊</div><h3>Dashboard &amp; ιστορικό</h3><p>Παρακολούθησε waste, κόστος και αποδοτικότητα σε όλες τις δουλειές σου, με γραφήματα.</p></div>
+      <div class="card"><div class="icon">🏭</div><h3>Σύγκριση προμηθευτών</h3><p>Καταχώρησε τιμές προμηθευτών και δες αυτόματα ποιος συμφέρει για κάθε δουλειά.</p></div>
+      <div class="card"><div class="icon">🌍</div><h3>Στα ελληνικά</h3><p>Πλήρης ελληνική διεπαφή (και 11 ακόμα γλώσσες). Δουλεύει offline, τα δεδομένα μένουν στη συσκευή σου.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how" style="background:#fff;border-top:1px solid #d5dce3;border-bottom:1px solid #d5dce3">
+  <div class="wrap">
+    <h2 class="sec">Τρία βήματα και τέλος</h2>
+    <p class="lead">Από τη λίστα κοπής στο πλάνο, πιο γρήγορα απ' όσο θα άνοιγες το Excel.</p>
+    <div class="steps">
+      <div class="step"><h3>Βάλε τα μήκη</h3><p>Γράψε τα κομμάτια που χρειάζεσαι (μήκος × ποσότητα) για κάθε διάμετρο. Μπορείς να αποθηκεύσεις τη δουλειά με όνομα πελάτη/έργου.</p></div>
+      <div class="step"><h3>Πάτα «Υπολογισμός»</h3><p>Το SteelCut δοκιμάζει χιλιάδες συνδυασμούς και σου δίνει το πλάνο με το λιγότερο waste — σε δευτερόλεπτα.</p></div>
+      <div class="step"><h3>Κόψε &amp; εκτύπωσε</h3><p>Πάρε το πλάνο στο συνεργείο, εκτύπωσε ετικέτες για κάθε ράβδο και κράτα το PDF στο αρχείο του έργου.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="example">
+      <div>
+        <h3>Παράδειγμα: γιατί αξίζει</h3>
+        <p>Μία τυπική δουλειά: 120 τεμάχια Φ12 σε διάφορα μήκη, ράβδοι 12 m.</p>
+        <p>Με το χέρι, το waste βγαίνει συνήθως 8–12%. Το SteelCut το ρίχνει στο ελάχιστο δυνατό — και σου δείχνει ακριβώς πού πήγε κάθε εκατοστό.</p>
+        <p style="margin-top:16px"><a class="btn" href="index.html">Δοκίμασέ το με τα δικά σου νούμερα →</a></p>
+      </div>
+      <div class="numbers">
+        <div class="num-row"><span>Τεμάχια προς κοπή</span><b>120</b></div>
+        <div class="num-row"><span>Διάμετρος</span><b>Φ12</b></div>
+        <div class="num-row"><span>Μήκος ράβδου</span><b>12 m</b></div>
+        <div class="num-row"><span>Χρόνος υπολογισμού</span><b>~2 sec</b></div>
+        <div class="num-row"><span>Κόστος εργαλείου</span><b>0 €</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="padding-top:20px">
+  <div class="wrap">
+    <h2 class="sec">Συχνές ερωτήσεις</h2>
+    <p class="lead">Ό,τι ρωτάει κάθε συνεργείο πριν το δοκιμάσει.</p>
+    <div class="faq">
+      <details><summary>Είναι πραγματικά δωρεάν;</summary><p>Ναι. Δεν έχει λογαριασμό, συνδρομή ή κρυφές χρεώσεις. Ανοίγεις τη σελίδα και δουλεύεις.</p></details>
+      <details><summary>Χρειάζεται εγκατάσταση;</summary><p>Όχι. Δουλεύει κατευθείαν στον browser — σε κινητό, tablet και υπολογιστή. Μπορείς να το αποθηκεύσεις και σαν εφαρμογή (PWA) για offline χρήση.</p></details>
+      <details><summary>Πού πάνε τα δεδομένα μου;</summary><p>Πουθενά. Όλα αποθηκεύονται τοπικά στη συσκευή σου (localStorage). Δεν ανεβαίνει τίποτα σε server.</p></details>
+      <details><summary>Κάνει για μεγάλες δουλειές με πολλές διαμέτρους;</summary><p>Ναι — υποστηρίζει Φ8 έως Φ40 ταυτόχρονα, με ξεχωριστή βελτιστοποίηση ανά διάμετρο, σενάρια σύγκρισης και ιστορικό έργων.</p></details>
+      <details><summary>Μπορώ να το δείξω στον πελάτη;</summary><p>Φυσικά. Βγάλε επαγγελματικό PDF με το πλάνο κοπής, το waste και το κόστος — έτοιμο για προσφορά ή αρχείο έργου.</p></details>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="final">
+      <h2>Σταμάτα να πετάς σίδερο.</h2>
+      <p>Άνοιξε το SteelCut και δες το βέλτιστο πλάνο κοπής σε δευτερόλεπτα.</p>
+      <a class="btn" href="index.html" style="background:#fff;color:var(--navy)!important">Ξεκίνα δωρεάν →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 SteelCut — Δωρεάν εργαλείο βελτιστοποίησης κοπής οπλισμού</span>
+    <span><a href="index.html">English version</a> · <a href="index.html">Άνοιγμα εφαρμογής</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
