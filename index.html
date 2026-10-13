@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SteelCut — Rebar & Steel Bar Cutting Optimizer</title>
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ff7a1a">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="description" content="Free rebar & steel bar cutting optimizer. Optimal cutting plans with minimal waste — cut labels, PDF reports, offcut warehouse and supplier comparison.">
@@ -360,7 +359,6 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
       <button data-nav="pricing" data-i18n="navPricing">Pricing</button>
     </nav>
     <div class="bar-cta">
-      <button class="btn btn-ghost btn-sm" id="installBtn" data-i18n="ws2aInstallApp" style="display:none">Install app</button>
       <select id="langSel" aria-label="Language"></select>
 <label class="expert-wrap" id="expertWrap"><input type="checkbox" id="expertMode"><span data-i18n="ws3Expert">Expert mode</span></label>
       <button class="btn btn-primary btn-sm" data-nav="optimizer" data-i18n="openApp">Open app</button>
@@ -1423,15 +1421,6 @@ function tourShow(){document.querySelectorAll('.tour-tip').forEach(e=>e.remove()
   d.innerHTML='<h4>'+esc(t('tour'+(tourStep+1)+'t'))+'</h4><p>'+esc(t('tour'+(tourStep+1)+'b'))+'</p><div class="trow">'+(tourStep>0?'<button class="btn btn-ghost" data-tb>'+esc(t('tourBack'))+'</button>':'')+'<button class="btn btn-ghost" data-ts>'+esc(t('tourSkip'))+'</button>'+(tourStep<4?'<button class="btn btn-accent" data-tn>'+esc(t('tourNext'))+'</button>':'<button class="btn btn-accent" data-td>'+esc(t('tourDone'))+'</button>')+'</div>';
   document.body.appendChild(d);show('optimizer');
   const q=s=>d.querySelector(s);if(q('[data-tn]'))q('[data-tn]').onclick=()=>{tourStep++;tourShow()};if(q('[data-tb]'))q('[data-tb]').onclick=()=>{tourStep--;tourShow()};if(q('[data-ts]'))q('[data-ts]').onclick=()=>d.remove();if(q('[data-td]'))q('[data-td]').onclick=()=>d.remove()}
-var ws2aInstallEvt=null;
-function ws2aCaptureInstall(e){
-  e.preventDefault();ws2aInstallEvt=e;
-  if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone)return; /* already installed */
-  var b=$('installBtn');if(!b)return;b.style.display='';
-  b.onclick=function(){if(!ws2aInstallEvt)return;
-    ws2aInstallEvt.prompt();
-    ws2aInstallEvt.userChoice.then(function(ch){if(ch&&ch.outcome==='accepted'){b.style.display='none'}ws2aInstallEvt=null})};
-}
 /* =====================================================================
    WS2C — SteelCut workstream 2C: real .xlsx import + quick text input
    ---------------------------------------------------------------------
@@ -1719,10 +1708,8 @@ function ws2cParseQuick(text){
 /* ================= init ================= */
 function init(){
   const sv=load();if(sv&&sv.S){S=Object.assign(S,sv.S)}
-  /* WS2A: PWA — register service worker + wire install prompt */
+  /* Offline support: service worker (no install prompt — website only) */
   if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}
-  window.addEventListener('beforeinstallprompt',ws2aCaptureInstall);
-  window.addEventListener('appinstalled',function(){var b=$('installBtn');if(b)b.style.display='none';toast(t('ws2aMsgInstalled'))});
   LANG=(S.lang&&I18N[S.lang])?S.lang:'en';S.lang=LANG;
   if(!S.project.date)$('pDate').value=new Date().toISOString().slice(0,10);
   fillForm();renderStock();renderCuts();renderWarehouse();renderSuppliers();
