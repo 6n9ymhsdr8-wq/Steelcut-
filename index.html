@@ -251,9 +251,9 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 /* ============ ws1 additions ============ */
 /* =====================================================================
    WS1 — CSS additions (SteelCut upgrade)
-   INSERTION: INSERT_BEFORE the anchor below (end of the <style> block).
+   INSERTION: INSERT_BEFORE the anchor below (end of the [style] block).
    Anchor (verbatim, unique in index.html):
-   </style>
+   [/style]
    ===================================================================== */
 /* WS1: checkbox sizing inside the settings formgrid (light industrial look) */
 .fg input[type="checkbox"]{width:20px;height:20px;margin-top:10px;accent-color:var(--brand);cursor:pointer}
@@ -263,8 +263,8 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 /* ============ ws2a additions ============ */
 /* ============================================================
    SteelCut WS2A — CSS additions (patches only, never edit directly)
-   Add this block inside the existing <style> in <head>:
-     ANCHOR (INSERT_BEFORE):  </style>
+   Add this block inside the existing [style] in <head>:
+     ANCHOR (INSERT_BEFORE):  [/style]
    Light industrial style, reuses existing .plabel/.bc classes.
    ============================================================ */
 
@@ -276,7 +276,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 
 /* ============ ws2b additions ============ */
 /* ================= WS2B css-additions.css =================
-   Insert BEFORE the closing </style> tag of index.html (the file has exactly one).
+   Insert BEFORE the closing [/style] tag of index.html (the file has exactly one).
    Everything else reuses existing classes (panel, btn, data table, modal). */
 
 /* Cutting-sequence blocks in the efficiency report */
@@ -289,7 +289,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
    WS2C — CSS additions: quick-input textarea + hint line
    ---------------------------------------------------------------------
    PATCH — apply per README.md, change CSS-1:
-     INSERT_BEFORE the closing </style> tag (unique in <head>)
+     INSERT_BEFORE the closing [/style] tag (unique in <head>)
      the rules below. They reuse the app's own variables
      (--line, --brand, --muted) so the light industrial theme is kept.
    ===================================================================== */
@@ -301,8 +301,8 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 /* =====================================================================
    WS3 — ease of use / world-class UX : mobile & workshop CSS
    ---------------------------------------------------------------------
-   Integration: paste this whole block BEFORE the closing </style> tag
-   (the </style> that follows the "@media print" body.print-labels block,
+   Integration: paste this whole block BEFORE the closing [/style] tag
+   (the [/style] that follows the "@media print" body.print-labels block,
    ~line 170). Purely additive: no existing rule is changed or removed.
    ===================================================================== */
 
