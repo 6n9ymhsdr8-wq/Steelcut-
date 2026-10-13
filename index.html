@@ -39,7 +39,7 @@
       "applicationSubCategory": "Cutting stock optimizer",
       "operatingSystem": "Web",
       "url": "https://6n9ymhsdr8-wq.github.io/Steelcut-/",
-      "description": "Free rebar and steel bar cutting optimizer. Compute optimal cutting plans with minimal waste — multi-diameter optimization, saw kerf and angled cuts, reusable offcut warehouse, cut labels with QR codes, PDF reports, DXF export, supplier price comparison and project dashboard. Works offline as an installable app. Available in 12 languages.",
+      "description": "Free rebar and steel bar cutting optimizer. Compute optimal cutting plans with minimal waste — multi-diameter optimization, saw kerf and angled cuts, reusable offcut warehouse, cut labels with QR codes, PDF reports, DXF export, supplier price comparison and project dashboard. Works offline after the first load. Available in 12 languages.",
       "inLanguage": ["en", "el", "de", "fr", "es", "it", "pt", "nl", "pl", "tr", "ar", "ro"],
       "isAccessibleForFree": true,
       "offers": {
@@ -47,7 +47,7 @@
         "price": "0",
         "priceCurrency": "USD"
       },
-      "featureList": "1D cutting stock optimization, multi-diameter rebar optimization, saw kerf and angled cuts, reusable offcut warehouse, cut labels with QR codes, PDF reports, DXF export, supplier price comparison, project dashboard, BBS import, stock length advisor, offline PWA"
+      "featureList": "1D cutting stock optimization, multi-diameter rebar optimization, saw kerf and angled cuts, reusable offcut warehouse, cut labels with QR codes, PDF reports, DXF export, supplier price comparison, project dashboard, BBS import, stock length advisor, offline support"
     },
     {
       "@type": "FAQPage",
@@ -89,7 +89,7 @@
           "name": "Can I use it offline?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "After the first load, the app itself works offline. Only the QR code image and the PDF library load from the internet."
+            "text": "After the first load, the site itself works offline. Only the QR code image and the PDF library load from the internet."
           }
         }
       ]
@@ -218,7 +218,7 @@ table.data input:focus,table.data select:focus{outline:2px solid #bcd6ef;border-
 .faq details[open] summary{border-bottom:1px solid var(--line)}
 .faq .a{padding:16px 20px;color:var(--muted);font-size:14.5px}
 footer{background:var(--navy);color:#b9c9dc;padding:48px 0 28px;margin-top:40px}
-footer .fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:28px;margin-bottom:30px}
+footer .fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:28px;margin-bottom:30px}
 footer h4{color:#fff;font-size:14px;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em}
 footer a{color:#b9c9dc;text-decoration:none;font-size:14px;display:block;padding:4px 0;cursor:pointer}
 footer a:hover{color:#fff}
@@ -234,7 +234,9 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 .tour-tip h4{margin-bottom:8px;font-size:15px}.tour-tip p{font-size:13.5px;color:#c9d8e8;margin-bottom:14px}
 .tour-tip .trow{display:flex;gap:8px;justify-content:flex-end}
 .tour-tip .btn{padding:7px 14px;font-size:13px}
-@media(max-width:900px){.grid3,.steps{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.metrics,.kpis{grid-template-columns:repeat(2,1fr)}.formgrid{grid-template-columns:1fr}.mainnav{display:none}.hero h1{font-size:32px}.labelsheet{grid-template-columns:repeat(2,1fr)}footer .fgrid{grid-template-columns:1fr 1fr}}
+.nav-toggle{display:none;background:#fff;border:1px solid var(--line);border-radius:8px;width:42px;height:42px;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px;flex:0 0 auto}
+.nav-toggle span{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px}
+@media(max-width:900px){.grid3,.steps{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.metrics,.kpis{grid-template-columns:repeat(2,1fr)}.formgrid{grid-template-columns:1fr}.mainnav{display:none}.hero h1{font-size:32px}.nav-toggle{display:inline-flex}.bar-in{position:relative}.mainnav.open{display:flex;position:absolute;top:64px;left:0;right:0;background:#fff;border-bottom:1px solid var(--line);box-shadow:var(--sh);flex-direction:column;align-items:stretch;padding:8px 16px 14px;margin:0;z-index:59;gap:0}.mainnav.open button{text-align:left;padding:13px 10px;border:0;border-bottom:1px solid var(--line);background:none;width:100%;font-size:15px}.mainnav.open button:last-child{border-bottom:0}.labelsheet{grid-template-columns:repeat(2,1fr)}footer .fgrid{grid-template-columns:1fr 1fr}}
 @media print{
   .topbar,.hero,.no-print,footer,#toast,.tour-tip,.modal-bg{display:none!important}
   body{background:#fff}
@@ -349,6 +351,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 <header class="topbar no-print">
   <div class="wrap bar-in">
     <a class="brand" data-nav="home"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0e4d8a"/><path d="M8 12h16M8 16h11M8 20h16" stroke="white" stroke-width="2.6"/></svg>STEELCUT</a>
+    <button id="navToggle" class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <nav class="mainnav" id="mainnav">
       <button data-nav="home" data-i18n="navHome">Home</button>
       <button data-nav="optimizer" data-i18n="navOptimizer">Cut Optimizer</button>
@@ -357,6 +360,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
       <button data-nav="jobs" data-i18n="navJobs">Jobs &amp; History</button>
       <button data-nav="reports" data-i18n="navReports">Reports</button>
       <button data-nav="pricing" data-i18n="navPricing">Pricing</button>
+      <button data-nav="tools" data-i18n="navTools">Tools</button>
     </nav>
     <div class="bar-cta">
       <select id="langSel" aria-label="Language"></select>
@@ -449,6 +453,24 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
     </div>
   </div>
 
+  <div class="section" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow" data-i18n="prEyebrow">Pricing</div>
+        <h2 data-i18n="prTitle">Free for the workshop. Pro when you grow.</h2>
+        <p data-i18n="prSub2">Everything you need to cut smarter costs nothing. Pro adds cloud sync and team features &mdash; coming soon.</p>
+      </div>
+      <div class="price-grid">
+        <div class="price-card"><h3>Free</h3><div class="amt">0 &euro;</div><div class="muted" data-i18n="prForever">forever</div>
+          <ul><li><b data-i18n="prF1">Unlimited cutting optimizations</b></li><li data-i18n="prF2">Cutting diagrams &amp; CSV export</li><li data-i18n="prF4">PDF reports &amp; labels</li></ul>
+          <button class="btn btn-ghost" style="width:100%" data-nav="optimizer" data-i18n="heroStart">Start optimizing</button></div>
+        <div class="price-card hot"><span class="tag">Pro</span><h3>Pro</h3><div class="amt">&mdash;</div><div class="muted" data-i18n="prSoon">coming soon</div>
+          <ul><li><b data-i18n="prP1">Everything in Free</b></li><li data-i18n="prP2">Cloud sync across devices</li><li data-i18n="prP3">Team workspaces &amp; priority support</li></ul>
+          <button class="btn btn-primary" style="width:100%" data-nav="pricing" data-i18n="prSeeFull">See full pricing</button></div>
+      </div>
+    </div>
+  </div>
+
   <div class="hero" style="padding:56px 0">
     <div class="wrap" style="text-align:center">
       <h2 data-i18n="ctaTitle" style="margin-bottom:12px">Stop guessing your cuts.</h2>
@@ -461,6 +483,11 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 <section class="view" id="v-optimizer">
   <div class="apphead"><div class="wrap"><h2 data-i18n="navOptimizer">Cut Optimizer</h2><p data-i18n="optSub">Enter stock, cuts and project info — get the optimal cutting plan.</p></div></div>
   <div class="wrap">
+    <div class="panel no-print" id="ws4TplPanel">
+      <h3 data-i18n="ws4TplT">Templates</h3>
+      <p class="desc" data-i18n="ws4TplD">One click loads a realistic job &mdash; edit freely afterwards.</p>
+      <div id="ws4TplCards" class="tpl-cards"></div>
+    </div>
     <div class="panel no-print">
       <h3 data-i18n="projTitle">Project info</h3>
       <p class="desc" data-i18n="projDesc">Attached to saved jobs, PDF reports and labels.</p>
@@ -497,6 +524,24 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
       </div>
     </div>
 
+    <div class="panel no-print" id="ws4ShapesPanel">
+      <h3 data-i18n="ws4ShapesT">Rebar shapes (BS 8666)</h3>
+      <p class="desc" data-i18n="ws4ShapesD">Pick a shape code, enter dimensions &mdash; SteelCut computes the cutting length and adds it as cuts.</p>
+      <div class="formgrid">
+        <div class="fg"><label data-i18n="ws4ShapeCode">Shape code</label><select id="ws4ShapeSel"></select></div>
+        <div class="fg"><label data-i18n="diaCol">Diameter</label><select id="ws4ShapeDia"></select></div>
+        <div class="fg"><label data-i18n="qty">Qty</label><input id="ws4ShapeQty" type="number" min="1" step="1" value="10"></div>
+      </div>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;align-items:flex-start">
+        <div id="ws4ShapeSvg" style="flex:0 0 auto"></div>
+        <div style="flex:1;min-width:220px"><div class="formgrid" id="ws4ShapeDims"></div>
+        <div class="hint" id="ws4ShapeFormula" style="margin-top:8px"></div></div>
+      </div>
+      <div class="row-actions" style="margin-top:12px">
+        <span class="muted"><span data-i18n="ws4CompLen">Cutting length</span>: <strong id="ws4ShapeLen">&mdash;</strong></span>
+        <button class="btn btn-primary btn-sm" id="ws4ShapeAdd" data-i18n="ws4AddShapes">Add as cuts</button>
+      </div>
+    </div>
     <div class="panel no-print">
       <h3 data-i18n="settings">Settings</h3>
       <p class="desc" data-i18n="setDesc">Cutting parameters and costing.</p>
@@ -535,7 +580,11 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
     <div class="fg"><label data-i18n="ws2bAdvLen">Candidate stock (lengthMM:price)</label><textarea id="ws2bAdvInput" rows="2" data-i18n-ph="ws2bAdvPh" placeholder="12000:45.50, 6000:24.00"></textarea><div class="hint" data-i18n="ws2bAdvHint">Format: lengthMM:price — e.g. 12000:45.50, 6000:24.00</div></div>
   </div>
   <div class="row-actions">
-    <button class="btn btn-primary btn-sm" id="ws2bAdvBtn" data-i18n="ws2bAdvBtn">Compare</button>
+    <label class="muted small" style="margin-right:6px"><span data-i18n="ws4AdvMode">Minimize</span>:</label>
+        <label class="small" style="margin-right:10px"><input type="radio" name="ws4AdvMode" value="waste" checked> <span data-i18n="ws4ModeWaste">Waste</span></label>
+        <label class="small" style="margin-right:10px"><input type="radio" name="ws4AdvMode" value="cost"> <span data-i18n="ws4ModeCost">Cost</span></label>
+        <span class="fg" style="display:inline-block;min-width:150px"><input id="ws4AdvPriceKg" type="number" min="0" step="0.01" data-i18n-ph="ws4PriceKgPh" placeholder="&euro;/kg (optional)"></span>
+        <button class="btn btn-primary btn-sm" id="ws2bAdvBtn" data-i18n="ws2bAdvBtn">Compare</button>
   </div>
   <div id="ws2bAdvOut" style="margin-top:16px"></div>
 </div>
@@ -555,7 +604,9 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
         <button class="btn btn-ghost btn-sm" id="labelsBtn" data-i18n="labelsBtn">Cut labels</button>
         <button class="btn btn-ghost btn-sm" id="toWhBtn" data-i18n="toWarehouse">Send offcuts to warehouse</button>
         <button class="btn btn-ghost btn-sm" id="printBtn" data-i18n="print">Print</button>
+        <button class="btn btn-ghost btn-sm" id="ws4ShareBtn" data-i18n="ws4Share">Share plan</button>
       </div>
+      <div id="ws4ShareOut" style="margin-top:12px"></div>
     </div>
   </div>
 </section>
@@ -614,6 +665,15 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
         <button class="btn btn-ghost btn-sm" id="dxfBtn" data-i18n="ws2aDxfBtn">Export DXF</button>
       </div>
     </div>
+    <div class="panel" id="ws4PoPanel"><h3 data-i18n="ws4PoT">Purchase order</h3>
+      <p class="desc" data-i18n="ws4PoD">Bars to order per the cutting plan &mdash; estimated.</p>
+      <div class="row-actions">
+        <button class="btn btn-primary btn-sm" id="ws4PoBtn" data-i18n="ws4PoGen">Generate order</button>
+        <button class="btn btn-ghost btn-sm" id="ws4PoPrint" data-i18n="ws4PoPrint">Print order</button>
+        <button class="btn btn-ghost btn-sm" id="ws4PoPdf" data-i18n="ws4PoPdf">Add to PDF report</button>
+      </div>
+      <div id="ws4PoOut" style="margin-top:14px"></div>
+    </div>
     <div class="panel"><h3 data-i18n="sessTitle">Session backup</h3><p class="desc" data-i18n="sessDesc">Move everything to another device.</p>
       <div class="row-actions">
         <button class="btn btn-ghost btn-sm" id="sessExpBtn" data-i18n="dlSession">Download session file</button>
@@ -648,6 +708,29 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
     </div>
   </div>
 </section>
+
+<!-- ================= TOOLS (EC2) ================= -->
+<section class="view" id="v-tools">
+  <div class="apphead"><div class="wrap"><h2 data-i18n="navTools">Tools</h2><p data-i18n="ws4ToolsSub">Engineering calculators for rebar work.</p></div></div>
+  <div class="wrap">
+    <div class="panel">
+      <h3 data-i18n="ws4Ec2T">Anchorage &amp; lap length (EC2)</h3>
+      <p class="desc" data-i18n="ws4Ec2D">Per EN 1992-1-1 &sect;8.4 / &sect;8.7. Simplified: straight or hooked ends, no transverse reinforcement.</p>
+      <div class="formgrid">
+        <div class="fg"><label data-i18n="ws4Ec2Dia">Bar diameter</label><select id="ws4Ec2Dia"></select></div>
+        <div class="fg"><label data-i18n="ws4Ec2Conc">Concrete class</label><select id="ws4Ec2Conc"><option>C20/25</option><option>C25/30</option><option selected>C30/37</option><option>C35/45</option><option>C40/50</option><option>C45/55</option><option>C50/60</option></select></div>
+        <div class="fg"><label data-i18n="ws4Ec2Bond">Bond conditions</label><select id="ws4Ec2Bond"><option value="good" data-i18n="ws4BondGood">Good</option><option value="other" data-i18n="ws4BondOther">Other</option></select></div>
+        <div class="fg"><label data-i18n="ws4Ec2Steel">Steel class</label><select id="ws4Ec2Steel"><option>B500B</option><option>B500A</option><option>B500C</option></select></div>
+        <div class="fg"><label data-i18n="ws4Ec2End">Bar end</label><select id="ws4Ec2End"><option value="straight" data-i18n="ws4EndStraight">Straight</option><option value="hook" data-i18n="ws4EndHook">Hook / bend &ge; 90&deg;</option></select></div>
+        <div class="fg"><label data-i18n="ws4Ec2Cover">Concrete cover c (mm)</label><input id="ws4Ec2Cover" type="number" min="10" step="5" value="30"></div>
+        <div class="fg"><label data-i18n="ws4Ec2Force">Force type</label><select id="ws4Ec2Force"><option value="tension" data-i18n="ws4Tension">Tension</option><option value="compression" data-i18n="ws4Compression">Compression</option></select></div>
+        <div class="fg"><label data-i18n="ws4Ec2Lap">% lapped at section</label><select id="ws4Ec2Lap"><option value="1">&le; 25%</option><option value="1.2">33%</option><option value="1.4">50%</option><option value="1.5">&gt; 50%</option></select></div>
+      </div>
+      <div class="row-actions" style="margin-top:14px"><button class="btn btn-primary btn-sm" id="ws4Ec2Btn" data-i18n="ws4Ec2Calc">Calculate</button></div>
+      <div id="ws4Ec2Out" style="margin-top:14px"></div>
+    </div>
+  </div>
+</section>
 </main>
 
 <footer class="no-print">
@@ -655,8 +738,9 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
     <div class="fgrid">
       <div><div class="fbrand"><svg viewBox="0 0 32 32" width="26" height="26"><rect width="32" height="32" rx="6" fill="#e8f0f9"/><path d="M8 12h16M8 16h11M8 20h16" stroke="#0e4d8a" stroke-width="2.6"/></svg>STEELCUT</div><p class="small" data-i18n="footerTag">Professional steel bar cutting optimizer for metal fabricators and contractors.</p></div>
       <div><h4 data-i18n="ftProduct">Product</h4><a data-nav="optimizer" data-i18n="navOptimizer">Cut Optimizer</a><a data-nav="dashboard" data-i18n="navDashboard">Dashboard</a><a data-nav="pricing" data-i18n="navPricing">Pricing</a></div>
-      <div><h4 data-i18n="ftCompany">Company</h4><a data-nav="home" data-i18n="navHome">Home</a><a data-nav="reports" data-i18n="navReports">Reports</a></div>
-      <div><h4 data-i18n="ftLegal">Legal</h4><a data-i18n="ftPrivacy">Privacy — data stays in your browser</a></div>
+      <div><h4 data-i18n="ftCompany">Company</h4><a data-nav="home" data-i18n="navHome">Home</a><a data-nav="reports" data-i18n="navReports">Reports</a><a href="about.html" data-i18n="ftAbout">About</a></div>
+      <div><h4 data-i18n="ftResources">Resources</h4><a href="changelog.html" data-i18n="ftChangelog">Changelog</a><a href="guides/waste-below-3-percent.html" data-i18n="ftGuide1">Cut waste below 3%</a><a href="guides/bbs-to-cutting-plan.html" data-i18n="ftGuide2">BBS to cutting plan</a></div>
+      <div><h4 data-i18n="ftLegal">Legal</h4><a href="privacy.html" data-i18n="ftPrivacyP">Privacy Policy</a><a href="terms.html" data-i18n="ftTerms">Terms of Service</a></div>
     </div>
     <div class="copy"><span>© 2026 SteelCut. <span data-i18n="rights">All rights reserved.</span></span><span data-i18n="madeFor">Made for metal professionals.</span></div>
   </div>
@@ -713,10 +797,10 @@ q1:"Is SteelCut really free?",q1a:"Yes. The cutting optimizer, warehouse, histor
 q2:"Do I need to create an account?",q2a:"No. SteelCut works entirely in your browser and stores your jobs locally. Use session export/import to move between devices.",
 q3:"Which diameters are supported?",q3a:"The built-in rebar library covers Φ8 to Φ40 with standard weights. You can also work with generic bars without a diameter.",
 q4:"Does it account for the saw blade width?",q4a:"Yes — set the saw kerf in Settings and every cut plan includes it between pieces, plus a minimum length for reusable offcuts.",
-q5:"Can I use it offline?",q5a:"After the first load, the app itself works offline. Only the QR code image and the PDF library load from the internet.",
+q5:"Can I use it offline?",q5a:"After the first load, the site itself works offline. Only the QR code image and the PDF library load from the internet.",
 ctaTitle:"Stop guessing your cuts.",ctaSub:"Calculate your first optimized cutting plan in under a minute.",
 footerTag:"Professional steel bar cutting optimizer for metal fabricators and contractors.",
-ftProduct:"Product",ftCompany:"Company",ftLegal:"Legal",ftPrivacy:"Privacy — data stays in your browser",rights:"All rights reserved.",madeFor:"Made for metal professionals.",
+ftProduct:"Product",ftCompany:"Company",ftLegal:"Legal",ftPrivacy:"Privacy — data stays in your browser",ftResources:"Resources",ftAbout:"About",ftChangelog:"Changelog",ftGuide1:"Cut waste below 3%",ftGuide2:"BBS to cutting plan",ftPrivacyP:"Privacy Policy",ftTerms:"Terms of Service",ftContact:"Contact",prEyebrow:"Pricing",prTitle:"Free for the workshop. Pro when you grow.",prSub2:"Everything you need to cut smarter costs nothing. Pro adds cloud sync and team features \u2014 coming soon.",prSeeFull:"See full pricing",rights:"All rights reserved.",madeFor:"Made for metal professionals.",
 optSub:"Enter stock, cuts and project info — get the optimal cutting plan.",
 projTitle:"Project info",projDesc:"Attached to saved jobs, PDF reports and labels.",clientL:"Client",clientPh:"Client name",projCodeL:"Project code",projCodePh:"e.g. A-2026-014",projDateL:"Date",notesL:"Notes",notesPh:"Notes for the workshop…",
 stockBars:"Stock bars",stockDesc:"Bars you have available (or plan to buy).",length:"Length",qty:"Qty",unit:"Unit",diaCol:"Diameter",diaAny:"Any",addStock:"+ Add stock bar",fromWarehouse:"Import from warehouse",
@@ -744,7 +828,7 @@ tour1t:"Welcome to SteelCut",tour1b:"This short tour shows the workflow: stock i
 tour2t:"1 · Stock bars",tour2b:"List the bars you own or plan to buy — length, quantity and diameter. You can also import reusable offcuts from the warehouse.",
 tour3t:"2 · Required cuts",tour3b:"List every piece you must cut, with its diameter. Tip: import a whole bar bending schedule from Excel/CSV in one click.",
 tour4t:"3 · Calculate",tour4b:"Set saw kerf and rebar type, then hit Calculate. SteelCut packs every bar for minimum waste and draws the cutting diagrams.",
-tour5t:"4 · Use the results",tour5b:"Export the PDF report, print cut labels, save the job, or send offcuts to the warehouse. That's it!","ws1AlgoBfd":"Best-fit decreasing","ws1AlgoExact":"Exact (branch & bound)","ws1AlgoFfd":"First-fit decreasing","ws1AlgoLabel":"Algorithm","ws1AlgoPattern":"Pattern reuse (min. layouts)","ws1AngleDeg":"degrees","ws1CustomAngle":"Custom…","ws1CutAngle":"Cut angle","ws1EndTrim":"End trim / bar","ws1Grip":"Grip allowance","ws1MinLayouts":"Minimize layout count","ws1MinLayoutsHint":"Fewer distinct cutting patterns","ws1QualityExact":"Optimal solution — the exact solver proved no better plan exists for this job size.","ws1QualityHeu":"Heuristic solution · lower bound {lb} bars → within {n} bars of optimal","ws1TrimL":"Left trim","ws1TrimR":"Right trim","ws1WhFirst":"Use warehouse offcuts first","ws1WhFirstHint":"Consume offcut stock before new bars","ws2aDxfBtn":"Export DXF","ws2aInstallApp":"Install app","ws2aMsgInstalled":"App installed — find it on your home screen.","ws2bAdvBars":"Bars","ws2bAdvBest":"Cheapest:","ws2bAdvBtn":"Compare","ws2bAdvCost":"Total cost","ws2bAdvDesc":"Compare candidate stock lengths to find the cheapest option for the current cuts.","ws2bAdvHint":"Format: lengthMM:price — e.g. 12000:45.50, 6000:24.00","ws2bAdvLen":"Candidate stock (lengthMM:price)","ws2bAdvNeedCuts":"Add required cuts first.","ws2bAdvNeedRows":"Enter at least one candidate (lengthMM:price).","ws2bAdvNoFit":"a piece does not fit","ws2bAdvPh":"12000:45.50, 6000:24.00","ws2bAdvTitle":"Stock advisor","ws2bAdvTotal":"total","ws2bAdvWaste":"Waste %","ws2bBbsBtn":"Import BBS","ws2bBbsDesc":"Paste CSV rows (Mark,Dia,Length,Qty) or free-text lines like “Φ12: 2500x12” — one per line.","ws2bBbsPh":"B1,12,2450,14\nΦ12: 2500x12\nD16 5300x6","ws2bBbsTitle":"Import bending schedule (BBS)","ws2bCancel":"Cancel","ws2bEffBar":"Bar","ws2bEffBars":"Bars used","ws2bEffCutSeq":"Cutting sequence","ws2bEffDia":"Diameter","ws2bEffKept":"(kept)","ws2bEffLen":"Total length","ws2bEffOffcut":"offcut","ws2bEffPct":"Efficiency","ws2bEffTitle":"Efficiency report","ws2bEffWaste":"Waste","ws2bEffWastePct":"Waste %","ws2bImpDone":"Imported","ws2bImpNone":"No lines could be parsed.","ws2bParse":"Parse & import","ws2cNoLines":"Nothing to parse — type or paste cut lines first.","ws2cParse":"Parse & add","ws2cPdfHint":"For PDF cutting lists: select the text in the PDF, copy it, and paste it here.","ws2cQuickAdded":"Quick entries added.","ws2cQuickBtn":"Quick input","ws2cQuickPh":"One per line, e.g.:\n2500x12\nΦ12: 2450x14\n5300x6 C1 D16","ws2cQuickTitle":"Quick input","ws2cXlsxErr":"Could not read this Excel file. Try exporting it as CSV and import that instead.","ws2cXlsxNoRows":"No usable rows found in the Excel file (columns: length, qty, unit, label, diameter).","ws3Back":"← Back","ws3CalcT":"Run the optimizer and draw the cutting plan","ws3DiaT":"Rebar diameter, e.g. Φ12 — leave empty for generic bars","ws3Done":"Start optimizing","ws3Expert":"Expert mode","ws3ExpertOff":"Expert mode off","ws3ExpertOn":"Expert mode on — the intro wizard will be skipped","ws3ExpertTip":"Skip the first-run wizard and open the optimizer directly","ws3KerfH":"Material lost per cut — typically 2–4 mm","ws3KerfT":"Saw kerf — the width of material the saw blade removes on every cut","ws3LoadDemo":"Load demo data","ws3Next":"Next →","ws3OffH":"Longer leftovers are kept as reusable offcuts","ws3OffT":"Min. reusable offcut — shorter leftovers are counted as waste","ws3PriceH":"Feeds the total cost estimate","ws3PriceT":"Price per meter of stock bar — used to estimate the job cost","ws3RebarH":"Needed for weight & cost estimates","ws3RebarT":"Rebar type — sets the weight per meter (kg/m) used for weight & cost","ws3Skip":"Skip","ws3UnitT":"Unit of the length you typed","ws3W1b":"List the bars you have in stock — length, quantity and diameter. Most workshops buy 12 m bars: add one row and set the quantity.","ws3W1t":"1 · Your stock bars","ws3W2b":"List every piece you need to cut, with length, quantity and diameter. Tip: import a whole cut list from Excel/CSV in one click.","ws3W2t":"2 · Your required cuts","ws3W3b":"Press “Calculate cutting plan” and SteelCut packs every bar for minimum waste. Want to see it in action first?","ws3W3t":"3 · Calculate","ws3WizTitle":"Welcome to SteelCut"
+tour5t:"4 · Use the results",tour5b:"Export the PDF report, print cut labels, save the job, or send offcuts to the warehouse. That's it!","ws1AlgoBfd":"Best-fit decreasing","ws1AlgoExact":"Exact (branch & bound)","ws1AlgoFfd":"First-fit decreasing","ws1AlgoLabel":"Algorithm","ws1AlgoPattern":"Pattern reuse (min. layouts)","ws1AngleDeg":"degrees","ws1CustomAngle":"Custom…","ws1CutAngle":"Cut angle","ws1EndTrim":"End trim / bar","ws1Grip":"Grip allowance","ws1MinLayouts":"Minimize layout count","ws1MinLayoutsHint":"Fewer distinct cutting patterns","ws1QualityExact":"Optimal solution — the exact solver proved no better plan exists for this job size.","ws1QualityHeu":"Heuristic solution · lower bound {lb} bars → within {n} bars of optimal","ws1TrimL":"Left trim","ws1TrimR":"Right trim","ws1WhFirst":"Use warehouse offcuts first","ws1WhFirstHint":"Consume offcut stock before new bars","ws2aDxfBtn":"Export DXF","ws2bAdvBars":"Bars","ws2bAdvBest":"Cheapest:","ws2bAdvBtn":"Compare","ws2bAdvCost":"Total cost","ws2bAdvDesc":"Compare candidate stock lengths to find the cheapest option for the current cuts.","ws2bAdvHint":"Format: lengthMM:price — e.g. 12000:45.50, 6000:24.00","ws2bAdvLen":"Candidate stock (lengthMM:price)","ws2bAdvNeedCuts":"Add required cuts first.","ws2bAdvNeedRows":"Enter at least one candidate (lengthMM:price).","ws2bAdvNoFit":"a piece does not fit","ws2bAdvPh":"12000:45.50, 6000:24.00","ws2bAdvTitle":"Stock advisor","ws2bAdvTotal":"total","ws2bAdvWaste":"Waste %","ws2bBbsBtn":"Import BBS","ws2bBbsDesc":"Paste CSV rows (Mark,Dia,Length,Qty) or free-text lines like “Φ12: 2500x12” — one per line.","ws2bBbsPh":"B1,12,2450,14\nΦ12: 2500x12\nD16 5300x6","ws2bBbsTitle":"Import bending schedule (BBS)","ws2bCancel":"Cancel","ws2bEffBar":"Bar","ws2bEffBars":"Bars used","ws2bEffCutSeq":"Cutting sequence","ws2bEffDia":"Diameter","ws2bEffKept":"(kept)","ws2bEffLen":"Total length","ws2bEffOffcut":"offcut","ws2bEffPct":"Efficiency","ws2bEffTitle":"Efficiency report","ws2bEffWaste":"Waste","ws2bEffWastePct":"Waste %","ws2bImpDone":"Imported","ws2bImpNone":"No lines could be parsed.","ws2bParse":"Parse & import","ws2cNoLines":"Nothing to parse — type or paste cut lines first.","ws2cParse":"Parse & add","ws2cPdfHint":"For PDF cutting lists: select the text in the PDF, copy it, and paste it here.","ws2cQuickAdded":"Quick entries added.","ws2cQuickBtn":"Quick input","ws2cQuickPh":"One per line, e.g.:\n2500x12\nΦ12: 2450x14\n5300x6 C1 D16","ws2cQuickTitle":"Quick input","ws2cXlsxErr":"Could not read this Excel file. Try exporting it as CSV and import that instead.","ws2cXlsxNoRows":"No usable rows found in the Excel file (columns: length, qty, unit, label, diameter).","ws3Back":"← Back","ws3CalcT":"Run the optimizer and draw the cutting plan","ws3DiaT":"Rebar diameter, e.g. Φ12 — leave empty for generic bars","ws3Done":"Start optimizing","ws3Expert":"Expert mode","ws3ExpertOff":"Expert mode off","ws3ExpertOn":"Expert mode on — the intro wizard will be skipped","ws3ExpertTip":"Skip the first-run wizard and open the optimizer directly","ws3KerfH":"Material lost per cut — typically 2–4 mm","ws3KerfT":"Saw kerf — the width of material the saw blade removes on every cut","ws3LoadDemo":"Load demo data","ws3Next":"Next →","ws3OffH":"Longer leftovers are kept as reusable offcuts","ws3OffT":"Min. reusable offcut — shorter leftovers are counted as waste","ws3PriceH":"Feeds the total cost estimate","ws3PriceT":"Price per meter of stock bar — used to estimate the job cost","ws3RebarH":"Needed for weight & cost estimates","ws3RebarT":"Rebar type — sets the weight per meter (kg/m) used for weight & cost","ws3Skip":"Skip","ws3UnitT":"Unit of the length you typed","ws3W1b":"List the bars you have in stock — length, quantity and diameter. Most workshops buy 12 m bars: add one row and set the quantity.","ws3W1t":"1 · Your stock bars","ws3W2b":"List every piece you need to cut, with length, quantity and diameter. Tip: import a whole cut list from Excel/CSV in one click.","ws3W2t":"2 · Your required cuts","ws3W3b":"Press “Calculate cutting plan” and SteelCut packs every bar for minimum waste. Want to see it in action first?","ws3W3t":"3 · Calculate","ws3WizTitle":"Welcome to SteelCut"
 }};
 I18N.el={
 tagline:"Επαγγελματικός βελτιστοποιητής κοπής χαλύβδινων ράβδων",tour:"Ξενάγηση",loadDemo:"Φόρτωση demo",
@@ -802,7 +886,7 @@ tour1t:"Καλώς ήρθες στο SteelCut",tour1b:"Αυτή η σύντομ�
 tour2t:"1 · Διαθέσιμες ράβδοι",tour2b:"Κατέγραψε τις ράβδους σου — μήκος, ποσότητα και διάμετρο. Μπορείς και να εισάγεις ρέταλα από την αποθήκη.",
 tour3t:"2 · Απαιτούμενες κοπές",tour3b:"Κατέγραψε κάθε τεμάχιο με τη διάμετρό του. Συμβουλή: εισήγαγε ολόκληρο πίνακα οπλισμού από Excel/CSV με ένα κλικ.",
 tour4t:"3 · Υπολογισμός",tour4b:"Ρύθμισε το φάρδος λάμας και τον τύπο οπλισμού, πάτα Υπολογισμό. Το SteelCut γεμίζει κάθε ράβδο με ελάχιστη φύρα και σχεδιάζει τα διαγράμματα.",
-tour5t:"4 · Χρησιμοποίησε τα αποτελέσματα",tour5b:"Εξήγαγε την αναφορά PDF, εκτύπωσε ετικέτες, αποθήκευσε τη δουλειά ή στείλε τα ρέταλα στην αποθήκη. Τέλος!","ws1AlgoBfd":"Best-fit decreasing","ws1AlgoExact":"Ακριβής (branch & bound)","ws1AlgoFfd":"First-fit decreasing","ws1AlgoLabel":"Αλγόριθμος","ws1AlgoPattern":"Επανάχρηση διατάξεων (ελάχ. πλήθος)","ws1AngleDeg":"μοίρες","ws1CustomAngle":"Προσαρμοσμένη…","ws1CutAngle":"Γωνία κοπής","ws1EndTrim":"Τελικό κόψιμο / ράβδο","ws1Grip":"Περιθώριο σύσφιξης","ws1MinLayouts":"Ελαχιστοποίηση διατάξεων","ws1MinLayoutsHint":"Λιγότερες διαφορετικές διατάξεις κοπής","ws1QualityExact":"Βέλτιστη λύση — ο ακριβής επιλυτής απέδειξε ότι δεν υπάρχει καλύτερο πλάνο για αυτό το μέγεθος.","ws1QualityHeu":"Ευρετική λύση · κάτω φράγμα {lb} ράβδοι → εντός {n} ράβδων από το βέλτιστο","ws1TrimL":"Καθάρισμα αριστερού άκρου","ws1TrimR":"Καθάρισμα δεξιού άκρου","ws1WhFirst":"Προτεραιότητα ρετάλων αποθήκης","ws1WhFirstHint":"Κατανάλωση ρετάλων πριν τις νέες ράβδους","ws2aDxfBtn":"Εξαγωγή DXF","ws2aInstallApp":"Εγκατάσταση εφαρμογής","ws2aMsgInstalled":"Η εφαρμογή εγκαταστάθηκε — θα τη βρεις στην αρχική οθόνη.","ws2bAdvBars":"Ράβδοι","ws2bAdvBest":"Φθηνότερο:","ws2bAdvBtn":"Σύγκρινε","ws2bAdvCost":"Συνολικό κόστος","ws2bAdvDesc":"Σύγκρινε υποψήφια μήκη ράβδων για να βρεις τη φθηνότερη επιλογή για τις τρέχουσες κοπές.","ws2bAdvHint":"Μορφή: μήκοςMM:τιμή — π.χ. 12000:45.50, 6000:24.00","ws2bAdvLen":"Υποψήφια μήκη (μήκοςMM:τιμή)","ws2bAdvNeedCuts":"Πρόσθεσε πρώτα απαιτούμενες κοπές.","ws2bAdvNeedRows":"Βάλε τουλάχιστον ένα υποψήφιο μήκος (μήκοςMM:τιμή).","ws2bAdvNoFit":"ένα τεμάχιο δεν χωράει","ws2bAdvPh":"12000:45.50, 6000:24.00","ws2bAdvTitle":"Σύμβουλος αποθέματος","ws2bAdvTotal":"σύνολο","ws2bAdvWaste":"Φύρα %","ws2bBbsBtn":"Εισαγωγή BBS","ws2bBbsDesc":"Επικόλλησε γραμμές CSV (Μάρκα,Διάμετρος,Μήκος,Τεμ.) ή ελεύθερο κείμενο όπως «Φ12: 2500x12» — μία γραμμή ανά εγγραφή.","ws2bBbsPh":"B1,12,2450,14\nΦ12: 2500x12\nD16 5300x6","ws2bBbsTitle":"Εισαγωγή πίνακα οπλισμού (BBS)","ws2bCancel":"Ακύρωση","ws2bEffBar":"Ράβδος","ws2bEffBars":"Ράβδοι","ws2bEffCutSeq":"Σειρά κοπής","ws2bEffDia":"Διάμετρος","ws2bEffKept":"(κρατήθηκε)","ws2bEffLen":"Συνολικό μήκος","ws2bEffOffcut":"ρέταλο","ws2bEffPct":"Απόδοση","ws2bEffTitle":"Αναφορά απόδοσης","ws2bEffWaste":"Φύρα","ws2bEffWastePct":"Φύρα %","ws2bImpDone":"Εισήχθησαν","ws2bImpNone":"Καμία γραμμή δεν αναλύθηκε.","ws2bParse":"Ανάλυση & εισαγωγή","ws2cNoLines":"Τίποτα για ανάλυση — γράψε ή επικόλλησε πρώτα γραμμές κοπής.","ws2cParse":"Ανάλυση & προσθήκη","ws2cPdfHint":"Για λίστες κοπής σε PDF: επίλεξε το κείμενο στο PDF, αντέγραψέ το και επικόλλησέ το εδώ.","ws2cQuickAdded":"Οι γρήγορες εγγραφές προστέθηκαν.","ws2cQuickBtn":"Γρήγορη εισαγωγή","ws2cQuickPh":"Ένα ανά γραμμή, π.χ.:\n2500x12\nΦ12: 2450x14\n5300x6 C1 D16","ws2cQuickTitle":"Γρήγορη εισαγωγή","ws2cXlsxErr":"Δεν ήταν δυνατή η ανάγνωση αυτού του αρχείου Excel. Δοκίμασε να το εξάγεις ως CSV και εισήγαγε εκείνο.","ws2cXlsxNoRows":"Δεν βρέθηκαν αξιοποιήσιμες γραμμές στο αρχείο Excel (στήλες: μήκος, ποσότητα, μονάδα, ετικέτα, διάμετρος).","ws3Back":"← Πίσω","ws3CalcT":"Εκτέλεση του βελτιστοποιητή και σχεδίαση του πλάνου κοπής","ws3DiaT":"Διάμετρος οπλισμού, π.χ. Φ12 — άφησέ το κενό για γενικές ράβδους","ws3Done":"Ξεκίνα βελτιστοποίηση","ws3Expert":"Λειτουργία ειδικού","ws3ExpertOff":"Η λειτουργία ειδικού απενεργοποιήθηκε","ws3ExpertOn":"Η λειτουργία ειδικού ενεργοποιήθηκε — ο οδηγός θα παραλείπεται","ws3ExpertTip":"Παράλειψη του οδηγού πρώτης χρήσης και άμεσο άνοιγμα του βελτιστοποιητή","ws3KerfH":"Υλικό που χάνεται σε κάθε κοπή — συνήθως 2–4 mm","ws3KerfT":"Φάρδος λάμας — το πλάτος υλικού που αφαιρεί η λεπίδα σε κάθε κοπή","ws3LoadDemo":"Φόρτωση demo δεδομένων","ws3Next":"Επόμενο →","ws3OffH":"Τα μεγαλύτερα ρέταλα κρατιούνται ως αξιοποιήσιμα","ws3OffT":"Ελάχιστο αξιοποιήσιμο ρέταλο — μικρότερα ρέταλα μετράνε ως φύρα","ws3PriceH":"Τροφοδοτεί την εκτίμηση του συνολικού κόστους","ws3PriceT":"Τιμή ανά μέτρο ράβδου — χρησιμοποιείται για την εκτίμηση του κόστους","ws3RebarH":"Απαραίτητο για εκτίμηση βάρους και κόστους","ws3RebarT":"Τύπος οπλισμού — ορίζει το βάρος ανά μέτρο (kg/m) για βάρος και κόστος","ws3Skip":"Παράλειψη","ws3UnitT":"Μονάδα του μήκους που έγραψες","ws3W1b":"Κατέγραψε τις ράβδους που έχεις — μήκος, ποσότητα και διάμετρο. Τα περισσότερα συνεργεία αγοράζουν 12άμετρες: βάλε μία γραμμή και ρύθμισε την ποσότητα.","ws3W1t":"1 · Οι ράβδοι σου","ws3W2b":"Κατέγραψε κάθε τεμάχιο που πρέπει να κόψεις, με μήκος, ποσότητα και διάμετρο. Συμβουλή: εισήγαγε ολόκληρη λίστα από Excel/CSV με ένα κλικ.","ws3W2t":"2 · Οι κοπές σου","ws3W3b":"Πάτα «Υπολογισμός πλάνου κοπής» και το SteelCut γεμίζει κάθε ράβδο με ελάχιστη φύρα. Θες να το δεις πρώτα σε δράση;","ws3W3t":"3 · Υπολόγισε","ws3WizTitle":"Καλώς ήρθες στο SteelCut"
+tour5t:"4 · Χρησιμοποίησε τα αποτελέσματα",tour5b:"Εξήγαγε την αναφορά PDF, εκτύπωσε ετικέτες, αποθήκευσε τη δουλειά ή στείλε τα ρέταλα στην αποθήκη. Τέλος!","ws1AlgoBfd":"Best-fit decreasing","ws1AlgoExact":"Ακριβής (branch & bound)","ws1AlgoFfd":"First-fit decreasing","ws1AlgoLabel":"Αλγόριθμος","ws1AlgoPattern":"Επανάχρηση διατάξεων (ελάχ. πλήθος)","ws1AngleDeg":"μοίρες","ws1CustomAngle":"Προσαρμοσμένη…","ws1CutAngle":"Γωνία κοπής","ws1EndTrim":"Τελικό κόψιμο / ράβδο","ws1Grip":"Περιθώριο σύσφιξης","ws1MinLayouts":"Ελαχιστοποίηση διατάξεων","ws1MinLayoutsHint":"Λιγότερες διαφορετικές διατάξεις κοπής","ws1QualityExact":"Βέλτιστη λύση — ο ακριβής επιλυτής απέδειξε ότι δεν υπάρχει καλύτερο πλάνο για αυτό το μέγεθος.","ws1QualityHeu":"Ευρετική λύση · κάτω φράγμα {lb} ράβδοι → εντός {n} ράβδων από το βέλτιστο","ws1TrimL":"Καθάρισμα αριστερού άκρου","ws1TrimR":"Καθάρισμα δεξιού άκρου","ws1WhFirst":"Προτεραιότητα ρετάλων αποθήκης","ws1WhFirstHint":"Κατανάλωση ρετάλων πριν τις νέες ράβδους","ws2aDxfBtn":"Εξαγωγή DXF","ws2bAdvBars":"Ράβδοι","ws2bAdvBest":"Φθηνότερο:","ws2bAdvBtn":"Σύγκρινε","ws2bAdvCost":"Συνολικό κόστος","ws2bAdvDesc":"Σύγκρινε υποψήφια μήκη ράβδων για να βρεις τη φθηνότερη επιλογή για τις τρέχουσες κοπές.","ws2bAdvHint":"Μορφή: μήκοςMM:τιμή — π.χ. 12000:45.50, 6000:24.00","ws2bAdvLen":"Υποψήφια μήκη (μήκοςMM:τιμή)","ws2bAdvNeedCuts":"Πρόσθεσε πρώτα απαιτούμενες κοπές.","ws2bAdvNeedRows":"Βάλε τουλάχιστον ένα υποψήφιο μήκος (μήκοςMM:τιμή).","ws2bAdvNoFit":"ένα τεμάχιο δεν χωράει","ws2bAdvPh":"12000:45.50, 6000:24.00","ws2bAdvTitle":"Σύμβουλος αποθέματος","ws2bAdvTotal":"σύνολο","ws2bAdvWaste":"Φύρα %","ws2bBbsBtn":"Εισαγωγή BBS","ws2bBbsDesc":"Επικόλλησε γραμμές CSV (Μάρκα,Διάμετρος,Μήκος,Τεμ.) ή ελεύθερο κείμενο όπως «Φ12: 2500x12» — μία γραμμή ανά εγγραφή.","ws2bBbsPh":"B1,12,2450,14\nΦ12: 2500x12\nD16 5300x6","ws2bBbsTitle":"Εισαγωγή πίνακα οπλισμού (BBS)","ws2bCancel":"Ακύρωση","ws2bEffBar":"Ράβδος","ws2bEffBars":"Ράβδοι","ws2bEffCutSeq":"Σειρά κοπής","ws2bEffDia":"Διάμετρος","ws2bEffKept":"(κρατήθηκε)","ws2bEffLen":"Συνολικό μήκος","ws2bEffOffcut":"ρέταλο","ws2bEffPct":"Απόδοση","ws2bEffTitle":"Αναφορά απόδοσης","ws2bEffWaste":"Φύρα","ws2bEffWastePct":"Φύρα %","ws2bImpDone":"Εισήχθησαν","ws2bImpNone":"Καμία γραμμή δεν αναλύθηκε.","ws2bParse":"Ανάλυση & εισαγωγή","ws2cNoLines":"Τίποτα για ανάλυση — γράψε ή επικόλλησε πρώτα γραμμές κοπής.","ws2cParse":"Ανάλυση & προσθήκη","ws2cPdfHint":"Για λίστες κοπής σε PDF: επίλεξε το κείμενο στο PDF, αντέγραψέ το και επικόλλησέ το εδώ.","ws2cQuickAdded":"Οι γρήγορες εγγραφές προστέθηκαν.","ws2cQuickBtn":"Γρήγορη εισαγωγή","ws2cQuickPh":"Ένα ανά γραμμή, π.χ.:\n2500x12\nΦ12: 2450x14\n5300x6 C1 D16","ws2cQuickTitle":"Γρήγορη εισαγωγή","ws2cXlsxErr":"Δεν ήταν δυνατή η ανάγνωση αυτού του αρχείου Excel. Δοκίμασε να το εξάγεις ως CSV και εισήγαγε εκείνο.","ws2cXlsxNoRows":"Δεν βρέθηκαν αξιοποιήσιμες γραμμές στο αρχείο Excel (στήλες: μήκος, ποσότητα, μονάδα, ετικέτα, διάμετρος).","ws3Back":"← Πίσω","ws3CalcT":"Εκτέλεση του βελτιστοποιητή και σχεδίαση του πλάνου κοπής","ws3DiaT":"Διάμετρος οπλισμού, π.χ. Φ12 — άφησέ το κενό για γενικές ράβδους","ws3Done":"Ξεκίνα βελτιστοποίηση","ws3Expert":"Λειτουργία ειδικού","ws3ExpertOff":"Η λειτουργία ειδικού απενεργοποιήθηκε","ws3ExpertOn":"Η λειτουργία ειδικού ενεργοποιήθηκε — ο οδηγός θα παραλείπεται","ws3ExpertTip":"Παράλειψη του οδηγού πρώτης χρήσης και άμεσο άνοιγμα του βελτιστοποιητή","ws3KerfH":"Υλικό που χάνεται σε κάθε κοπή — συνήθως 2–4 mm","ws3KerfT":"Φάρδος λάμας — το πλάτος υλικού που αφαιρεί η λεπίδα σε κάθε κοπή","ws3LoadDemo":"Φόρτωση demo δεδομένων","ws3Next":"Επόμενο →","ws3OffH":"Τα μεγαλύτερα ρέταλα κρατιούνται ως αξιοποιήσιμα","ws3OffT":"Ελάχιστο αξιοποιήσιμο ρέταλο — μικρότερα ρέταλα μετράνε ως φύρα","ws3PriceH":"Τροφοδοτεί την εκτίμηση του συνολικού κόστους","ws3PriceT":"Τιμή ανά μέτρο ράβδου — χρησιμοποιείται για την εκτίμηση του κόστους","ws3RebarH":"Απαραίτητο για εκτίμηση βάρους και κόστους","ws3RebarT":"Τύπος οπλισμού — ορίζει το βάρος ανά μέτρο (kg/m) για βάρος και κόστος","ws3Skip":"Παράλειψη","ws3UnitT":"Μονάδα του μήκους που έγραψες","ws3W1b":"Κατέγραψε τις ράβδους που έχεις — μήκος, ποσότητα και διάμετρο. Τα περισσότερα συνεργεία αγοράζουν 12άμετρες: βάλε μία γραμμή και ρύθμισε την ποσότητα.","ws3W1t":"1 · Οι ράβδοι σου","ws3W2b":"Κατέγραψε κάθε τεμάχιο που πρέπει να κόψεις, με μήκος, ποσότητα και διάμετρο. Συμβουλή: εισήγαγε ολόκληρη λίστα από Excel/CSV με ένα κλικ.","ws3W2t":"2 · Οι κοπές σου","ws3W3b":"Πάτα «Υπολογισμός πλάνου κοπής» και το SteelCut γεμίζει κάθε ράβδο με ελάχιστη φύρα. Θες να το δεις πρώτα σε δράση;","ws3W3t":"3 · Υπολόγισε","ws3WizTitle":"Καλώς ήρθες στο SteelCut"
 };
 /* ================= core ================= */
 const $=id=>document.getElementById(id);
@@ -838,7 +922,8 @@ function applyI18n(){
 let CUR='home';
 function show(v){CUR=v;document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));$('v-'+v).classList.add('active');document.querySelectorAll('#mainnav button').forEach(b=>b.classList.toggle('active',b.dataset.nav===v));window.scrollTo(0,0);
   if(v==='dashboard')renderDashboard();if(v==='jobs'){renderJobs();renderHist();renderCmpSel();}if(v==='reports')renderQR();if(v==='labels')renderLabels();}
-document.addEventListener('click',e=>{const n=e.target.closest('[data-nav]');if(n)show(n.dataset.nav)});
+document.addEventListener('click',e=>{const n=e.target.closest('[data-nav]');if(n){show(n.dataset.nav);var mm=$('mainnav');if(mm)mm.classList.remove('open');var nt2=$('navToggle');if(nt2)nt2.setAttribute('aria-expanded','false')}});
+var navToggle=$('navToggle');if(navToggle){navToggle.addEventListener('click',function(e){e.stopPropagation();var mn=$('mainnav');var isOpen=mn.classList.toggle('open');navToggle.setAttribute('aria-expanded',isOpen?'true':'false')});document.addEventListener('click',function(e){var mn=$('mainnav');if(mn&&mn.classList.contains('open')&&!e.target.closest('#mainnav')&&!e.target.closest('#navToggle')){mn.classList.remove('open');navToggle.setAttribute('aria-expanded','false')}})}
 function diaOptions(sel,allowAny){let h=allowAny?'<option value="">'+esc(t('diaAny'))+'</option>':'';REBAR.forEach(r=>{h+='<option value="'+r.d+'">Φ'+r.d+'</option>'});sel.innerHTML=h}
 /* ---------- stock & cuts tables ---------- */
 function renderStock(){const tb=$('stockBody');tb.innerHTML='';S.stock.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML='<td><input type="number" min="1" step="any" value="'+esc(r.len)+'" data-f="len"></td><td><input type="number" min="1" step="1" value="'+esc(r.qty)+'" data-f="qty"></td><td><select data-f="unit">'+['mm','cm','m','in'].map(u=>'<option'+(u===r.unit?' selected':'')+'>'+u+'</option>').join('')+'</select></td><td><select data-f="dia"></select></td><td><button class="btn btn-ghost btn-sm" data-del>×</button></td>';
@@ -1377,6 +1462,7 @@ function exportPDF(){const R=S.results;
       line('Bar '+(bi+1)+' ('+Math.round(b.len)+' mm): '+Object.keys(parts).map(k=>{const[l,lb]=k.split('||');return parts[k]+'x '+l+(lb?' ['+lb+']':'')}).join(', '));
       doc.setFont('courier','italic');line('   waste: '+Math.round(b.waste)+' mm'+(b.off?' (reusable)':''),14);doc.setFont('courier','normal');y+=1})});
   const n=doc.getNumberOfPages();for(let i=1;i<=n;i++){doc.setPage(i);doc.setFontSize(8);doc.text('Page '+i+' / '+n+'  -  SteelCut',10,290)}
+  if(window.ws4PoPdfLines){var _pl=window.ws4PoPdfLines();if(_pl&&_pl.length){y+=4;if(y>265){doc.addPage();y=18}doc.setFont('courier','bold');line('Purchase order (estimated)');doc.setFont('courier','normal');_pl.forEach(function(s){line(s)})}}
   doc.save('steelcut-plan.pdf');toast(t('msgExported'))}
 /* ================= labels ================= */
 function barcodeHTML(seed){let h='';let x=seed;for(let i=0;i<28;i++){x=(x*1103515245+12345)&0x7fffffff;const w=1+(x%3);h+='<i style="width:'+w+'px;height:'+(20+(x%14))+'px"></i>'}return h}
@@ -2059,6 +2145,408 @@ function ws3Init(){
 }
 document.addEventListener('DOMContentLoaded',ws3Init);
 })();
+
+</script>
+
+<script>
+/* ================= WS4 additions: 7 new features =================
+   1) Rebar shape codes (BS 8666)  2) EC2 anchorage/lap calculator
+   3) Waste cost analytics          4) Purchase order generator
+   5) Cost-optimal stock advisor    6) Share plan via link
+   7) Templates library
+   No new external dependencies. New UI strings: EN + EL only
+   (other languages fall back to English via t()). */
+Object.assign(I18N.en,{
+navTools:"Tools",ws4ToolsSub:"Engineering calculators for rebar work.",
+ws4TplT:"Templates",ws4TplD:"One click loads a realistic job \u2014 edit freely afterwards.",
+ws4TplLoad:"Load",ws4TplLoaded:"Template loaded.",
+ws4TplConfirm:"Replace current stock and cuts with the template?",
+ws4ShapesT:"Rebar shapes (BS 8666)",ws4ShapesD:"Pick a shape code, enter dimensions \u2014 SteelCut computes the cutting length and adds it as cuts.",
+ws4ShapeCode:"Shape code",ws4CompLen:"Cutting length",ws4AddShapes:"Add as cuts",
+ws4ShapeAdded:"Shape added as cuts.",ws4BadDim:"Enter all dimensions (> 0).",
+ws4Ec2T:"Anchorage & lap length (EC2)",ws4Ec2D:"Per EN 1992-1-1 \u00A78.4 / \u00A78.7. Simplified: straight or hooked ends, no transverse reinforcement.",
+ws4Ec2Dia:"Bar diameter",ws4Ec2Conc:"Concrete class",ws4Ec2Bond:"Bond conditions",
+ws4BondGood:"Good",ws4BondOther:"Other",ws4Ec2Steel:"Steel class",ws4Ec2End:"Bar end",
+ws4EndStraight:"Straight",ws4EndHook:"Hook / bend \u2265 90\u00B0",
+ws4Ec2Cover:"Concrete cover c (mm)",ws4Ec2Force:"Force type",ws4Tension:"Tension",ws4Compression:"Compression",
+ws4Ec2Lap:"% lapped at section",ws4Ec2Calc:"Calculate",ws4Ec2Lb:"Design anchorage length l_bd",ws4Ec2L0:"Design lap length l_0",
+ws4WasteKg:"Waste",ws4WasteEur:"Waste cost",ws4SavedEur:"Saved vs simple cut",
+ws4PriceKgL:"Steel price",ws4PriceKgPh:"\u20AC/kg (optional)",
+ws4PoT:"Purchase order",ws4PoD:"Bars to order per the cutting plan \u2014 estimated.",
+ws4PoGen:"Generate order",ws4PoPrint:"Print order",ws4PoPdf:"Add to PDF report",
+ws4PoInPdf:"Order will be included in the next PDF export.",ws4PoEst:"Est. cost",ws4PoWhNote:"Note: counts include reused warehouse offcuts (\u201Cuse warehouse first\u201D was on).",
+ws4PoEstNote:"Estimated \u2014 verify quantities with your supplier before ordering.",
+ws4AdvMode:"Minimize",ws4ModeWaste:"Waste",ws4ModeCost:"Cost",
+ws4NoPrice:"Set a supplier \u20AC/kg price or enter one \u2014 falling back to waste mode.",
+ws4Share:"Share plan",ws4ShareCopied:"Link copied.",ws4ShareFail:"Could not build the link.",
+ws4ShareCopyFail:"Copy failed \u2014 the link is shown below.",ws4ShareImported:"Shared job loaded.",
+ws4ShareTooLong:"Warning: the link is long and may not work in every app."
+});
+Object.assign(I18N.el,{
+navTools:"\u0395\u03C1\u03B3\u03B1\u03BB\u03B5\u03AF\u03B1",ws4ToolsSub:"\u039C\u03B7\u03C7\u03B1\u03BD\u03B9\u03BA\u03BF\u03AF \u03C5\u03C0\u03BF\u03BB\u03BF\u03B3\u03B9\u03C3\u03C4\u03AD\u03C2 \u03B3\u03B9\u03B1 \u03BF\u03C0\u03BB\u03B9\u03C3\u03BC\u03CC.",
+ws4TplT:"\u03A0\u03C1\u03CC\u03C4\u03C5\u03C0\u03B1",ws4TplD:"\u039C\u03B5 \u03AD\u03BD\u03B1 \u03BA\u03BB\u03B9\u03BA \u03C6\u03BF\u03C1\u03C4\u03CE\u03BD\u03B5\u03B9 \u03BC\u03B9\u03B1 \u03C1\u03B5\u03B1\u03BB\u03B9\u03C3\u03C4\u03B9\u03BA\u03AE \u03B4\u03BF\u03C5\u03BB\u03B5\u03B9\u03AC \u2014 \u03B5\u03C0\u03B5\u03BE\u03B5\u03C1\u03B3\u03AC\u03C3\u03BF\u03C5 \u03B5\u03BB\u03B5\u03CD\u03B8\u03B5\u03C1\u03B1 \u03BC\u03B5\u03C4\u03AC.",
+ws4TplLoad:"\u03A6\u03CC\u03C1\u03C4\u03C9\u03C3\u03B7",ws4TplLoaded:"\u03A4\u03BF \u03C0\u03C1\u03CC\u03C4\u03C5\u03C0\u03BF \u03C6\u03BF\u03C1\u03C4\u03CE\u03B8\u03B7\u03BA\u03B5.",
+ws4TplConfirm:"\u0391\u03BD\u03C4\u03B9\u03BA\u03B1\u03C4\u03AC\u03C3\u03C4\u03B1\u03C3\u03B7 \u03C4\u03C1\u03AD\u03C7\u03BF\u03BD\u03C4\u03BF\u03C2 \u03B1\u03C0\u03BF\u03B8\u03AD\u03BC\u03B1\u03C4\u03BF\u03C2 \u03BA\u03B1\u03B9 \u03BA\u03BF\u03C0\u03CE\u03BD \u03BC\u03B5 \u03C4\u03BF \u03C0\u03C1\u03CC\u03C4\u03C5\u03C0\u03BF;",
+ws4ShapesT:"\u03A3\u03C7\u03AE\u03BC\u03B1\u03C4\u03B1 \u03BF\u03C0\u03BB\u03B9\u03C3\u03BC\u03BF\u03CD (BS 8666)",ws4ShapesD:"\u0394\u03B9\u03AC\u03BB\u03B5\u03BE\u03B5 \u03BA\u03C9\u03B4\u03B9\u03BA\u03CC \u03C3\u03C7\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2, \u03B2\u03AC\u03BB\u03B5 \u03B4\u03B9\u03B1\u03C3\u03C4\u03AC\u03C3\u03B5\u03B9\u03C2 \u2014 \u03C4\u03BF SteelCut \u03C5\u03C0\u03BF\u03BB\u03BF\u03B3\u03AF\u03B6\u03B5\u03B9 \u03C4\u03BF \u03BC\u03AE\u03BA\u03BF\u03C2 \u03BA\u03BF\u03C0\u03AE\u03C2 \u03BA\u03B1\u03B9 \u03C4\u03BF \u03C0\u03C1\u03BF\u03C3\u03B8\u03AD\u03C4\u03B5\u03B9 \u03C3\u03C4\u03B9\u03C2 \u03BA\u03BF\u03C0\u03AD\u03C2.",
+ws4ShapeCode:"\u039A\u03C9\u03B4\u03B9\u03BA\u03CC\u03C2 \u03C3\u03C7\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2",ws4CompLen:"\u039C\u03AE\u03BA\u03BF\u03C2 \u03BA\u03BF\u03C0\u03AE\u03C2",ws4AddShapes:"\u03A0\u03C1\u03BF\u03C3\u03B8\u03AE\u03BA\u03B7 \u03C3\u03C4\u03B9\u03C2 \u03BA\u03BF\u03C0\u03AD\u03C2",
+ws4ShapeAdded:"\u03A4\u03BF \u03C3\u03C7\u03AE\u03BC\u03B1 \u03C0\u03C1\u03BF\u03C3\u03C4\u03AD\u03B8\u03B7\u03BA\u03B5 \u03C3\u03C4\u03B9\u03C2 \u03BA\u03BF\u03C0\u03AD\u03C2.",ws4BadDim:"\u0392\u03AC\u03BB\u03B5 \u03CC\u03BB\u03B5\u03C2 \u03C4\u03B9\u03C2 \u03B4\u03B9\u03B1\u03C3\u03C4\u03AC\u03C3\u03B5\u03B9\u03C2 (> 0).",
+ws4Ec2T:"\u039C\u03AE\u03BA\u03BF\u03C2 \u03B1\u03B3\u03BA\u03CD\u03C1\u03C9\u03C3\u03B7\u03C2 & \u03B1\u03BB\u03BB\u03B7\u03BB\u03BF\u03B5\u03C0\u03B9\u03BA\u03AC\u03BB\u03C5\u03C8\u03B7\u03C2 (EC2)",ws4Ec2D:"\u039A\u03B1\u03C4\u03AC \u0395\u039D 1992-1-1 \u00A78.4 / \u00A78.7. \u0391\u03C0\u03BB\u03BF\u03C0\u03BF\u03B9\u03B7\u03BC\u03AD\u03BD\u03BF: \u03B5\u03C5\u03B8\u03CD\u03B3\u03C1\u03B1\u03BC\u03BC\u03B1 \u03AE \u03BC\u03B5 \u03AC\u03B3\u03BA\u03B9\u03C3\u03C4\u03C1\u03BF, \u03C7\u03C9\u03C1\u03AF\u03C2 \u03B5\u03B3\u03BA\u03AC\u03C1\u03C3\u03B9\u03BF \u03BF\u03C0\u03BB\u03B9\u03C3\u03BC\u03CC.",
+ws4Ec2Dia:"\u0394\u03B9\u03AC\u03BC\u03B5\u03C4\u03C1\u03BF\u03C2 \u03C1\u03AC\u03B2\u03B4\u03BF\u03C5",ws4Ec2Conc:"\u039A\u03B1\u03C4\u03B7\u03B3\u03BF\u03C1\u03AF\u03B1 \u03C3\u03BA\u03C5\u03C1\u03BF\u03B4\u03AD\u03BC\u03B1\u03C4\u03BF\u03C2",ws4Ec2Bond:"\u03A3\u03C5\u03BD\u03B8\u03AE\u03BA\u03B5\u03C2 \u03C3\u03C5\u03BD\u03AC\u03C6\u03B5\u03B9\u03B1\u03C2",
+ws4BondGood:"\u039A\u03B1\u03BB\u03AD\u03C2",ws4BondOther:"\u0386\u03BB\u03BB\u03B5\u03C2",ws4Ec2Steel:"\u039A\u03B1\u03C4\u03B7\u03B3\u03BF\u03C1\u03AF\u03B1 \u03C7\u03AC\u03BB\u03C5\u03B2\u03B1",ws4Ec2End:"\u0386\u03BA\u03C1\u03BF \u03C1\u03AC\u03B2\u03B4\u03BF\u03C5",
+ws4EndStraight:"\u0395\u03C5\u03B8\u03CD",ws4EndHook:"\u0386\u03B3\u03BA\u03B9\u03C3\u03C4\u03C1\u03BF / \u03BA\u03AC\u03BC\u03C8\u03B7 \u2265 90\u00B0",
+ws4Ec2Cover:"\u0395\u03C0\u03B9\u03BA\u03AC\u03BB\u03C5\u03C8\u03B7 \u03C3\u03BA\u03C5\u03C1\u03BF\u03B4\u03AD\u03BC\u03B1\u03C4\u03BF\u03C2 c (mm)",ws4Ec2Force:"\u0395\u03AF\u03B4\u03BF\u03C2 \u03B4\u03CD\u03BD\u03B1\u03BC\u03B7\u03C2",ws4Tension:"\u0395\u03C6\u03B5\u03BB\u03BA\u03C5\u03C3\u03BC\u03CC\u03C2",ws4Compression:"\u0398\u03BB\u03AF\u03C8\u03B7",
+ws4Ec2Lap:"% \u03B1\u03BB\u03BB\u03B7\u03BB\u03BF\u03B5\u03C0\u03B9\u03BA\u03AC\u03BB\u03C5\u03C8\u03B7\u03C2 \u03C3\u03C4\u03B7 \u03B4\u03B9\u03B1\u03C4\u03BF\u03BC\u03AE",ws4Ec2Calc:"\u03A5\u03C0\u03BF\u03BB\u03BF\u03B3\u03B9\u03C3\u03BC\u03CC\u03C2",ws4Ec2Lb:"Μήκος αγκύρωσης l_bd",ws4Ec2L0:"Μήκος αλληλοεπικάλυψης l_0",
+ws4WasteKg:"\u03A6\u03CD\u03C1\u03B1",ws4WasteEur:"\u039A\u03CC\u03C3\u03C4\u03BF\u03C2 \u03C6\u03CD\u03C1\u03B1\u03C2",ws4SavedEur:"\u0395\u03BE\u03BF\u03B9\u03BA\u03BF\u03BD\u03CC\u03BC\u03B7\u03C3\u03B7 vs \u03B1\u03C0\u03BB\u03AE\u03C2 \u03BA\u03BF\u03C0\u03AE\u03C2",
+ws4PriceKgL:"\u03A4\u03B9\u03BC\u03AE \u03C7\u03AC\u03BB\u03C5\u03B2\u03B1",ws4PriceKgPh:"\u20AC/kg (\u03C0\u03C1\u03BF\u03B1\u03B9\u03C1\u03B5\u03C4\u03B9\u03BA\u03CC)",
+ws4PoT:"\u03A0\u03B1\u03C1\u03B1\u03B3\u03B3\u03B5\u03BB\u03AF\u03B1 \u03C0\u03C1\u03BF\u03BC\u03B7\u03B8\u03B5\u03C5\u03C4\u03AE",ws4PoD:"\u03A1\u03AC\u03B2\u03B4\u03BF\u03B9 \u03B3\u03B9\u03B1 \u03C0\u03B1\u03C1\u03B1\u03B3\u03B3\u03B5\u03BB\u03AF\u03B1 \u03C3\u03CD\u03BC\u03C6\u03C9\u03BD\u03B1 \u03BC\u03B5 \u03C4\u03BF \u03C0\u03BB\u03AC\u03BD\u03BF \u2014 \u03B5\u03BA\u03C4\u03AF\u03BC\u03B7\u03C3\u03B7.",
+ws4PoGen:"\u0394\u03B7\u03BC\u03B9\u03BF\u03C5\u03C1\u03B3\u03AF\u03B1 \u03C0\u03B1\u03C1\u03B1\u03B3\u03B3\u03B5\u03BB\u03AF\u03B1\u03C2",ws4PoPrint:"\u0395\u03BA\u03C4\u03CD\u03C0\u03C9\u03C3\u03B7",ws4PoPdf:"\u03A0\u03C1\u03BF\u03C3\u03B8\u03AE\u03BA\u03B7 \u03C3\u03C4\u03BF PDF",
+ws4PoInPdf:"\u0397 \u03C0\u03B1\u03C1\u03B1\u03B3\u03B3\u03B5\u03BB\u03AF\u03B1 \u03B8\u03B1 \u03C0\u03C1\u03BF\u03C3\u03C4\u03B5\u03B8\u03B5\u03AF \u03C3\u03C4\u03B7\u03BD \u03B5\u03C0\u03CC\u03BC\u03B5\u03BD\u03B7 \u03B5\u03BE\u03B1\u03B3\u03C9\u03B3\u03AE PDF.",ws4PoEst:"\u0395\u03BA\u03C4. \u03BA\u03CC\u03C3\u03C4\u03BF\u03C2",ws4PoWhNote:"\u03A3\u03B7\u03BC.: \u03C0\u03B5\u03C1\u03B9\u03BB\u03B1\u03BC\u03B2\u03AC\u03BD\u03B5\u03B9 \u03B1\u03BE\u03B9\u03BF\u03C0\u03BF\u03B9\u03B7\u03BC\u03AD\u03BD\u03B1 \u03C1\u03AD\u03C4\u03B1\u03BB\u03B1 \u03B1\u03C0\u03BF\u03B8\u03AE\u03BA\u03B7\u03C2.",
+ws4PoEstNote:"\u0395\u03BA\u03C4\u03AF\u03BC\u03B7\u03C3\u03B7 \u2014 \u03B5\u03C0\u03B9\u03B2\u03B5\u03B2\u03B1\u03B9\u03CE\u03C3\u03C4\u03B5 \u03C4\u03B9\u03C2 \u03C0\u03BF\u03C3\u03CC\u03C4\u03B7\u03C4\u03B5\u03C2 \u03BC\u03B5 \u03C4\u03BF\u03BD \u03C0\u03C1\u03BF\u03BC\u03B7\u03B8\u03B5\u03C5\u03C4\u03AE \u03C0\u03C1\u03B9\u03BD \u03C4\u03B7\u03BD \u03C0\u03B1\u03C1\u03B1\u03B3\u03B3\u03B5\u03BB\u03AF\u03B1.",
+ws4AdvMode:"\u0395\u03BB\u03B1\u03C7\u03B9\u03C3\u03C4\u03BF\u03C0\u03BF\u03AF\u03B7\u03C3\u03B7",ws4ModeWaste:"\u03A6\u03CD\u03C1\u03B1",ws4ModeCost:"\u039A\u03CC\u03C3\u03C4\u03BF\u03C2",
+ws4NoPrice:"\u0392\u03AC\u03BB\u03B5 \u03C4\u03B9\u03BC\u03AE \u03C0\u03C1\u03BF\u03BC\u03B7\u03B8\u03B5\u03C5\u03C4\u03AE/\u03BAg \u03AE \u03B3\u03C1\u03AC\u03C8\u03B5 \u03BC\u03AF\u03B1 \u2014 \u03B5\u03C0\u03B9\u03C3\u03C4\u03C1\u03BF\u03C6\u03AE \u03C3\u03B5 \u03BB\u03B5\u03B9\u03C4\u03BF\u03C5\u03C1\u03B3\u03AF\u03B1 \u03C6\u03CD\u03C1\u03B1\u03C2.",
+ws4Share:"\u039A\u03BF\u03B9\u03BD\u03BF\u03C0\u03BF\u03AF\u03B7\u03C3\u03B7 \u03C0\u03BB\u03AC\u03BD\u03BF\u03C5",ws4ShareCopied:"\u03A4\u03BF link \u03B1\u03BD\u03C4\u03B9\u03B3\u03C1\u03AC\u03C6\u03B7\u03BA\u03B5.",ws4ShareFail:"\u0394\u03B5\u03BD \u03BC\u03C0\u03CC\u03C1\u03B5\u03C3\u03B1 \u03BD\u03B1 \u03B4\u03B7\u03BC\u03B9\u03BF\u03C5\u03C1\u03B3\u03B7\u03B8\u03B5\u03AF \u03C4\u03BF link.",
+ws4ShareCopyFail:"\u0397 \u03B1\u03BD\u03C4\u03B9\u03B3\u03C1\u03B1\u03C6\u03AE \u03B1\u03C0\u03AD\u03C4\u03C5\u03C7\u03B5 \u2014 \u03C4\u03BF link \u03C6\u03B1\u03AF\u03BD\u03B5\u03C4\u03B1\u03B9 \u03C0\u03B1\u03C1\u03B1\u03BA\u03AC\u03C4\u03C9.",ws4ShareImported:"\u0397 \u03BA\u03BF\u03B9\u03BD\u03BF\u03C0\u03BF\u03B9\u03B7\u03BC\u03AD\u03BD\u03B7 \u03B4\u03BF\u03C5\u03BB\u03B5\u03B9\u03AC \u03C6\u03BF\u03C1\u03C4\u03CE\u03B8\u03B7\u03BA\u03B5.",
+ws4ShareTooLong:"\u03A0\u03C1\u03BF\u03C3\u03BF\u03C7\u03AE: \u03C4\u03BF link \u03B5\u03AF\u03BD\u03B1\u03B9 \u03BC\u03B5\u03B3\u03AC\u03BB\u03BF \u03BA\u03B1\u03B9 \u03BC\u03C0\u03BF\u03C1\u03B5\u03AF \u03BD\u03B1 \u03BC\u03B7 \u03B4\u03BF\u03C5\u03BB\u03B5\u03CD\u03B5\u03B9 \u03C0\u03B1\u03BD\u03C4\u03BF\u03CD."
+});
+
+/* ---------- shared helpers ---------- */
+function ws4KgPm(dia,fbDia){var d=dia!=null?dia:fbDia;var r=REBAR.find(function(x){return x.d===d});return r?r.w:0}
+function ws4PriceKg(){var p=0;(S.suppliers||[]).forEach(function(s){var v=num(s.price);if(v>0&&(p===0||v<p))p=v});if(p>0)return p;var m=(S.ws4&&num(S.ws4.priceKg))||0;return m>0?m:0}
+
+/* ================= 1) Rebar shape codes (BS 8666) =================
+   Stock-length formulas per BS 8666:2020 Table 2. r = minimum scheduling
+   bend radius (Table 2): 2d for d<=16, tabulated above that. */
+function ws4BendR(dia){var T={6:12,8:16,10:20,12:24,16:32,20:70,25:87,32:112,40:140,50:175};if(T[dia])return T[dia];return dia<=16?2*dia:3.5*dia}
+var WS4_SHAPES=[
+{code:'00',name:'Straight bar',dims:['A'],formula:'L = A',
+ svg:'<svg viewBox="0 0 200 90" width="200" height="90"><line x1="15" y1="40" x2="185" y2="40" stroke="#0e4d8a" stroke-width="5" stroke-linecap="round"/><text x="100" y="72" text-anchor="middle" font-size="14" fill="#5c6f83">A</text></svg>',
+ calc:function(D){return D.A}},
+{code:'20',name:'Straight bar (BS 4466 legacy)',dims:['A'],formula:'L = A',
+ svg:'<svg viewBox="0 0 200 90" width="200" height="90"><line x1="15" y1="40" x2="185" y2="40" stroke="#0e4d8a" stroke-width="5" stroke-linecap="round"/><text x="100" y="72" text-anchor="middle" font-size="14" fill="#5c6f83">A</text></svg>',
+ calc:function(D){return D.A}},
+{code:'21',name:'Crank',dims:['A','B','C'],formula:'L = A + B + C \u2212 r \u2212 2d',
+ svg:'<svg viewBox="0 0 200 100" width="200" height="100"><polyline points="15,25 85,25 115,75 185,75" fill="none" stroke="#0e4d8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><text x="50" y="18" font-size="13" fill="#5c6f83">A</text><text x="112" y="52" font-size="13" fill="#5c6f83">B</text><text x="150" y="95" font-size="13" fill="#5c6f83">C</text></svg>',
+ calc:function(D,dia){return D.A+D.B+D.C-ws4BendR(dia)-2*dia}},
+{code:'32',name:'Double bend',dims:['A','B','C','D'],formula:'L = A + B + C + D \u2212 1.5r \u2212 3d',
+ svg:'<svg viewBox="0 0 200 110" width="200" height="110"><polyline points="12,28 62,28 62,82 118,82 118,48 188,48" fill="none" stroke="#0e4d8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><text x="34" y="20" font-size="12" fill="#5c6f83">A</text><text x="70" y="58" font-size="12" fill="#5c6f83">B</text><text x="92" y="100" font-size="12" fill="#5c6f83">C</text><text x="152" y="40" font-size="12" fill="#5c6f83">D</text></svg>',
+ calc:function(D,dia){return D.A+D.B+D.C+D.D-1.5*ws4BendR(dia)-3*dia}},
+{code:'51',name:'Link / stirrup',dims:['A','B','C'],formula:'L = 2(A + B + C) \u2212 2.5r \u2212 5d',
+ svg:'<svg viewBox="0 0 200 110" width="200" height="110"><rect x="55" y="22" width="90" height="60" fill="none" stroke="#0e4d8a" stroke-width="5" rx="4"/><path d="M145,82 l18,0 l0,-18" fill="none" stroke="#0e4d8a" stroke-width="5" stroke-linecap="round"/><text x="100" y="16" text-anchor="middle" font-size="13" fill="#5c6f83">A</text><text x="42" y="56" font-size="13" fill="#5c6f83">B</text><text x="168" y="70" font-size="13" fill="#5c6f83">C</text></svg>',
+ calc:function(D,dia){return 2*(D.A+D.B+D.C)-2.5*ws4BendR(dia)-5*dia}},
+{code:'99',name:'Other \u2014 enter total length',dims:['L'],formula:'L = entered length',
+ svg:'<svg viewBox="0 0 200 90" width="200" height="90"><rect x="30" y="15" width="140" height="60" fill="none" stroke="#5c6f83" stroke-width="3" stroke-dasharray="8 5" rx="6"/><text x="100" y="53" text-anchor="middle" font-size="22" fill="#5c6f83">?</text></svg>',
+ calc:function(D){return D.L}}
+];
+function ws4ShapeLen(sh,dims,dia){var D={};(sh.dims||[]).forEach(function(k){D[k]=num(dims[k])});return sh.calc(D,dia||12)}
+function ws4CurShape(){var s=$('ws4ShapeSel');return WS4_SHAPES.find(function(x){return x.code===s.value})||WS4_SHAPES[0]}
+function ws4RenderShapeDims(){
+  var sh=ws4CurShape();
+  $('ws4ShapeSvg').innerHTML=sh.svg;
+  var box=$('ws4ShapeDims');box.innerHTML='';
+  sh.dims.forEach(function(k){
+    var d=document.createElement('div');d.className='fg';
+    d.innerHTML='<label>'+esc(k)+' (mm)</label><input type="number" min="1" step="any" data-dim="'+k+'">';
+    box.appendChild(d);
+  });
+  var dia=num($('ws4ShapeDia').value)||12;
+  $('ws4ShapeFormula').textContent=sh.formula+((sh.code==='00'||sh.code==='20'||sh.code==='99')?'':'   \u00B7 r = '+Math.round(ws4BendR(dia))+' mm (BS 8666 min. radius)');
+  box.querySelectorAll('input').forEach(function(i){i.addEventListener('input',ws4UpdateShapeLen)});
+  ws4UpdateShapeLen();
+}
+function ws4ShapeDimsVal(){var sh=ws4CurShape(),D={},ok=true;
+  $('ws4ShapeDims').querySelectorAll('input[data-dim]').forEach(function(i){var v=num(i.value);D[i.dataset.dim]=v;if(!(v>0))ok=false});
+  return{D:D,ok:ok}}
+function ws4UpdateShapeLen(){var sh=ws4CurShape(),dia=num($('ws4ShapeDia').value)||null;
+  var r=ws4ShapeDimsVal();$('ws4ShapeLen').textContent=r.ok?fmtLen(ws4ShapeLen(sh,r.D,dia)):'\u2014'}
+function ws4AddShape(){
+  var sh=ws4CurShape(),dia=num($('ws4ShapeDia').value)||null;
+  var r=ws4ShapeDimsVal(),qty=Math.max(1,Math.round(num($('ws4ShapeQty').value)));
+  if(!r.ok){toast(t('ws4BadDim'));return}
+  var L=ws4ShapeLen(sh,r.D,dia);
+  if(!(L>0)){toast(t('ws4BadDim'));return}
+  S.cuts.push({id:uid(),len:Math.round(L),qty:qty,unit:'mm',dia:dia,label:'shape '+sh.code});
+  persist();renderCuts();toast(t('ws4ShapeAdded'));
+}
+function ws4RenderShapePicker(){
+  var sel=$('ws4ShapeSel');if(!sel)return;
+  sel.innerHTML=WS4_SHAPES.map(function(s){return '<option value="'+s.code+'">'+s.code+' \u2014 '+esc(s.name)+'</option>'}).join('');
+  diaOptions($('ws4ShapeDia'),false);
+  sel.onchange=ws4RenderShapeDims;$('ws4ShapeDia').onchange=ws4RenderShapeDims;
+  $('ws4ShapeQty').oninput=ws4UpdateShapeLen;
+  ws4RenderShapeDims();
+}
+
+/* ================= 2) EC2 anchorage & lap length =================
+   EN 1992-1-1: f_bd = 2.25*n1*n2*f_ctd (\u00A78.4.2); l_b,rqd = (Phi/4)*(s_sd/f_bd);
+   l_bd = a1*a2*a3*a4*a5*l_b,rqd >= l_b,min (\u00A78.4.4); l_0 = a1*a2*a3*a5*a6*l_b,rqd
+   >= l_0,min (\u00A78.7.3). a3=a4=a5=1.0 (no transverse reinf./welds/pressure). */
+function ws4Ec2(){
+  var dia=num($('ws4Ec2Dia').value);if(!(dia>0))return;
+  var cls=$('ws4Ec2Conc').value,fck=num(cls.slice(1).split('/')[0]);
+  var bond=$('ws4Ec2Bond').value,end=$('ws4Ec2End').value;
+  var cover=Math.max(10,num($('ws4Ec2Cover').value)||30);
+  var tension=$('ws4Ec2Force').value==='tension',a6=num($('ws4Ec2Lap').value)||1;
+  var fctm=0.30*Math.pow(fck,2/3),fctd=0.7*fctm/1.5;
+  var n1=bond==='good'?1.0:0.7,n2=dia<=32?1.0:(132-dia)/100;
+  var fbd=2.25*n1*n2*fctd,fyd=500/1.15;
+  var lbrqd=(dia/4)*(fyd/fbd);
+  var a1=end==='straight'?1.0:0.7;
+  var a2=Math.min(1.0,Math.max(0.7,1-0.15*(cover-dia)/dia));
+  var lbd=a1*a2*lbrqd;
+  var lbmin=tension?Math.max(0.3*lbrqd,10*dia,100):Math.max(0.6*lbrqd,10*dia,100);
+  lbd=Math.max(lbd,lbmin);
+  var l0=a1*a2*a6*lbrqd,l0min=Math.max(0.3*a6*lbrqd,15*dia,200);
+  l0=Math.max(l0,l0min);
+  var lbdR=Math.ceil(lbd/10)*10,l0R=Math.ceil(l0/10)*10;
+  var row=function(k,v){return '<tr><td>'+k+'</td><td class="num">'+v+'</td></tr>'};
+  var h='<table class="data"><tbody>';
+  h+=row('f<sub>ctm</sub> = 0.30\u00B7f<sub>ck</sub><sup>2/3</sup>',fmt(fctm,2)+' MPa');
+  h+=row('f<sub>ctd</sub> = 0.7\u00B7f<sub>ctm</sub>/1.5',fmt(fctd,2)+' MPa');
+  h+=row('f<sub>bd</sub> = 2.25\u00B7\u03B71\u00B7\u03B72\u00B7f<sub>ctd</sub> (\u03B71='+n1+', \u03B72='+fmt(n2,2)+')',fmt(fbd,2)+' MPa');
+  h+=row('l<sub>b,rqd</sub> = (\u03A6/4)\u00B7(f<sub>yd</sub>/f<sub>bd</sub>), f<sub>yd</sub>=434.8 MPa',fmt(lbrqd,0)+' mm');
+  h+=row('\u03B11='+a1+', \u03B12='+fmt(a2,3)+' (c='+cover+' mm), \u03B13=\u03B14=\u03B15=1.0, \u03B16='+a6,'');
+  h+='</tbody></table>';
+  h+='<div class="metrics" style="margin-top:12px">';
+  h+='<div class="metric"><div class="k">'+esc(t('ws4Ec2Lb'))+'</div><div class="v">'+fmt(lbdR,0)+' mm</div></div>';
+  h+='<div class="metric"><div class="k">'+esc(t('ws4Ec2L0'))+'</div><div class="v">'+fmt(l0R,0)+' mm</div></div>';
+  h+='</div><p class="muted small">l<sub>b,min</sub>='+fmt(lbmin,0)+' mm \u00B7 l<sub>0,min</sub>='+fmt(l0min,0)+' mm \u00B7 rounded up to 10 mm \u00B7 \u03B12 uses c<sub>d</sub>=c (simplified)</p>';
+  $('ws4Ec2Out').innerHTML=h;
+}
+
+/* ================= 3) Waste cost analytics ================= */
+function ws4NextFitWaste(pieces,L,kerf){
+  var bars=0,open=-1,used=0;
+  for(var i=0;i<pieces.length;i++){var p=pieces[i];if(p.len>L)continue;
+    var need=p.len+(open>=0?kerf:0);
+    if(open>=0&&need<=open){open-=need;used+=p.len}else{bars++;open=L-p.len;used+=p.len}}
+  return bars>0?bars*L-used:0;
+}
+function ws4WasteStats(R){
+  var fbDia=R.settings.rebar?num(R.settings.rebar):null;
+  var kerf=(R.ws1&&R.ws1.effKerf!=null)?R.ws1.effKerf:num(R.kerf);
+  var priceKg=ws4PriceKg(),wasteKg=0,savedKg=0;
+  R.groups.forEach(function(g){
+    var kpm=ws4KgPm(g.dia,fbDia),gw=0,pieces=[];
+    g.bars.forEach(function(b){gw+=b.waste;b.pieces.forEach(function(p){pieces.push({len:p.len})})});
+    wasteKg+=gw/1000*kpm;
+    if(g.bars.length&&kpm>0){
+      var L=g.bars.reduce(function(a,b){return Math.max(a,b.len)},0);
+      savedKg+=Math.max(0,ws4NextFitWaste(pieces,L,kerf)-gw)/1000*kpm;
+    }
+  });
+  return{wasteKg:wasteKg,wasteEur:wasteKg*priceKg,savedEur:savedKg*priceKg};
+}
+function ws4DashExtra(){
+  var k=$('dashKpis');if(!k)return;
+  var wk=0,we=0,sv=0;
+  (S.history||[]).forEach(function(h){var s=h.stats||{};wk+=num(s.wasteKg);we+=num(s.wasteEur);sv+=num(s.savedEur)});
+  var card=function(k2,v){return '<div class="metric"><div class="k">'+esc(k2)+'</div><div class="v">'+v+'</div></div>'};
+  k.innerHTML+=card(t('ws4WasteKg'),fmt(wk,1)+' kg')+card(t('ws4WasteEur'),'\u20AC '+fmt(we,2))+card(t('ws4SavedEur'),'\u20AC '+fmt(sv,2));
+  var pr=$('ws4PriceRow');
+  if(!pr){pr=document.createElement('div');pr.id='ws4PriceRow';pr.style.margin='12px 0';k.parentNode.insertBefore(pr,k.nextSibling)}
+  pr.innerHTML='<label class="muted small">'+esc(t('ws4PriceKgL'))+': </label><input id="ws4PriceKgDash" type="number" min="0" step="0.01" style="width:110px" value="'+esc((S.ws4&&S.ws4.priceKg)||'')+'" placeholder="\u20AC/kg">';
+  $('ws4PriceKgDash').onchange=function(){S.ws4=S.ws4||{};S.ws4.priceKg=num(this.value);persist();ws4DashExtra()};
+}
+function ws4ResultsExtra(){
+  var R=S.results;if(!R)return;var m=$('metrics');if(!m)return;
+  var w=ws4WasteStats(R),cur=R.settings.currency||'\u20AC';
+  var card=function(k2,v){return '<div class="metric"><div class="k">'+esc(k2)+'</div><div class="v">'+v+'</div></div>'};
+  m.innerHTML+=card(t('ws4WasteKg'),fmt(w.wasteKg,1)+' kg')+card(t('ws4WasteEur'),esc(cur)+' '+fmt(w.wasteEur,2))+card(t('ws4SavedEur'),esc(cur)+' '+fmt(w.savedEur,2));
+}
+
+/* ================= 4) Purchase order generator ================= */
+var ws4PO=null;
+function ws4GenPO(){
+  var R=S.results;if(!R){toast(t('msgNoResults'));return}
+  var map={};
+  R.groups.forEach(function(g){g.bars.forEach(function(b){
+    var k=(g.dia==null?'std':g.dia)+'|'+Math.round(b.len);
+    (map[k]=map[k]||{dia:g.dia,len:Math.round(b.len),qty:0}).qty++;
+  })});
+  var rows=Object.values(map).sort(function(a,b){return((a.dia==null?1e9:a.dia)-(b.dia==null?1e9:b.dia))||b.len-a.len});
+  var fbDia=R.settings.rebar?num(R.settings.rebar):null,cur=R.settings.currency||'\u20AC',totW=0;
+  rows.forEach(function(r){r.weight=r.qty*(r.len/1000)*ws4KgPm(r.dia,fbDia);totW+=r.weight});
+  ws4PO={date:R.date,rows:rows,totW:totW,cur:cur,whNote:!!(R.ws1&&R.ws1.preferWh)};
+  var h='<table class="data"><thead><tr><th>'+esc(t('diaCol'))+'</th><th>'+esc(t('length'))+'</th><th class="num">'+esc(t('qty'))+'</th><th class="num">'+esc(t('totalWeight'))+' (kg)</th></tr></thead><tbody>';
+  rows.forEach(function(r){h+='<tr><td>'+esc(diaName(r.dia))+'</td><td>'+fmtLen(r.len)+'</td><td class="num">'+r.qty+'</td><td class="num">'+fmt(r.weight,1)+'</td></tr>'});
+  h+='</tbody></table><p style="margin-top:10px"><strong>'+esc(t('totalWeight'))+': '+fmt(totW,1)+' kg</strong></p>';
+  var sups=(S.suppliers||[]).filter(function(s){return num(s.price)>0});
+  if(sups.length){
+    h+='<table class="data" style="margin-top:10px"><thead><tr><th>'+esc(t('supName'))+'</th><th class="num">'+esc(t('ws4PoEst'))+' ('+esc(cur)+')</th></tr></thead><tbody>';
+    sups.map(function(s){return{n:s.name||'\u2014',tot:totW*num(s.price)}}).sort(function(a,b){return a.tot-b.tot}).forEach(function(r2){
+      h+='<tr><td>'+esc(r2.n)+'</td><td class="num">'+fmt(r2.tot,2)+'</td></tr>'});
+    h+='</tbody></table>';
+  }
+  if(ws4PO.whNote)h+='<p class="muted small" style="margin-top:8px">'+esc(t('ws4PoWhNote'))+'</p>';
+  h+='<p class="muted small">'+esc(t('ws4PoEstNote'))+'</p>';
+  $('ws4PoOut').innerHTML=h;
+}
+function ws4PrintPO(){
+  if(!ws4PO){toast(t('msgNoResults'));return}
+  var w=window.open('','_blank');if(!w)return;
+  w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>'+esc(t('ws4PoT'))+' \u2014 SteelCut</title></head><body>'+$('ws4PoOut').innerHTML+'</body></html>');
+  w.document.close();w.focus();setTimeout(function(){w.print()},300);
+}
+window.ws4PoPdfLines=function(){
+  var R=S.results;
+  if(!R||!ws4PO||ws4PO.date!==R.date)return[];
+  var L=[];
+  ws4PO.rows.forEach(function(r){L.push('PHI '+(r.dia==null?'any':r.dia)+' x '+r.len+' mm: '+r.qty+' bars ('+r.weight.toFixed(1)+' kg)')});
+  L.push('Total order weight: '+ws4PO.totW.toFixed(1)+' kg (estimated)');
+  return L;
+};
+
+/* ================= 5) Cost-optimal stock advisor ================= */
+function ws4AdviseCost(){
+  var out=$('ws2bAdvOut'),lens=[];
+  String($('ws2bAdvInput').value||'').split(/[;,\n]+/).forEach(function(p){
+    var m=p.trim().match(/^(\d+(?:[.,]\d+)?)/);
+    if(m){var L=parseFloat(m[1].replace(',','.'));if(L>0)lens.push(L)}
+  });
+  if(!lens.length){toast(t('ws2bAdvNeedRows'));return}
+  var cuts=S.cuts.filter(function(c){return num(c.len)>0&&num(c.qty)>0});
+  if(!cuts.length){toast(t('ws2bAdvNeedCuts'));return}
+  var priceKg=0;
+  (S.suppliers||[]).forEach(function(s){var v=num(s.price);if(v>0&&(priceKg===0||v<priceKg))priceKg=v});
+  var man=num(($('ws4AdvPriceKg')||{}).value);
+  if(man>0)priceKg=man;
+  if(!(priceKg>0)){toast(t('ws4NoPrice'));ws2bAdviseOrig();return}
+  var kerf=num($('sKerf').value),cur=(($('sCur')&&$('sCur').value)||S.settings.currency||'\u20AC');
+  var fbDia=S.settings.rebar?num(S.settings.rebar):null,gmap={};
+  cuts.forEach(function(c){var k=c.dia==null?'std':'d'+c.dia;(gmap[k]=gmap[k]||{dia:c.dia==null?null:num(c.dia),pieces:[]});var L=toMM(c.len,c.unit),q=Math.round(num(c.qty));for(var i=0;i<q;i++)gmap[k].pieces.push({len:L})});
+  var groups=Object.values(gmap);
+  var res=lens.map(function(L){
+    var bars=0,weight=0,waste=0,barLen=0,ok=true;
+    for(var gi=0;gi<groups.length;gi++){var g=groups[gi],kpm=ws4KgPm(g.dia,fbDia);
+      var r=bfd(g.pieces,[{len:L,qty:999999,dia:g.dia}],kerf);
+      if(r.error){ok=false;break}
+      r.bars.forEach(function(b){bars++;barLen+=b.len;waste+=b.len-b.used;if(kpm>0)weight+=b.len/1000*kpm});
+    }
+    if(!ok)return{L:L,ok:false};
+    return{L:L,ok:true,bars:bars,wastePct:barLen?waste/barLen*100:0,weight:weight,cost:weight*priceKg};
+  });
+  var best=null;res.forEach(function(r){if(r.ok&&(!best||r.cost<best.cost))best=r});
+  var h='<table class="data"><thead><tr><th>'+esc(t('length'))+'</th><th class="num">'+esc(t('ws2bAdvBars'))+'</th><th class="num">'+esc(t('ws2bAdvWaste'))+'</th><th class="num">'+esc(t('totalWeight'))+' (kg)</th><th class="num">'+esc(t('ws2bAdvCost'))+' ('+esc(cur)+')</th></tr></thead><tbody>';
+  res.forEach(function(r){
+    h+='<tr><td>'+Math.round(r.L)+' mm</td>';
+    if(!r.ok)h+='<td colspan="4" class="muted">'+esc(t('ws2bAdvNoFit'))+'</td>';
+    else h+='<td class="num">'+r.bars+'</td><td class="num">'+fmt(r.wastePct,1)+'%</td><td class="num">'+fmt(r.weight,1)+'</td><td class="num"><strong>'+fmt(r.cost,2)+'</strong></td>';
+    h+='</tr>';
+  });
+  h+='</tbody></table>';
+  if(best)h+='<p style="margin-top:12px;font-size:15px">'+esc(t('ws2bAdvBest'))+' <strong>'+Math.round(best.L)+'mm @ '+esc(cur)+fmt(best.cost,2)+' '+esc(t('ws2bAdvTotal'))+'</strong></p>';
+  out.innerHTML=h;
+}
+
+/* ================= 6) Share plan via link ================= */
+function ws4Share(){
+  var payload={v:1,stock:S.stock,cuts:S.cuts,settings:S.settings,project:S.project},b64='';
+  try{b64=btoa(unescape(encodeURIComponent(JSON.stringify(payload)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}catch(e){toast(t('ws4ShareFail'));return}
+  var url=location.origin+location.pathname+'#s='+b64;
+  var showQr=function(){
+    var warn=b64.length>1800?'<p class="muted small">'+esc(t('ws4ShareTooLong'))+'</p>':'';
+    $('ws4ShareOut').innerHTML=warn+'<p class="small"><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(url.slice(0,90))+'\u2026</a></p>'+ws2aQRImg(url);
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(function(){toast(t('ws4ShareCopied'));showQr()},function(){$('ws4ShareOut').innerHTML='<p class="muted small">'+esc(t('ws4ShareCopyFail'))+'</p>';showQr()});
+  }else{
+    var ta=document.createElement('textarea');ta.value=url;document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');toast(t('ws4ShareCopied'))}catch(e2){}
+    document.body.removeChild(ta);showQr();
+  }
+}
+function ws4ImportHash(){
+  try{
+    if(location.hash.indexOf('#s=')!==0)return;
+    var b64=location.hash.slice(3).replace(/-/g,'+').replace(/_/g,'/');
+    var o=JSON.parse(decodeURIComponent(escape(atob(b64))));
+    if(o&&o.v===1){
+      if(o.stock)S.stock=o.stock;if(o.cuts)S.cuts=o.cuts;
+      if(o.settings)S.settings=Object.assign(S.settings,o.settings);
+      if(o.project)S.project=Object.assign(S.project,o.project);
+      S.results=null;persist();fillForm();renderStock();renderCuts();renderResults();show('optimizer');
+      toast(t('ws4ShareImported'));
+    }
+  }catch(e){}
+  try{history.replaceState(null,'',location.pathname+location.search)}catch(e2){}
+}
+
+/* ================= 7) Templates library ================= */
+var WS4_TEMPLATES=[
+{id:'stirrups8',name:'Stirrups \u03A68 \u00B7 250\u00D7250',desc:'40 stirrups, shape 51',
+ stock:[{len:12000,qty:4,unit:'mm',dia:8}],
+ cuts:[{shape:'51',dims:{A:250,B:250,C:80},dia:8,qty:40,label:'stirrup'}]},
+{id:'pads12',name:'Foundation pads \u03A612',desc:'24 straight bars 1500 mm',
+ stock:[{len:12000,qty:4,unit:'mm',dia:12}],
+ cuts:[{len:1500,qty:24,unit:'mm',dia:12,label:'pad'}]},
+{id:'columns',name:'Columns 4\u03A616 + stirrups',desc:'8 column bars + 20 links',
+ stock:[{len:12000,qty:2,unit:'mm',dia:16},{len:12000,qty:3,unit:'mm',dia:8}],
+ cuts:[{len:3000,qty:8,unit:'mm',dia:16,label:'column'},{shape:'51',dims:{A:400,B:400,C:100},dia:8,qty:20,label:'link'}]},
+{id:'slabmesh',name:'Slab mesh \u03A610',desc:'30 bars 4200 mm',
+ stock:[{len:12000,qty:11,unit:'mm',dia:10}],
+ cuts:[{len:4200,qty:30,unit:'mm',dia:10,label:'mesh'}]},
+{id:'beams',name:'Beams 4\u03A614',desc:'12 bars 6000 mm',
+ stock:[{len:12000,qty:7,unit:'mm',dia:14}],
+ cuts:[{len:6000,qty:12,unit:'mm',dia:14,label:'beam'}]},
+{id:'wallcrank',name:'Wall cranks \u03A612',desc:'16 cranks, shape 21',
+ stock:[{len:12000,qty:4,unit:'mm',dia:12}],
+ cuts:[{shape:'21',dims:{A:2000,B:400,C:300},dia:12,qty:16,label:'crank'}]},
+{id:'starters',name:'Starter L-bars \u03A610',desc:'24 L-bars, shape 21',
+ stock:[{len:12000,qty:3,unit:'mm',dia:10}],
+ cuts:[{shape:'21',dims:{A:800,B:300,C:200},dia:10,qty:24,label:'starter'}]}
+];
+function ws4ResolveCuts(tp){
+  return tp.cuts.map(function(c){
+    if(c.shape){
+      var sh=WS4_SHAPES.find(function(s){return s.code===c.shape});
+      var L=sh?ws4ShapeLen(sh,c.dims,c.dia):0;
+      return{id:uid(),len:Math.max(1,Math.round(L)),qty:Math.max(1,Math.round(num(c.qty))),unit:'mm',dia:c.dia,label:c.label||('shape '+c.shape)};
+    }
+    return{id:uid(),len:num(c.len),qty:Math.max(1,Math.round(num(c.qty))),unit:c.unit||'mm',dia:c.dia==null?null:num(c.dia),label:c.label||''};
+  });
+}
+function ws4LoadTemplate(tp){
+  var go=function(){
+    S.stock=(tp.stock||[]).map(function(s){return{id:uid(),len:num(s.len),qty:Math.max(1,Math.round(num(s.qty))),unit:s.unit||'mm',dia:s.dia==null?null:num(s.dia)}});
+    S.cuts=ws4ResolveCuts(tp);S.results=null;
+    persist();renderStock();renderCuts();renderResults();toast(t('ws4TplLoaded'));
+  };
+  if((S.stock&&S.stock.length)||(S.cuts&&S.cuts.length)){confirmBox(t('ws4TplConfirm'),function(ok){if(ok)go()})}else{go()}
+}
+function ws4RenderTemplates(){
+  var box=$('ws4TplCards');if(!box)return;
+  box.style.display='grid';box.style.gridTemplateColumns='repeat(auto-fill,minmax(190px,1fr))';box.style.gap='12px';
+  box.innerHTML=WS4_TEMPLATES.map(function(tp,ix){
+    return '<div style="border:1px solid var(--line);border-radius:8px;padding:12px"><div style="font-weight:700;margin-bottom:4px">'+esc(tp.name)+'</div><div class="muted small" style="margin-bottom:10px">'+esc(tp.desc)+'</div><button class="btn btn-ghost btn-sm" data-tpl="'+ix+'">'+esc(t('ws4TplLoad'))+'</button></div>';
+  }).join('');
+  box.querySelectorAll('[data-tpl]').forEach(function(b){b.onclick=function(){ws4LoadTemplate(WS4_TEMPLATES[num(b.dataset.tpl)])}});
+}
+
+/* ================= init ================= */
+var ws2bAdviseOrig=null,ws4POIncludeNote='';
+function ws4Init(){
+  S.ws4=S.ws4||{};
+  ws4RenderShapePicker();
+  $('ws4ShapeAdd').onclick=ws4AddShape;
+  diaOptions($('ws4Ec2Dia'),false);
+  $('ws4Ec2Btn').onclick=ws4Ec2;
+  ws4RenderTemplates();
+  $('ws4PoBtn').onclick=ws4GenPO;
+  $('ws4PoPrint').onclick=ws4PrintPO;
+  $('ws4PoPdf').onclick=function(){if(!S.results){toast(t('msgNoResults'));return}ws4GenPO();toast(t('ws4PoInPdf'))};
+  $('ws4ShareBtn').onclick=ws4Share;
+  ws2bAdviseOrig=ws2bAdvise;
+  ws2bAdvise=function(){var m=document.querySelector('input[name="ws4AdvMode"]:checked');if(m&&m.value==='cost'){ws4AdviseCost();return}ws2bAdviseOrig()};
+  $('ws2bAdvBtn').onclick=ws2bAdvise;
+  var ws4RDO=renderDashboard;
+  renderDashboard=function(){ws4RDO();ws4DashExtra()};
+  var ws4RRO=renderResults;
+  renderResults=function(){ws4RRO();ws4ResultsExtra()};
+  var ws4AHO=addHistory;
+  addHistory=function(){ws4AHO();try{var h=S.history[0],R=S.results;if(h&&R&&h.date===R.date){var w=ws4WasteStats(R);h.stats.wasteKg=w.wasteKg;h.stats.wasteEur=w.wasteEur;h.stats.savedEur=w.savedEur;persist()}}catch(e){}};
+  ws4ImportHash();
+}
+document.addEventListener('DOMContentLoaded',ws4Init);
 
 </script>
 </body>
