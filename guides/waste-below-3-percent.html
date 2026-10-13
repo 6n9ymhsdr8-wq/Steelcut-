@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to cut rebar waste below 3% — SteelCut Guide</title>
+<meta name="description" content="Practical steps to cut rebar waste below 3% with SteelCut: real kerf, offcut reuse, stock advisor, and labels.">
+<meta name="author" content="SteelCut">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://6n9ymhsdr8-wq.github.io/Steelcut-/guides/waste-below-3-percent.html">
+<meta property="og:title" content="How to cut rebar waste below 3% — SteelCut Guide">
+<meta property="og:description" content="Practical steps to cut rebar waste below 3% with SteelCut: real kerf, offcut reuse, stock advisor, and labels.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://6n9ymhsdr8-wq.github.io/Steelcut-/guides/waste-below-3-percent.html">
+<meta property="og:image" content="https://6n9ymhsdr8-wq.github.io/Steelcut-/og-image-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to cut rebar waste below 3% — SteelCut Guide">
+<meta name="twitter:description" content="Practical steps to cut rebar waste below 3% with SteelCut: real kerf, offcut reuse, stock advisor, and labels.">
+<meta name="twitter:image" content="https://6n9ymhsdr8-wq.github.io/Steelcut-/og-image-en.png">
+<meta name="theme-color" content="#0d2b4d">
+<style>:root{--bg:#edf0f4;--card:#fff;--ink:#17222f;--muted:#5c6f83;--line:#d9e1e9;--brand:#0e4d8a;--brand-d:#0a3a68;--accent:#e8590c;--accent-d:#c94808;--navy:#0d2b4d;--ok:#18794e;--r:8px;--sh:0 1px 2px rgba(16,34,51,.06),0 4px 14px rgba(16,34,51,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.phead{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+.phead .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.06em;color:var(--navy);text-decoration:none;font-size:17px}
+.pnav{display:flex;gap:2px;align-items:center}
+.pnav a{color:var(--muted);text-decoration:none;font-size:14.5px;padding:8px 12px;border-radius:6px;font-weight:500}
+.pnav a:hover{color:var(--brand);background:#f0f5fa}
+.btn{display:inline-block;border:0;border-radius:8px;padding:11px 22px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-primary:hover{background:var(--brand-d)}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-accent:hover{background:var(--accent-d)}
+.btn-sm{padding:8px 16px;font-size:14px}
+.pagehero{background:linear-gradient(135deg,#0d2b4d 0%,#144a7e 100%);color:#fff;padding:54px 0}
+.eyebrow{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ffb37e;margin-bottom:12px}
+.pagehero h1{font-size:clamp(28px,4vw,40px);line-height:1.15;letter-spacing:-.01em;margin-bottom:12px}
+.pagehero p{color:#c7d6e8;font-size:17px;max-width:640px}
+.prose{max-width:780px;margin:0 auto;padding:48px 20px}
+.prose h2{font-size:22px;margin:34px 0 12px;letter-spacing:-.01em}
+.prose h2:first-child{margin-top:0}
+.prose p{margin:0 0 16px;color:#33475c}
+.prose ul,.prose ol{margin:0 0 18px 22px;color:#33475c}
+.prose li{margin-bottom:8px}
+.prose a{color:var(--brand)}
+.prose .note{background:#f2f6fb;border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:6px;padding:14px 18px;margin:22px 0;font-size:15px}
+.prose .warn{background:#fff8f0;border:1px solid #f0d9bd;border-left:4px solid var(--accent);border-radius:6px;padding:14px 18px;margin:22px 0;font-size:15px}
+.meta{color:var(--muted);font-size:14px;margin-bottom:26px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin:26px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px;box-shadow:var(--sh)}
+.card h3{font-size:18px;margin-bottom:8px}
+.card p{color:var(--muted);font-size:15px;margin:0}
+.card .n{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;margin-bottom:12px}
+footer{background:var(--navy);color:#a9bdd4;padding:52px 0 30px;margin-top:70px}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:28px;margin-bottom:32px}
+.fbrand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.06em;color:#fff;margin-bottom:10px}
+footer h4{color:#fff;font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+footer a{color:#a9bdd4;text-decoration:none;display:block;margin-bottom:8px;font-size:14.5px}
+footer a:hover{color:#fff}
+footer .small{font-size:14px;line-height:1.6}
+.copy{border-top:1px solid rgba(255,255,255,.12);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:13.5px}
+.ph{color:#7d93ab;font-style:italic}
+.cta-band{background:#fff;border-top:1px solid var(--line);padding:52px 0;text-align:center}
+.cta-band h2{font-size:26px;margin-bottom:10px}
+.cta-band p{color:var(--muted);margin-bottom:22px}
+table.spec{width:100%;border-collapse:collapse;margin:18px 0;font-size:15px}
+table.spec th,table.spec td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+table.spec th{color:var(--muted);font-weight:600;font-size:13.5px;text-transform:uppercase;letter-spacing:.06em}
+@media(max-width:760px){.fgrid{grid-template-columns:1fr 1fr}.pnav a:not(.keep){display:none}.prose{padding:36px 20px}}
+</style>
+</head>
+<body>
+<header class="phead"><div class="wrap">
+<a class="brand" href="../index.html"><svg viewBox="0 0 32 32" width="26" height="26"><rect width="32" height="32" rx="6" fill="#0e4d8a"/><path d="M8 12h16M8 16h11M8 20h16" stroke="white" stroke-width="2.6"/></svg>STEELCUT</a>
+<nav class="pnav"><a href="../index.html">Home</a><a href="../index.html">Cut Optimizer</a><a href="waste-below-3-percent.html">Guides</a><a href="../index.html" class="btn btn-primary btn-sm keep">Open app</a></nav>
+</div></header>
+<div class="pagehero"><div class="wrap">
+<span class="eyebrow">Guide</span>
+<h1>How to cut rebar waste below 3%</h1>
+<p>Waste isn't luck &mdash; it's arithmetic. Seven practical steps, all supported by SteelCut.</p>
+</div></div>
+<main class="prose">
+
+<p class="meta">Practical guide &middot; 5 min read</p>
+<h2>1. Enter your real stock lengths</h2>
+<p>Don't assume every bar is exactly 12 m &mdash; measure what your supplier actually delivers. SteelCut optimizes against the stock lengths you enter, so accurate input is the foundation of a low-waste plan.</p>
+<h2>2. Set the true saw kerf</h2>
+<p>Every cut eats a few millimetres of steel. Measure your blade's kerf (typically 3&ndash;5 mm) and set it in SteelCut's settings &mdash; the optimizer adds it between pieces automatically. An ignored kerf is one of the most common reasons real waste exceeds the plan.</p>
+<h2>3. Reuse offcuts instead of scrapping them</h2>
+<p>Set a realistic minimum reusable offcut length (e.g. 300&ndash;500 mm) and let SteelCut send longer leftovers to the warehouse instead of the scrap bin. Enable "use warehouse offcuts first" so the next job consumes them before cutting fresh bars.</p>
+<h2>4. Combine cut lists into bigger jobs</h2>
+<p>Optimization loves a large pool: ten cut lists optimized together waste less than ten optimized separately. SteelCut handles multiple diameters in a single job and allocates shared bars automatically.</p>
+<h2>5. Let the exact optimizer do its work</h2>
+<p>For smaller jobs, SteelCut automatically switches to an exact branch-and-bound algorithm that finds the mathematically optimal packing &mdash; not just a good one. Check the efficiency report to see your real waste percentage.</p>
+<h2>6. Buy the right stock lengths</h2>
+<p>Sometimes the cheapest fix is buying smarter. SteelCut's stock advisor suggests which stock lengths to purchase for your cut list &mdash; the "best" length is the one your actual cuts pack into, not the default 12 m.</p>
+<h2>7. Make the workshop follow the plan</h2>
+<p>A perfect plan is worthless if the cutter improvises. Print SteelCut's piece labels (with QR codes) and the per-bar cutting sequence so the workshop executes exactly what was computed.</p>
+<div class="note"><strong>Honest caveat:</strong> below 3% isn't always reachable &mdash; it depends on how your cut lengths relate to your stock lengths. SteelCut shows you the real number in the efficiency report, so you always know where you stand instead of guessing.</div>
+<p>Next: <a href="bbs-to-cutting-plan.html">From bending schedule to cutting plan &rarr;</a></p>
+
+</main>
+<div class="cta-band"><div class="wrap">
+<h2>Stop guessing your cuts.</h2>
+<p>Calculate your first optimized cutting plan in under a minute &mdash; free, no account needed.</p>
+<a class="btn btn-accent" href="../index.html">Open SteelCut</a>
+</div></div>
+<footer><div class="wrap">
+<div class="fgrid">
+<div><div class="fbrand"><svg viewBox="0 0 32 32" width="26" height="26"><rect width="32" height="32" rx="6" fill="#0e4d8a"/><path d="M8 12h16M8 16h11M8 20h16" stroke="white" stroke-width="2.6"/></svg>STEELCUT</div><p class="small">Professional steel bar cutting optimizer for metal fabricators and contractors.</p></div>
+<div><h4>Product</h4><a href="../index.html">Cut Optimizer</a><a href="../index.html">Pricing</a><a href="waste-below-3-percent.html">Cutting guides</a></div>
+<div><h4>Company</h4><a href="../about.html">About</a><a href="../changelog.html">Changelog</a></div>
+<div><h4>Legal</h4><a href="../privacy.html">Privacy Policy</a><a href="../terms.html">Terms of Service</a></div>
+</div>
+<div class="copy"><span>&copy; 2026 SteelCut. All rights reserved.</span><span>Made for metal professionals.</span></div>
+</div></footer>
+</body>
+</html>
