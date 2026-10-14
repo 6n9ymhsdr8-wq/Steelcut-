@@ -115,14 +115,15 @@ h1,h2,h3{line-height:1.2;letter-spacing:-.01em}
 .muted{color:var(--muted)} .small{font-size:13px}
 /* ---------- header ---------- */
 .topbar{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid var(--line)}
-.bar-in{display:flex;align-items:center;gap:18px;height:64px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:800;letter-spacing:.14em;font-size:17px;cursor:pointer}
+.bar-in{display:flex;align-items:center;gap:12px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:800;letter-spacing:.1em;font-size:17px;cursor:pointer}
 .brand svg{width:30px;height:30px}
 .mainnav{display:flex;gap:2px;margin-left:8px;flex:1}
-.mainnav button{background:none;border:0;color:var(--muted);font-size:14.5px;font-weight:600;padding:9px 12px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.mainnav button{background:none;border:0;color:var(--muted);font-size:14.5px;font-weight:600;padding:9px 9px;border-radius:6px;cursor:pointer;white-space:nowrap}
 .mainnav button:hover{color:var(--ink);background:#f0f4f8}
 .mainnav button.active{color:var(--brand);background:#e8f0f9}
-.bar-cta{display:flex;align-items:center;gap:10px}
+.bar-cta{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.topbar .btn{white-space:nowrap}
 select,input,textarea{font:inherit;color:var(--ink)}
 #langSel{border:1px solid var(--line);border-radius:6px;padding:7px 9px;background:#fff;font-size:13.5px}
 /* ---------- buttons ---------- */
@@ -311,6 +312,9 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 /* Expert-mode toggle in the header (all screens) */
 .expert-wrap{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;user-select:none}
 .expert-wrap input{width:auto;accent-color:var(--brand);margin:0}
+/* Design polish 14/10: a view ending in a navy band must flow straight into
+   the navy footer — cancel the footer's top gap so no white stripe appears */
+.view > .hero:last-child{margin-bottom:-40px}
 
 /* First-run wizard: progress dots */
 .ws3-dots{display:flex;gap:6px;margin-bottom:14px}
@@ -343,6 +347,9 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
   .tour-tip{max-width:calc(100vw - 40px)}
   .modal{padding:24px 20px}
   #toast{font-size:15px}
+  /* header CTA cluster would overflow small phones: the hero has its own
+     big CTAs, so the small header "Open app" button hides on phones */
+  .topbar .bar-cta .btn{display:none}
 }
 
 </style>
@@ -381,6 +388,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
       <div class="hero-cta no-print">
         <button class="btn btn-accent" data-nav="optimizer" data-i18n="heroStart">Start optimizing</button>
         <button class="btn btn-ghost" id="heroDemo" data-i18n="heroDemo">Try with demo data</button>
+        <button class="btn btn-ghost" id="heroTour" data-i18n="heroTour">Quick tour</button>
       </div>
       <div class="hero-stats">
         <div class="st"><div class="n">12</div><div class="l" data-i18n="statLangs">languages</div></div>
@@ -775,7 +783,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 const I18N={en:{
 tagline:"Professional steel bar cutting optimizer",tour:"Guided tour",loadDemo:"Load demo",
 navHome:"Home",navOptimizer:"Cut Optimizer",navDashboard:"Dashboard",navWarehouse:"Warehouse",navJobs:"Jobs & History",navReports:"Reports",navPricing:"Pricing",openApp:"Open app",
-homeBadge:"Free for workshops",heroTitle:"Cut less. Waste less. Save more.",heroSub:"Enter your stock bars and required cuts — SteelCut computes the optimal cutting plan with minimal waste, in seconds.",heroStart:"Start optimizing",heroDemo:"Try with demo data",
+homeBadge:"Free for workshops",heroTitle:"Cut less. Waste less. Save more.",heroSub:"Enter your stock bars and required cuts — SteelCut computes the optimal cutting plan with minimal waste, in seconds.",heroStart:"Start optimizing",heroDemo:"Try with demo data",heroTour:"Quick tour",
 statLangs:"languages",statPrivate:"private — data stays in your browser",statFree:"to start, no account needed",
 whoEyebrow:"Who it's for",whoTitle:"Built for metal professionals",whoSub:"From the rebar yard to the construction site — anyone who cuts steel bars saves material with SteelCut.",
 who1t:"Rebar fabricators",who1b:"Optimize bending schedules and cut lists across multiple diameters. Print workshop-ready reports and labels.",
@@ -833,7 +841,7 @@ tour5t:"4 · Use the results",tour5b:"Export the PDF report, print cut labels, s
 I18N.el={
 tagline:"Επαγγελματικός βελτιστοποιητής κοπής χαλύβδινων ράβδων",tour:"Ξενάγηση",loadDemo:"Φόρτωση demo",
 navHome:"Αρχική",navOptimizer:"Βελτιστοποίηση κοπής",navDashboard:"Πίνακας",navWarehouse:"Αποθήκη",navJobs:"Δουλειές & Ιστορικό",navReports:"Αναφορές",navPricing:"Τιμές",openApp:"Άνοιγμα εφαρμογής",
-homeBadge:"Δωρεάν για συνεργεία",heroTitle:"Κόψε λιγότερο. Πέταξε λιγότερο. Κέρδισε περισσότερο.",heroSub:"Βάλε τις ράβδους που έχεις και τις κοπές που χρειάζεσαι — το SteelCut υπολογίζει το βέλτιστο πλάνο κοπής με ελάχιστη φύρα, σε δευτερόλεπτα.",heroStart:"Ξεκίνα βελτιστοποίηση",heroDemo:"Δοκίμασε με demo δεδομένα",
+homeBadge:"Δωρεάν για συνεργεία",heroTitle:"Κόψε λιγότερο. Πέταξε λιγότερο. Κέρδισε περισσότερο.",heroSub:"Βάλε τις ράβδους που έχεις και τις κοπές που χρειάζεσαι — το SteelCut υπολογίζει το βέλτιστο πλάνο κοπής με ελάχιστη φύρα, σε δευτερόλεπτα.",heroStart:"Ξεκίνα βελτιστοποίηση",heroDemo:"Δοκίμασε με demo δεδομένα",heroTour:"Γρήγορη ξενάγηση",
 statLangs:"γλώσσες",statPrivate:"απόρρητο — τα δεδομένα μένουν στον browser σου",statFree:"για ξεκίνημα, χωρίς λογαριασμό",
 whoEyebrow:"Σε ποιους απευθύνεται",whoTitle:"Φτιαγμένο για επαγγελματίες μετάλλου",whoSub:"Από τη μάντρα οπλισμού μέχρι το εργοτάξιο — όποιος κόβει σιδηρές ράβδους εξοικονομεί υλικό με το SteelCut.",
 who1t:"Κατασκευαστές οπλισμού",who1b:"Βελτιστοποίησε πίνακες οπλισμού και λίστες κοπής σε πολλές διαμέτρους. Εκτύπωσε αναφορές και ετικέτες έτοιμες για το συνεργείο.",
@@ -2135,13 +2143,13 @@ function ws3Init(){
       else{ws3WizSeen();ws3WizClose();show('optimizer')}
     };
     demo.onclick=function(){ws3WizSeen();ws3WizClose();show('optimizer');loadDemo()};
+    var ht=document.getElementById('heroTour');if(ht)ht.onclick=function(){ws3WizOpen()};
   }
 
-  // 5) First-run logic: expert → straight to the optimizer; brand-new
-  //    visitor (no sc_seen flag) → friendly 3-step wizard
-  var seen=true;try{seen=!!localStorage.getItem('sc_seen')}catch(e){seen=true}
+  // 5) First-run logic: expert → straight to the optimizer; everyone else
+  //    lands on the home view. The 3-step wizard no longer pops up on its
+  //    own — it opens on demand from the "Quick tour" button in the hero.
   if(ws3IsExpert()){show('optimizer');return}
-  if(!seen)ws3WizOpen();
 }
 document.addEventListener('DOMContentLoaded',ws3Init);
 })();
