@@ -495,6 +495,14 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
       <h3 data-i18n="ws4TplT">Templates</h3>
       <p class="desc" data-i18n="ws4TplD">One click loads a realistic job &mdash; edit freely afterwards.</p>
       <div id="ws4TplCards" class="tpl-cards"></div>
+      <div class="row-actions" style="margin-top:14px"><button class="btn btn-ghost btn-sm" id="ws4TplSaveBtn" data-i18n="ws4TplSave">Save current as template</button></div>
+      <div id="ws4TplSaveForm" style="display:none;margin-top:10px">
+        <div class="fg" style="max-width:340px"><input id="ws4TplName" data-i18n-ph="ws4TplNamePh" placeholder="Template name…"></div>
+        <div class="row-actions" style="margin-top:8px"><button class="btn btn-primary btn-sm" id="ws4TplDoSave" data-i18n="ws4TplSaveBtn">Save</button><button class="btn btn-ghost btn-sm" id="ws4TplDoCancel" data-i18n="ws4TplCancel">Cancel</button></div>
+      </div>
+      <h4 data-i18n="ws4TplMine" style="margin:18px 0 10px">My templates</h4>
+      <div id="ws4TplMineCards" class="tpl-cards"></div>
+      <p class="muted small" id="ws4TplMineEmpty" data-i18n="ws4TplEmptyMine">No custom templates yet — save the current job above.</p>
     </div>
     <div class="panel no-print">
       <h3 data-i18n="projTitle">Project info</h3>
@@ -726,9 +734,11 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
       <p class="desc" data-i18n="ws4Ec2D">Per EN 1992-1-1 &sect;8.4 / &sect;8.7. Simplified: straight or hooked ends, no transverse reinforcement.</p>
       <div class="formgrid">
         <div class="fg"><label data-i18n="ws4Ec2Dia">Bar diameter</label><select id="ws4Ec2Dia"></select></div>
-        <div class="fg"><label data-i18n="ws4Ec2Conc">Concrete class</label><select id="ws4Ec2Conc"><option>C20/25</option><option>C25/30</option><option selected>C30/37</option><option>C35/45</option><option>C40/50</option><option>C45/55</option><option>C50/60</option></select></div>
+        <div class="fg"><label data-i18n="ws4Ec2Conc">Concrete class</label><select id="ws4Ec2Conc"><option>C20/25</option><option>C25/30</option><option selected>C30/37</option><option>C35/45</option><option>C40/50</option><option>C45/55</option><option>C50/60</option><option value="custom" data-i18n="ws4CustomOpt">Custom…</option></select></div>
+        <div class="fg" id="ws4Ec2ConcCWrap" style="display:none"><label data-i18n="ws4Ec2Fck">f_ck (MPa)</label><input id="ws4Ec2ConcC" type="number" min="12" max="90" step="1" value="30"></div>
         <div class="fg"><label data-i18n="ws4Ec2Bond">Bond conditions</label><select id="ws4Ec2Bond"><option value="good" data-i18n="ws4BondGood">Good</option><option value="other" data-i18n="ws4BondOther">Other</option></select></div>
-        <div class="fg"><label data-i18n="ws4Ec2Steel">Steel class</label><select id="ws4Ec2Steel"><option>B500B</option><option>B500A</option><option>B500C</option></select></div>
+        <div class="fg"><label data-i18n="ws4Ec2Steel">Steel class</label><select id="ws4Ec2Steel"><option>B500B</option><option>B500A</option><option>B500C</option><option value="custom" data-i18n="ws4CustomOpt">Custom…</option></select></div>
+        <div class="fg" id="ws4Ec2SteelCWrap" style="display:none"><label data-i18n="ws4Ec2Fyk">f_yk (MPa)</label><input id="ws4Ec2SteelC" type="number" min="200" max="700" step="5" value="500"></div>
         <div class="fg"><label data-i18n="ws4Ec2End">Bar end</label><select id="ws4Ec2End"><option value="straight" data-i18n="ws4EndStraight">Straight</option><option value="hook" data-i18n="ws4EndHook">Hook / bend &ge; 90&deg;</option></select></div>
         <div class="fg"><label data-i18n="ws4Ec2Cover">Concrete cover c (mm)</label><input id="ws4Ec2Cover" type="number" min="10" step="5" value="30"></div>
         <div class="fg"><label data-i18n="ws4Ec2Force">Force type</label><select id="ws4Ec2Force"><option value="tension" data-i18n="ws4Tension">Tension</option><option value="compression" data-i18n="ws4Compression">Compression</option></select></div>
@@ -2168,7 +2178,7 @@ Object.assign(I18N.en,{
 navTools:"Tools",ws4ToolsSub:"Engineering calculators for rebar work.",
 ws4TplT:"Templates",ws4TplD:"One click loads a realistic job \u2014 edit freely afterwards.",
 ws4TplLoad:"Load",ws4TplLoaded:"Template loaded.",
-ws4TplConfirm:"Replace current stock and cuts with the template?",
+ws4TplConfirm:"Replace current stock and cuts with the template?",ws4TplMine:"My templates",ws4TplSave:"Save current as template",ws4TplNamePh:"Template name\u2026",ws4TplSaveBtn:"Save",ws4TplCancel:"Cancel",ws4TplDelete:"Delete",ws4TplSaved:"Template saved.",ws4TplDeleted:"Template deleted.",ws4TplNeedData:"Add stock bars or cuts first.",ws4TplDelConfirm:"Delete this template?",ws4TplEmptyMine:"No custom templates yet \u2014 save the current job above.",ws4CustomOpt:"Custom\u2026",ws4Ec2Fck:"f_ck (MPa)",ws4Ec2Fyk:"f_yk (MPa)",
 ws4ShapesT:"Rebar shapes (BS 8666)",ws4ShapesD:"Pick a shape code, enter dimensions \u2014 SteelCut computes the cutting length and adds it as cuts.",
 ws4ShapeCode:"Shape code",ws4CompLen:"Cutting length",ws4AddShapes:"Add as cuts",
 ws4ShapeAdded:"Shape added as cuts.",ws4BadDim:"Enter all dimensions (> 0).",
@@ -2194,7 +2204,7 @@ Object.assign(I18N.el,{
 navTools:"\u0395\u03C1\u03B3\u03B1\u03BB\u03B5\u03AF\u03B1",ws4ToolsSub:"\u039C\u03B7\u03C7\u03B1\u03BD\u03B9\u03BA\u03BF\u03AF \u03C5\u03C0\u03BF\u03BB\u03BF\u03B3\u03B9\u03C3\u03C4\u03AD\u03C2 \u03B3\u03B9\u03B1 \u03BF\u03C0\u03BB\u03B9\u03C3\u03BC\u03CC.",
 ws4TplT:"\u03A0\u03C1\u03CC\u03C4\u03C5\u03C0\u03B1",ws4TplD:"\u039C\u03B5 \u03AD\u03BD\u03B1 \u03BA\u03BB\u03B9\u03BA \u03C6\u03BF\u03C1\u03C4\u03CE\u03BD\u03B5\u03B9 \u03BC\u03B9\u03B1 \u03C1\u03B5\u03B1\u03BB\u03B9\u03C3\u03C4\u03B9\u03BA\u03AE \u03B4\u03BF\u03C5\u03BB\u03B5\u03B9\u03AC \u2014 \u03B5\u03C0\u03B5\u03BE\u03B5\u03C1\u03B3\u03AC\u03C3\u03BF\u03C5 \u03B5\u03BB\u03B5\u03CD\u03B8\u03B5\u03C1\u03B1 \u03BC\u03B5\u03C4\u03AC.",
 ws4TplLoad:"\u03A6\u03CC\u03C1\u03C4\u03C9\u03C3\u03B7",ws4TplLoaded:"\u03A4\u03BF \u03C0\u03C1\u03CC\u03C4\u03C5\u03C0\u03BF \u03C6\u03BF\u03C1\u03C4\u03CE\u03B8\u03B7\u03BA\u03B5.",
-ws4TplConfirm:"\u0391\u03BD\u03C4\u03B9\u03BA\u03B1\u03C4\u03AC\u03C3\u03C4\u03B1\u03C3\u03B7 \u03C4\u03C1\u03AD\u03C7\u03BF\u03BD\u03C4\u03BF\u03C2 \u03B1\u03C0\u03BF\u03B8\u03AD\u03BC\u03B1\u03C4\u03BF\u03C2 \u03BA\u03B1\u03B9 \u03BA\u03BF\u03C0\u03CE\u03BD \u03BC\u03B5 \u03C4\u03BF \u03C0\u03C1\u03CC\u03C4\u03C5\u03C0\u03BF;",
+ws4TplConfirm:"\u0391\u03BD\u03C4\u03B9\u03BA\u03B1\u03C4\u03AC\u03C3\u03C4\u03B1\u03C3\u03B7 \u03C4\u03C1\u03AD\u03C7\u03BF\u03BD\u03C4\u03BF\u03C2 \u03B1\u03C0\u03BF\u03B8\u03AD\u03BC\u03B1\u03C4\u03BF\u03C2 \u03BA\u03B1\u03B9 \u03BA\u03BF\u03C0\u03CE\u03BD \u03BC\u03B5 \u03C4\u03BF \u03C0\u03C1\u03CC\u03C4\u03C5\u03C0\u03BF;",ws4TplMine:"\u03a4\u03b1 \u03c0\u03c1\u03cc\u03c4\u03c5\u03c0\u03ac \u03bc\u03bf\u03c5",ws4TplSave:"\u0391\u03c0\u03bf\u03b8\u03ae\u03ba\u03b5\u03c5\u03c3\u03b7 \u03c4\u03c1\u03ad\u03c7\u03bf\u03bd\u03c4\u03bf\u03c2 \u03c9\u03c2 \u03c0\u03c1\u03cc\u03c4\u03c5\u03c0\u03bf",ws4TplNamePh:"\u038c\u03bd\u03bf\u03bc\u03b1 \u03c0\u03c1\u03bf\u03c4\u03cd\u03c0\u03bf\u03c5\u2026",ws4TplSaveBtn:"\u0391\u03c0\u03bf\u03b8\u03ae\u03ba\u03b5\u03c5\u03c3\u03b7",ws4TplCancel:"\u0386\u03ba\u03c5\u03c1\u03bf",ws4TplDelete:"\u0394\u03b9\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae",ws4TplSaved:"\u03a4\u03bf \u03c0\u03c1\u03cc\u03c4\u03c5\u03c0\u03bf \u03b1\u03c0\u03bf\u03b8\u03b7\u03ba\u03b5\u03cd\u03c4\u03b7\u03ba\u03b5.",ws4TplDeleted:"\u03a4\u03bf \u03c0\u03c1\u03cc\u03c4\u03c5\u03c0\u03bf \u03b4\u03b9\u03b1\u03b3\u03c1\u03ac\u03c6\u03b7\u03ba\u03b5.",ws4TplNeedData:"\u03a0\u03c1\u03cc\u03c3\u03b8\u03b5\u03c3\u03b5 \u03c0\u03c1\u03ce\u03c4\u03b1 \u03c1\u03ac\u03b2\u03b4\u03bf\u03c5\u03c2 \u03ae \u03ba\u03bf\u03c0\u03ad\u03c2.",ws4TplDelConfirm:"\u0394\u03b9\u03b1\u03b3\u03c1\u03b1\u03c6\u03ae \u03c0\u03c1\u03bf\u03c4\u03cd\u03c0\u03bf\u03c5;",ws4TplEmptyMine:"\u039a\u03b1\u03bd\u03ad\u03bd\u03b1 \u03c0\u03c1\u03bf\u03c3\u03b1\u03c1\u03bc\u03bf\u03c3\u03bc\u03ad\u03bd\u03bf \u03c0\u03c1\u03cc\u03c4\u03c5\u03c0\u03bf \u2014 \u03b1\u03c0\u03bf\u03b8\u03ae\u03ba\u03b5\u03c5\u03c3\u03b5 \u03c4\u03b7\u03bd \u03c4\u03c1\u03ad\u03c7\u03bf\u03c5\u03c3\u03b1 \u03b5\u03c1\u03b3\u03b1\u03c3\u03af\u03b1.",ws4CustomOpt:"\u03a0\u03c1\u03bf\u03c3\u03b1\u03c1\u03bc\u03bf\u03c3\u03bc\u03ad\u03bd\u03bf\u2026",ws4Ec2Fck:"f_ck (MPa)",ws4Ec2Fyk:"f_yk (MPa)",
 ws4ShapesT:"\u03A3\u03C7\u03AE\u03BC\u03B1\u03C4\u03B1 \u03BF\u03C0\u03BB\u03B9\u03C3\u03BC\u03BF\u03CD (BS 8666)",ws4ShapesD:"\u0394\u03B9\u03AC\u03BB\u03B5\u03BE\u03B5 \u03BA\u03C9\u03B4\u03B9\u03BA\u03CC \u03C3\u03C7\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2, \u03B2\u03AC\u03BB\u03B5 \u03B4\u03B9\u03B1\u03C3\u03C4\u03AC\u03C3\u03B5\u03B9\u03C2 \u2014 \u03C4\u03BF SteelCut \u03C5\u03C0\u03BF\u03BB\u03BF\u03B3\u03AF\u03B6\u03B5\u03B9 \u03C4\u03BF \u03BC\u03AE\u03BA\u03BF\u03C2 \u03BA\u03BF\u03C0\u03AE\u03C2 \u03BA\u03B1\u03B9 \u03C4\u03BF \u03C0\u03C1\u03BF\u03C3\u03B8\u03AD\u03C4\u03B5\u03B9 \u03C3\u03C4\u03B9\u03C2 \u03BA\u03BF\u03C0\u03AD\u03C2.",
 ws4ShapeCode:"\u039A\u03C9\u03B4\u03B9\u03BA\u03CC\u03C2 \u03C3\u03C7\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2",ws4CompLen:"\u039C\u03AE\u03BA\u03BF\u03C2 \u03BA\u03BF\u03C0\u03AE\u03C2",ws4AddShapes:"\u03A0\u03C1\u03BF\u03C3\u03B8\u03AE\u03BA\u03B7 \u03C3\u03C4\u03B9\u03C2 \u03BA\u03BF\u03C0\u03AD\u03C2",
 ws4ShapeAdded:"\u03A4\u03BF \u03C3\u03C7\u03AE\u03BC\u03B1 \u03C0\u03C1\u03BF\u03C3\u03C4\u03AD\u03B8\u03B7\u03BA\u03B5 \u03C3\u03C4\u03B9\u03C2 \u03BA\u03BF\u03C0\u03AD\u03C2.",ws4BadDim:"\u0392\u03AC\u03BB\u03B5 \u03CC\u03BB\u03B5\u03C2 \u03C4\u03B9\u03C2 \u03B4\u03B9\u03B1\u03C3\u03C4\u03AC\u03C3\u03B5\u03B9\u03C2 (> 0).",
@@ -2288,15 +2298,23 @@ function ws4RenderShapePicker(){
    EN 1992-1-1: f_bd = 2.25*n1*n2*f_ctd (\u00A78.4.2); l_b,rqd = (Phi/4)*(s_sd/f_bd);
    l_bd = a1*a2*a3*a4*a5*l_b,rqd >= l_b,min (\u00A78.4.4); l_0 = a1*a2*a3*a5*a6*l_b,rqd
    >= l_0,min (\u00A78.7.3). a3=a4=a5=1.0 (no transverse reinf./welds/pressure). */
+function ws4Ec2CustomToggle(){
+  var cc=$('ws4Ec2Conc'),sc=$('ws4Ec2Steel');
+  if($('ws4Ec2ConcCWrap'))$('ws4Ec2ConcCWrap').style.display=cc&&cc.value==='custom'?'':'none';
+  if($('ws4Ec2SteelCWrap'))$('ws4Ec2SteelCWrap').style.display=sc&&sc.value==='custom'?'':'none';
+}
 function ws4Ec2(){
   var dia=num($('ws4Ec2Dia').value);if(!(dia>0))return;
-  var cls=$('ws4Ec2Conc').value,fck=num(cls.slice(1).split('/')[0]);
+  var concV=$('ws4Ec2Conc').value;
+  var fck=concV==='custom'?Math.max(1,num($('ws4Ec2ConcC').value)||30):num(concV.slice(1).split('/')[0]);
   var bond=$('ws4Ec2Bond').value,end=$('ws4Ec2End').value;
   var cover=Math.max(10,num($('ws4Ec2Cover').value)||30);
   var tension=$('ws4Ec2Force').value==='tension',a6=num($('ws4Ec2Lap').value)||1;
   var fctm=0.30*Math.pow(fck,2/3),fctd=0.7*fctm/1.5;
   var n1=bond==='good'?1.0:0.7,n2=dia<=32?1.0:(132-dia)/100;
-  var fbd=2.25*n1*n2*fctd,fyd=500/1.15;
+  var steelV=$('ws4Ec2Steel').value;
+  var fyk=steelV==='custom'?Math.max(1,num($('ws4Ec2SteelC').value)||500):500;
+  var fbd=2.25*n1*n2*fctd,fyd=fyk/1.15;
   var lbrqd=(dia/4)*(fyd/fbd);
   var a1=end==='straight'?1.0:0.7;
   var a2=Math.min(1.0,Math.max(0.7,1-0.15*(cover-dia)/dia));
@@ -2311,7 +2329,7 @@ function ws4Ec2(){
   h+=row('f<sub>ctm</sub> = 0.30\u00B7f<sub>ck</sub><sup>2/3</sup>',fmt(fctm,2)+' MPa');
   h+=row('f<sub>ctd</sub> = 0.7\u00B7f<sub>ctm</sub>/1.5',fmt(fctd,2)+' MPa');
   h+=row('f<sub>bd</sub> = 2.25\u00B7\u03B71\u00B7\u03B72\u00B7f<sub>ctd</sub> (\u03B71='+n1+', \u03B72='+fmt(n2,2)+')',fmt(fbd,2)+' MPa');
-  h+=row('l<sub>b,rqd</sub> = (\u03A6/4)\u00B7(f<sub>yd</sub>/f<sub>bd</sub>), f<sub>yd</sub>=434.8 MPa',fmt(lbrqd,0)+' mm');
+  h+=row('l<sub>b,rqd</sub> = (\u03A6/4)\u00B7(f<sub>yd</sub>/f<sub>bd</sub>), f<sub>yd</sub>='+fmt(fyd,1)+' MPa',fmt(lbrqd,0)+' mm');
   h+=row('\u03B11='+a1+', \u03B12='+fmt(a2,3)+' (c='+cover+' mm), \u03B13=\u03B14=\u03B15=1.0, \u03B16='+a6,'');
   h+='</tbody></table>';
   h+='<div class="metrics" style="margin-top:12px">';
@@ -2530,6 +2548,33 @@ function ws4RenderTemplates(){
   box.querySelectorAll('[data-tpl]').forEach(function(b){b.onclick=function(){ws4LoadTemplate(WS4_TEMPLATES[num(b.dataset.tpl)])}});
 }
 
+/* ---- custom user templates (localStorage) ---- */
+var WS4_TPL_KEY='steelcut_custom_tpls_v1';
+function ws4GetCustomTpls(){try{var a=JSON.parse(localStorage.getItem(WS4_TPL_KEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}}
+function ws4SetCustomTpls(a){try{localStorage.setItem(WS4_TPL_KEY,JSON.stringify(a))}catch(e){}}
+function ws4SaveCustomTpl(){
+  var name=($('ws4TplName').value||'').trim();if(!name){toast(t('ws4TplNamePh'));return}
+  var ns=S.stock?S.stock.length:0,nc=S.cuts?S.cuts.length:0;
+  if(!ns&&!nc){toast(t('ws4TplNeedData'));return}
+  var tp={id:'c'+Date.now().toString(36),name:name,desc:ns+' stock \u00B7 '+nc+' cuts',custom:true,ts:Date.now(),
+    stock:(S.stock||[]).map(function(s){return{len:s.len,qty:s.qty,unit:s.unit,dia:s.dia}}),
+    cuts:(S.cuts||[]).map(function(c){return{len:c.len,qty:c.qty,unit:c.unit,dia:c.dia,label:c.label}})};
+  var all=ws4GetCustomTpls();all.unshift(tp);ws4SetCustomTpls(all);
+  $('ws4TplName').value='';$('ws4TplSaveForm').style.display='none';
+  ws4RenderCustomTpls();toast(t('ws4TplSaved'));
+}
+function ws4RenderCustomTpls(){
+  var box=$('ws4TplMineCards'),empty=$('ws4TplMineEmpty');if(!box)return;
+  var all=ws4GetCustomTpls();
+  box.style.display='grid';box.style.gridTemplateColumns='repeat(auto-fill,minmax(190px,1fr))';box.style.gap='12px';
+  box.innerHTML=all.map(function(tp,ix){
+    return '<div style="border:1px solid var(--line);border-radius:8px;padding:12px"><div style="font-weight:700;margin-bottom:4px">'+esc(tp.name)+'</div><div class="muted small" style="margin-bottom:10px">'+esc(tp.desc||'')+'</div><div class="row-actions"><button class="btn btn-ghost btn-sm" data-ctpl="'+ix+'">'+esc(t('ws4TplLoad'))+'</button><button class="btn btn-ghost btn-sm" data-cdel="'+ix+'">'+esc(t('ws4TplDelete'))+'</button></div></div>';
+  }).join('');
+  if(empty)empty.style.display=all.length?'none':'';
+  box.querySelectorAll('[data-ctpl]').forEach(function(b){b.onclick=function(){var tp=ws4GetCustomTpls()[num(b.dataset.ctpl)];if(tp)ws4LoadTemplate(tp)}});
+  box.querySelectorAll('[data-cdel]').forEach(function(b){b.onclick=function(){var ix=num(b.dataset.cdel);confirmBox(t('ws4TplDelConfirm'),function(ok){if(!ok)return;var a=ws4GetCustomTpls();a.splice(ix,1);ws4SetCustomTpls(a);ws4RenderCustomTpls();toast(t('ws4TplDeleted'))})}});
+}
+
 /* ================= init ================= */
 var ws2bAdviseOrig=null,ws4POIncludeNote='';
 function ws4Init(){
@@ -2539,6 +2584,13 @@ function ws4Init(){
   diaOptions($('ws4Ec2Dia'),false);
   $('ws4Ec2Btn').onclick=ws4Ec2;
   ws4RenderTemplates();
+  ws4RenderCustomTpls();
+  $('ws4TplSaveBtn').onclick=function(){$('ws4TplSaveForm').style.display='';$('ws4TplName').focus()};
+  $('ws4TplDoSave').onclick=ws4SaveCustomTpl;
+  $('ws4TplDoCancel').onclick=function(){$('ws4TplSaveForm').style.display='none'};
+  $('ws4Ec2Conc').onchange=ws4Ec2CustomToggle;
+  $('ws4Ec2Steel').onchange=ws4Ec2CustomToggle;
+  ws4Ec2CustomToggle();
   $('ws4PoBtn').onclick=ws4GenPO;
   $('ws4PoPrint').onclick=ws4PrintPO;
   $('ws4PoPdf').onclick=function(){if(!S.results){toast(t('msgNoResults'));return}ws4GenPO();toast(t('ws4PoInPdf'))};
