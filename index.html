@@ -3,31 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SteelCut — Rebar & Steel Bar Cutting Optimizer</title>
+<title>Rebar Cutting Optimizer — Free Online Tool | SteelCut</title>
 <meta name="theme-color" content="#ff7a1a">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="description" content="Free rebar & steel bar cutting optimizer. Optimal cutting plans with minimal waste — cut labels, PDF reports, offcut warehouse and supplier comparison.">
+<meta name="description" content="Free rebar cutting optimizer: compute optimal cutting plans for steel bars with minimal waste. Cut labels, PDF reports, offcut warehouse, supplier comparison — no account needed.">
 <meta name="keywords" content="steel cutting optimizer, rebar cutting optimization, rebar cutting calculator, steel bar cutting calculator, bar cutting software, cutting stock problem, bar bending schedule optimizer, metal fabrication">
 <meta name="author" content="SteelCut">
 <meta name="robots" content="index,follow">
-<link rel="canonical" href="https://6n9ymhsdr8-wq.github.io/Steelcut-/">
+<link rel="canonical" href="https://getsteelcut.com/">
 <meta property="og:title" content="SteelCut — Rebar & Steel Bar Cutting Optimizer">
 <meta property="og:description" content="Free rebar & steel bar cutting optimizer. Optimal cutting plans with minimal waste — cut labels, PDF reports, offcut warehouse and supplier comparison.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SteelCut">
 <meta property="og:locale" content="en_US">
-<meta property="og:url" content="https://6n9ymhsdr8-wq.github.io/Steelcut-/">
-<meta property="og:image" content="https://6n9ymhsdr8-wq.github.io/Steelcut-/og-image-en.png">
+<meta property="og:url" content="https://getsteelcut.com/">
+<meta property="og:image" content="https://getsteelcut.com/og-image-en.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="SteelCut — rebar and steel bar cutting optimizer">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="SteelCut — Rebar & Steel Bar Cutting Optimizer">
 <meta name="twitter:description" content="Free rebar & steel bar cutting optimizer. Optimal cutting plans with minimal waste — cut labels, PDF reports, offcut warehouse and supplier comparison.">
-<meta name="twitter:image" content="https://6n9ymhsdr8-wq.github.io/Steelcut-/og-image-en.png">
-<link rel="alternate" hreflang="en" href="https://6n9ymhsdr8-wq.github.io/Steelcut-/">
-<link rel="alternate" hreflang="el" href="https://6n9ymhsdr8-wq.github.io/Steelcut-/el.html">
-<link rel="alternate" hreflang="x-default" href="https://6n9ymhsdr8-wq.github.io/Steelcut-/">
+<meta name="twitter:image" content="https://getsteelcut.com/og-image-en.png">
+<link rel="alternate" hreflang="en" href="https://getsteelcut.com/">
+<link rel="alternate" hreflang="el" href="https://getsteelcut.com/el.html">
+<link rel="alternate" hreflang="x-default" href="https://getsteelcut.com/">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -36,10 +36,10 @@
       "@type": "SoftwareApplication",
       "name": "SteelCut",
       "applicationCategory": "BusinessApplication",
-      "applicationSubCategory": "Cutting stock optimizer",
+      "applicationSubCategory": "Rebar cutting optimizer",
       "operatingSystem": "Web",
-      "url": "https://6n9ymhsdr8-wq.github.io/Steelcut-/",
-      "description": "Free rebar and steel bar cutting optimizer. Compute optimal cutting plans with minimal waste — multi-diameter optimization, saw kerf and angled cuts, reusable offcut warehouse, cut labels with QR codes, PDF reports, DXF export, supplier price comparison and project dashboard. Works offline after the first load. Available in 12 languages.",
+      "url": "https://getsteelcut.com/",
+      "description": "Free online rebar cutting optimizer. Compute optimal cutting plans for steel bars with minimal waste — multi-diameter optimization, saw kerf and angled cuts, reusable offcut warehouse, cut labels with QR codes, PDF reports, DXF export, supplier price comparison and project dashboard. Works offline after the first load. Available in 12 languages.",
       "inLanguage": ["en", "el", "de", "fr", "es", "it", "pt", "nl", "pl", "tr", "ar", "ro"],
       "isAccessibleForFree": true,
       "offers": {
@@ -189,6 +189,11 @@ table.data input:focus,table.data select:focus{outline:2px solid #bcd6ef;border-
 .barvis .blabel{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;justify-content:space-between}
 .barrow{display:flex;height:44px;border:1px solid #b9c6d4;border-radius:5px;overflow:hidden;background:#f4f6f8}
 .seg{display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;border-right:1px solid rgba(255,255,255,.7);min-width:26px}
+#wsMode{position:fixed;inset:0;background:var(--bg);z-index:300;overflow:auto;display:none}
+#wsMode .seg{min-height:64px;font-size:19px}
+#wsMode .blabel{font-size:20px;padding:12px 4px}
+#wsMode .barrow{min-height:64px}
+.btn-lg{font-size:20px;padding:14px 28px}
 .seg.cut{background:var(--brand)} .seg.off{background:#7d8fa3} .seg.wst{background:#d5dce3;color:#7d8fa3}
 .legend{display:flex;gap:18px;font-size:13px;color:var(--muted);margin:10px 0 4px;flex-wrap:wrap}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
@@ -523,6 +528,9 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
       <table class="data"><thead><tr><th data-i18n="length">Length</th><th data-i18n="qty">Qty</th><th data-i18n="unit">Unit</th><th data-i18n="diaCol">Diameter</th><th></th></tr></thead><tbody id="stockBody"></tbody></table>
       <div class="row-actions">
         <button class="btn btn-ghost btn-sm" id="addStockBtn" data-i18n="addStock">+ Add stock bar</button>
+        <button class="btn btn-ghost btn-sm" id="add12mBtn" data-i18n="wsAdd12m">+ 12 m bars</button>
+        <button class="btn btn-ghost btn-sm" id="presetTimberBtn" data-i18n="wsPresetTimber">🪵 Timber 4 m</button>
+        <button class="btn btn-ghost btn-sm" id="presetPipeBtn" data-i18n="wsPresetPipe">🔧 Pipe 6 m</button>
         <button class="btn btn-ghost btn-sm" id="fromWhBtn" data-i18n="fromWarehouse">Import from warehouse</button>
       </div>
     </div>
@@ -536,7 +544,11 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
         <button class="btn btn-ghost btn-sm" id="importBtn" data-i18n="importExcel">Import Excel / CSV</button>
 <button class="btn btn-ghost btn-sm" id="quickBtn" data-i18n="ws2cQuickBtn">Quick input</button>
 <button class="btn btn-ghost btn-sm" id="ws2bBbsBtn" data-i18n="ws2bBbsBtn">Import BBS</button>
+<button class="btn btn-ghost btn-sm" id="voiceBtn">🎤 <span data-i18n="ws2cVoiceBtn">Voice input</span></button>
+<select id="voiceDia" class="btn btn-ghost btn-sm" title="Φ" style="max-width:76px"><option value="">Φ?</option><option>8</option><option>10</option><option selected>12</option><option>14</option><option>16</option><option>20</option><option>25</option><option>32</option></select>
+<button class="btn btn-ghost btn-sm" id="scanBtn">📷 <span data-i18n="ws2cScanBtn">Scan list</span></button>
         <input type="file" id="importFile" accept=".csv,.txt,.xlsx,.xls" style="display:none">
+        <input type="file" id="scanFile" accept="image/*" style="display:none">
       </div>
     </div>
 
@@ -576,6 +588,8 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
         <div class="fg"><label data-i18n="ws1EndTrim">End trim / bar</label><input id="sEndTrim" type="number" min="0" step="10" value="0"><div class="hint">mm</div></div>
         <div class="fg"><label data-i18n="ws1MinLayouts">Minimize layout count</label><input id="sMinLayouts" type="checkbox"><div class="hint" data-i18n="ws1MinLayoutsHint">Fewer distinct cutting patterns</div></div>
         <div class="fg"><label data-i18n="ws1WhFirst">Use warehouse offcuts first</label><input id="sWhFirst" type="checkbox"><div class="hint" data-i18n="ws1WhFirstHint">Consume offcut stock before new bars</div></div>
+        <div class="fg"><label data-i18n="wsAutoCalc">Auto-calculate</label><input id="sAutoCalc" type="checkbox" checked><div class="hint" data-i18n="wsAutoCalcHint">Recalculate automatically as you type</div></div>
+        <div class="fg"><label data-i18n="wsMaterial">Material</label><select id="sMaterial"><option value="steel" data-i18n="matSteel">Steel / Rebar</option><option value="timber" data-i18n="matTimber">Timber</option><option value="pipe" data-i18n="matPipe">Pipe</option></select></div>
 
         <div class="fg"><label data-i18n="rebarType">Rebar type (weight &amp; price)</label><select id="sRebar"></select></div>
         <div class="fg"><label data-i18n="pricePerM">Price per meter</label><input id="sPriceM" type="number" min="0" step="0.01" value="0"></div>
@@ -621,11 +635,30 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
         <button class="btn btn-ghost btn-sm" id="toWhBtn" data-i18n="toWarehouse">Send offcuts to warehouse</button>
         <button class="btn btn-ghost btn-sm" id="printBtn" data-i18n="print">Print</button>
         <button class="btn btn-ghost btn-sm" id="ws4ShareBtn" data-i18n="ws4Share">Share plan</button>
+        <button class="btn btn-ghost btn-sm" id="wsModeBtn" data-i18n="wsModeBtn">Workshop mode</button>
       </div>
       <div id="ws4ShareOut" style="margin-top:12px"></div>
     </div>
   </div>
 </section>
+
+<!-- ================= WORKSHOP MODE ================= -->
+<div id="wsMode">
+  <div class="wrap" style="max-width:960px;padding:28px 16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+      <h2 style="margin:0"><span data-i18n="wsModeT">Workshop mode</span> <span id="wsModeCnt" class="muted small"></span></h2>
+      <button class="btn btn-ghost" id="wsModeExit">✕ <span data-i18n="closeBtn">Close</span></button>
+    </div>
+    <div id="wsModeBar" style="margin:26px 0"></div>
+    <div style="display:flex;gap:14px;justify-content:center;margin:26px 0;flex-wrap:wrap">
+      <button class="btn btn-primary btn-lg" id="wsModePrev">◀</button>
+      <button class="btn btn-primary btn-lg" id="wsModeDone">✓</button>
+      <button class="btn btn-primary btn-lg" id="wsModeNext">▶</button>
+    </div>
+    <p id="wsModeProg" class="muted" style="text-align:center"></p>
+    <p class="muted small" style="text-align:center">← → <span data-i18n="wsModeNavHint">navigate</span> · Enter <span data-i18n="wsModeMarkDone">Mark done</span> · Esc <span data-i18n="closeBtn">Close</span></p>
+  </div>
+</div>
 
 <!-- ================= DASHBOARD ================= -->
 <section class="view" id="v-dashboard">
@@ -791,7 +824,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 "use strict";
 /* ================= i18n ================= */
 const I18N={en:{
-tagline:"Professional steel bar cutting optimizer",tour:"Guided tour",loadDemo:"Load demo",
+tagline:"Free online rebar cutting optimizer for workshops & contractors",tour:"Guided tour",loadDemo:"Load demo",
 navHome:"Home",navOptimizer:"Cut Optimizer",navDashboard:"Dashboard",navWarehouse:"Warehouse",navJobs:"Jobs & History",navReports:"Reports",navPricing:"Pricing",openApp:"Open app",
 homeBadge:"Free for workshops",heroTitle:"Cut less. Waste less. Save more.",heroSub:"Enter your stock bars and required cuts — SteelCut computes the optimal cutting plan with minimal waste, in seconds.",heroStart:"Start optimizing",heroDemo:"Try with demo data",heroTour:"Quick tour",
 statLangs:"languages",statPrivate:"private — data stays in your browser",statFree:"to start, no account needed",
@@ -833,7 +866,7 @@ whTitle:"Offcut warehouse",whDesc:"Reusable leftovers are stored here and can be
 jobsSub:"Saved jobs, automatic history and scenario comparison.",savedJobs:"Saved jobs",jobsDesc:"Reload a job to edit it or compare scenarios.",noJobs:"No saved jobs yet.",load:"Load",del:"Delete",savedAt:"Saved",
 cmpTitle:"Compare scenarios",cmpDesc:"Pick two saved results and compare them side by side.",compareBtn:"Compare",selectResult:"— select result —",
 history:"History",historyDesc:"Every calculation is logged automatically.",clearHistory:"Clear history",
-supTitle:"Supplier comparison",supDesc:"Enter supplier prices to see who offers the best deal for your current job.",supName:"Supplier",pricePerKg:"Price / kg",addSupplier:"+ Add supplier",supCalcBtn:"Evaluate for current results",cheapest:"Cheapest",totalForJob:"Total for this job",noResults:"Calculate a cutting plan first.",supNeedRebar:"Select a rebar type in Settings first.",
+supTitle:"Supplier comparison",supDesc:"Enter supplier prices to see who offers the best deal for your current job.",supName:"Supplier",pricePerKg:"Price / kg",addSupplier:"+ Add supplier",supCalcBtn:"Evaluate for current results",cheapest:"Cheapest",totalForJob:"Total for this job",noResults:"Calculate a cutting plan first.",supNeedRebar:"Select a rebar type in Settings first.",wsMaterial:"Material",matSteel:"Steel / Rebar",matTimber:"Timber",matPipe:"Pipe",wsPresetTimber:"\U0001fab5 Timber 4 m",wsPresetPipe:"\U0001f527 Pipe 6 m",wsPresetLoaded:"preset loaded",wsModeBtn:"Workshop mode",wsModeT:"Workshop mode",wsModeMarkDone:"Mark done",wsModeDone:"Done",wsModeBarsDone:"bars done",wsModeNavHint:"navigate",wsAutoCalc:"Auto-calculate",wsAutoCalcHint:"Recalculate as you type",wsAdd12m:"+ 12 m bars",ws12mAdded:"12 m bars added",ws12mExists:"12 m bars already in stock",ws2cVoiceBtn:"Voice input",ws2cListening:"Listening…",ws2cVoiceNoSup:"Voice input needs Chrome or Edge.",ws2cVoiceAdded:"cuts added",ws2cScanBtn:"Scan list",ws2cScanning:"Reading photo…",ws2cScanErr:"Could not read the photo.",wsCo2:"CO₂ in waste (est.)",kpiBench:"Avg waste %",
 repDesc:"Export your cutting plan or move a whole session to another device.",repTitle:"Reports & data",dlCsv:"Download CSV",printReport:"Print workshop report",
 sessTitle:"Session backup",sessDesc:"Move everything to another device.",dlSession:"Download session file",upSession:"Upload session file",
 qrTitle:"Job QR code",qrDesc:"Scan in the workshop to identify this cutting plan. (Needs internet connection.)",
@@ -891,7 +924,7 @@ whTitle:"Αποθήκη ρετάλων",whDesc:"Τα αξιοποιήσιμα ρ
 jobsSub:"Αποθηκευμένες δουλειές, αυτόματο ιστορικό και σύγκριση σεναρίων.",savedJobs:"Αποθηκευμένες δουλειές",jobsDesc:"Φόρτωσε μια δουλειά για επεξεργασία ή σύγκριση σεναρίων.",noJobs:"Καμία αποθηκευμένη δουλειά ακόμα.",load:"Φόρτωση",del:"Διαγραφή",savedAt:"Αποθηκεύτηκε",
 cmpTitle:"Σύγκριση σεναρίων",cmpDesc:"Διάλεξε δύο αποθηκευμένα αποτελέσματα και σύγκρινέ τα.",compareBtn:"Σύγκριση",selectResult:"— διάλεξε αποτέλεσμα —",
 history:"Ιστορικό",historyDesc:"Κάθε υπολογισμός καταγράφεται αυτόματα.",clearHistory:"Καθαρισμός ιστορικού",
-supTitle:"Σύγκριση προμηθευτών",supDesc:"Βάλε τιμές προμηθευτών για να δεις την καλύτερη προσφορά για την τρέχουσα δουλειά.",supName:"Προμηθευτής",pricePerKg:"Τιμή / κιλό",addSupplier:"+ Προσθήκη προμηθευτή",supCalcBtn:"Αξιολόγηση για το τρέχον αποτέλεσμα",cheapest:"Φθηνότερος",totalForJob:"Σύνολο για αυτή τη δουλειά",noResults:"Υπολόγισε πρώτα ένα πλάνο κοπής.",supNeedRebar:"Διάλεξε πρώτα τύπο οπλισμού στις Ρυθμίσεις.",
+supTitle:"Σύγκριση προμηθευτών",supDesc:"Βάλε τιμές προμηθευτών για να δεις την καλύτερη προσφορά για την τρέχουσα δουλειά.",supName:"Προμηθευτής",pricePerKg:"Τιμή / κιλό",addSupplier:"+ Προσθήκη προμηθευτή",supCalcBtn:"Αξιολόγηση για το τρέχον αποτέλεσμα",cheapest:"Φθηνότερος",totalForJob:"Σύνολο για αυτή τη δουλειά",noResults:"Υπολόγισε πρώτα ένα πλάνο κοπής.",supNeedRebar:"Διάλεξε πρώτα τύπο οπλισμού στις Ρυθμίσεις.",wsMaterial:"Υλικό",matSteel:"Χάλυβας / Οπλισμός",matTimber:"Ξυλεία",matPipe:"Σωλήνας",wsPresetTimber:"🪵 Ξυλεία 4 m",wsPresetPipe:"🔧 Σωλήνας 6 m",wsPresetLoaded:"το πρότυπο φορτώθηκε",wsModeBtn:"Λειτουργία συνεργείου",wsModeT:"Λειτουργία συνεργείου",wsModeMarkDone:"Ολοκληρώθηκε",wsModeDone:"Έτοιμη",wsModeBarsDone:"ράβδοι έτοιμες",wsModeNavHint:"πλοήγηση",wsAutoCalc:"Αυτόματος υπολογισμός",wsAutoCalcHint:"Επανυπολογισμός καθώς πληκτρολογείς",wsAdd12m:"+ Ράβδοι 12 m",ws12mAdded:"Προστέθηκαν ράβδοι 12 m",ws12mExists:"Υπάρχουν ήδη ράβδοι 12 m",ws2cVoiceBtn:"Φωνητική εισαγωγή",ws2cListening:"Ακούω…",ws2cVoiceNoSup:"Η φωνητική εισαγωγή θέλει Chrome ή Edge.",ws2cVoiceAdded:"κοπές προστέθηκαν",ws2cScanBtn:"Σάρωση λίστας",ws2cScanning:"Ανάγνωση φωτογραφίας…",ws2cScanErr:"Δεν μπόρεσα να διαβάσω τη φωτογραφία.",wsCo2:"CO₂ στη φύρα (εκτ.)",kpiBench:"Μέση φύρα %",
 repDesc:"Εξήγαγε το πλάνο κοπής σου ή μετέφερε ολόκληρο το session σε άλλη συσκευή.",repTitle:"Αναφορές & δεδομένα",dlCsv:"Λήψη CSV",printReport:"Εκτύπωση αναφοράς συνεργείου",
 sessTitle:"Αντίγραφο session",sessDesc:"Μετέφερε τα πάντα σε άλλη συσκευή.",dlSession:"Λήψη αρχείου session",upSession:"Μεταφόρτωση αρχείου session",
 qrTitle:"QR κωδικός δουλειάς",qrDesc:"Σκάναρε στο συνεργείο για αναγνώριση του πλάνου κοπής. (Χρειάζεται internet.)",
@@ -965,10 +998,12 @@ function readForm(){
     trimL:ws1el('sTrimL')?num(ws1el('sTrimL').value):0,trimR:ws1el('sTrimR')?num(ws1el('sTrimR').value):0,
     grip:ws1el('sGrip')?num(ws1el('sGrip').value):0,endTrim:ws1el('sEndTrim')?num(ws1el('sEndTrim').value):0,
     minLayouts:ws1el('sMinLayouts')?ws1el('sMinLayouts').checked:false,
-    whFirst:ws1el('sWhFirst')?ws1el('sWhFirst').checked:false};
+    whFirst:ws1el('sWhFirst')?ws1el('sWhFirst').checked:false,
+    autoCalc:ws1el('sAutoCalc')?ws1el('sAutoCalc').checked:true,
+    material:ws1el('sMaterial')?ws1el('sMaterial').value:'steel'};
   persist();
 }
-function fillForm(){const p=S.project||{},s=S.settings||{};$('pClient').value=p.client||'';$('pCode').value=p.code||'';$('pDate').value=p.date||'';$('pNotes').value=p.notes||'';$('sKerf').value=s.kerf==null?3:s.kerf;$('sMinOff').value=s.minOff==null?300:s.minOff;$('sPriceM').value=s.priceM||0;$('sCur').value=s.currency||'€';$('sJob').value=s.job||'';buildRebarSel();$('sRebar').value=s.rebar||'';ws1FillForm(s)}
+function fillForm(){const p=S.project||{},s=S.settings||{};$('pClient').value=p.client||'';$('pCode').value=p.code||'';$('pDate').value=p.date||'';$('pNotes').value=p.notes||'';$('sKerf').value=s.kerf==null?3:s.kerf;$('sMinOff').value=s.minOff==null?300:s.minOff;$('sPriceM').value=s.priceM||0;$('sCur').value=s.currency||'€';$('sJob').value=s.job||'';buildRebarSel();$('sRebar').value=s.rebar||'';var ac=$('sAutoCalc');if(ac)ac.checked=s.autoCalc!==false;var sm=$('sMaterial');if(sm)sm.value=s.material||'steel';applyMaterial();ws1FillForm(s)}
 /* ================= optimizer (multi-diameter) ================= */
 function toMM(v,u){return num(v)*(UNITS[u]||1)}
 function bfd(pieces,pool,kerf){
@@ -1299,6 +1334,21 @@ if(typeof document!=='undefined'){
   });
 }
 
+/* ---------- auto-calculate (debounced, quiet) ---------- */
+var _acT=null,_autoQuiet=false;
+function autoCalcNow(){
+  if(S.settings&&S.settings.autoCalc===false)return;
+  var hasBars=S.stock.some(function(b){return num(b.len)>0&&num(b.qty)>0});
+  var hasCuts=S.cuts.some(function(c){return num(c.len)>0&&num(c.qty)>0});
+  if(!hasBars||!hasCuts)return;
+  _autoQuiet=true;
+  try{calcAll()}finally{_autoQuiet=false}
+}
+function scheduleAutoCalc(){
+  if(S.settings&&S.settings.autoCalc===false)return;
+  clearTimeout(_acT);_acT=setTimeout(autoCalcNow,900);
+}
+
 function calcAll(){
   readForm();
   const st=S.settings,kerf=st.kerf,minOff=st.minOff;
@@ -1323,7 +1373,7 @@ function calcAll(){
     const diaStock=bars.filter(b=>b.dia!=null&&b.dia===g.dia).map(b=>({...b}));
     const pool=whAll.filter(w=>w.dia==null||w.dia===g.dia).concat(diaStock,universal);
     const r=ws1PackGroup(g.pieces,pool,effKerf,{preferWh:preferWh,minLayouts:minLayouts});
-    if(r.error){toast(t('msgNoFit'));return}
+    if(r.error){if(!_autoQuiet)toast(t('msgNoFit'));return}
     const totPL=g.pieces.reduce((a,p)=>a+p.len,0);
     const maxBL=pool.reduce((a,b)=>Math.max(a,b.len),0);
     if(maxBL>0)lbBars+=Math.ceil(totPL/maxBL);
@@ -1343,8 +1393,8 @@ function calcAll(){
   S.results={groups,totals:{bars:totBars,eff,waste:totWaste,material:totBarLen,cost,weight,offKept,pieces:totPieces},
     kerf,minOff,settings:{...S.settings},project:{...S.project},date:new Date().toISOString(),
     ws1:{angleDeg:angleDeg,effKerf:effKerf,trimL:trimL,trimR:trimR,grip:grip,endTrim:endTrim,preferWh:preferWh,minLayouts:minLayouts,lbBars:lbBars,algos:[...new Set(algos)]}};
-  persist();renderResults();addHistory();
-  toast(t('msgCalcDone'));
+  persist();renderResults();addHistory(_autoQuiet);
+  if(!_autoQuiet)toast(t('msgCalcDone'));
 }
 function diaName(d){return d==null?'—':'Φ'+d}
 function renderResults(){
@@ -1356,7 +1406,7 @@ function renderResults(){
   const T=R.totals,cur=R.settings.currency||'€';
   const m=$('metrics');m.innerHTML='';
   const card=(k,v,cls)=>'<div class="metric"><div class="k">'+esc(k)+'</div><div class="v'+(cls?' '+cls:'')+'">'+v+'</div></div>';
-  m.innerHTML=card(t('barsNeeded'),fmt(T.bars,0))+card(t('efficiency'),fmt(T.eff,1)+'%',T.eff>=90?'good':T.eff>=75?'':'warn')+card(t('waste'),fmtLen(T.waste))+card(t('totalMaterial'),fmtLen(T.material))+card(t('totalCost'),esc(cur)+' '+fmt(T.cost,2))+card(t('totalWeight'),fmt(T.weight,1)+' kg')+card(t('offcutsKept'),fmt(T.offKept,0),'good')+card(t('pieces'),fmt(T.pieces,0));
+  m.innerHTML=card(t('barsNeeded'),fmt(T.bars,0))+card(t('efficiency'),fmt(T.eff,1)+'%',T.eff>=90?'good':T.eff>=75?'':'warn')+card(t('waste'),fmtLen(T.waste))+card(t('totalMaterial'),fmtLen(T.material))+card(t('totalCost'),esc(cur)+' '+fmt(T.cost,2))+card(t('totalWeight'),fmt(T.weight,1)+' kg')+card(t('offcutsKept'),fmt(T.offKept,0),'good')+card(t('pieces'),fmt(T.pieces,0))+card(t('wsCo2'),fmt(T.material>0?T.weight*T.waste/T.material*1.85:0,1)+' kg');
   let h='';
   R.groups.forEach(g=>{
     h+='<h4 style="margin:20px 0 6px">'+esc(t('diaCol'))+': '+esc(diaName(g.dia))+' <span class="muted small">· '+g.bars.length+' '+esc(t('bar'))+'</span></h4>';
@@ -1369,8 +1419,15 @@ function renderResults(){
   });
   $('diagrams').innerHTML=h;
 }
-function addHistory(){
+function addHistory(auto){
   const R=S.results;if(!R)return;
+  if(auto&&S.history.length){
+    const h0=S.history[0];
+    if(Date.now()-new Date(h0.date).getTime()<10*60*1000){
+      S.history[0]={id:h0.id,date:R.date,name:R.settings.job||t('results'),stats:R.totals,currency:R.settings.currency};
+      persist();return;
+    }
+  }
   S.history.unshift({id:uid(),date:R.date,name:R.settings.job||t('results'),stats:R.totals,currency:R.settings.currency});
   if(S.history.length>60)S.history.length=60;
   persist();
@@ -1498,7 +1555,9 @@ function renderDashboard(){const H=S.history;const k=$('dashKpis');
   const tot={jobs:H.length,bars:0,eff:0,waste:0,cost:0};
   H.forEach(h=>{tot.bars+=h.stats.bars;tot.eff+=h.stats.eff;tot.waste+=h.stats.waste;tot.cost+=h.stats.cost});
   const card=(k2,v)=>'<div class="metric"><div class="k">'+esc(k2)+'</div><div class="v">'+v+'</div></div>';
-  k.innerHTML=card(t('kpiJobs'),fmt(tot.jobs,0))+card(t('kpiBars'),fmt(tot.bars,0))+card(t('kpiEff'),H.length?fmt(tot.eff/H.length,1)+'%':'—')+card(t('kpiWaste'),fmtLen(tot.waste));
+  const avgW=H.length?H.reduce((a,h)=>a+(100-h.stats.eff),0)/H.length:null;
+  const benchCls=avgW==null?'':avgW<3?'good':avgW>5?'warn':'';
+  k.innerHTML=card(t('kpiJobs'),fmt(tot.jobs,0))+card(t('kpiBars'),fmt(tot.bars,0))+card(t('kpiEff'),H.length?fmt(tot.eff/H.length,1)+'%':'—')+card(t('kpiWaste'),fmtLen(tot.waste))+'<div class="metric"><div class="k">'+esc(t('kpiBench'))+'</div><div class="v'+(benchCls?' '+benchCls:'')+'">'+(avgW==null?'—':fmt(avgW,1)+'%')+'</div></div>';
   const ch=$('effChart');ch.innerHTML='';
   H.slice(0,10).reverse().forEach(h=>{const d=document.createElement('div');d.className='cb';d.innerHTML='<div class="fill" style="height:'+Math.max(h.stats.eff,3)+'%" title="'+fmt(h.stats.eff,1)+'%"></div><div class="t">'+esc((h.name||'').slice(0,10))+'</div>';ch.appendChild(d)});
   if(!H.length)ch.innerHTML='<p class="muted">'+esc(t('noData'))+'</p>'}
@@ -1805,9 +1864,118 @@ function ws2cParseQuick(text){
     S.cuts.push({id:uid(),len:len,qty:qty,unit:'mm',label:lab,dia:dia!=null?dia:curDia});
     n++;
   });
-  if(n){persist();renderCuts();toast(t('ws2cQuickAdded')+' ('+n+')')}
+  if(n){persist();renderCuts();scheduleAutoCalc();toast(t('ws2cQuickAdded')+' ('+n+')')}
   else toast(t('ws2cNoLines'));
 }
+
+/* ---------- workshop mode (saw view) ---------- */
+var _wsBars=[],_wsIdx=0,_wsDone={};
+function wsModeOpen(){
+  if(!S.results){toast(t('msgNoResults'));return}
+  _wsBars=[];_wsIdx=0;_wsDone={};
+  S.results.groups.forEach(function(g){g.bars.forEach(function(b){_wsBars.push({dia:g.dia,bar:b})})});
+  if(!_wsBars.length){toast(t('msgNoResults'));return}
+  $('wsMode').style.display='block';document.body.style.overflow='hidden';
+  wsModeRender();document.addEventListener('keydown',wsModeKeys);
+}
+function wsModeClose(){$('wsMode').style.display='none';document.body.style.overflow='';document.removeEventListener('keydown',wsModeKeys)}
+function wsModeKeys(e){
+  if(e.key==='Escape')wsModeClose();
+  else if(e.key==='ArrowRight')wsModeGo(1);
+  else if(e.key==='ArrowLeft')wsModeGo(-1);
+  else if(e.key==='Enter'||e.key===' '){e.preventDefault();wsModeDone()}
+}
+function wsModeGo(d){_wsIdx=Math.max(0,Math.min(_wsBars.length-1,_wsIdx+d));wsModeRender()}
+function wsModeDone(){
+  _wsDone[_wsIdx]=true;
+  var nxt=-1;for(var i=_wsIdx+1;i<_wsBars.length;i++){if(!_wsDone[i]){nxt=i;break}}
+  _wsIdx=nxt>=0?nxt:Math.min(_wsIdx+1,_wsBars.length-1);
+  wsModeRender();
+}
+function wsModeRender(){
+  var it=_wsBars[_wsIdx],b=it.bar;
+  $('wsModeCnt').textContent=(_wsIdx+1)+' / '+_wsBars.length;
+  var h='<div class="barvis"><div class="blabel"><span>'+esc(t('bar'))+' '+(_wsIdx+1)+' \u2014 '+fmtLen(b.len)+'</span><span class="muted">'+esc(diaName(it.dia))+(_wsDone[_wsIdx]?' \u00b7 \u2713':'')+'</span></div><div class="barrow">';
+  b.pieces.forEach(function(px){var w=Math.max(px.len/b.len*100,2.5);h+='<div class="seg cut" style="width:'+w+'%">'+fmtLen(px.len)+'</div>'});
+  if(b.waste>0){var w2=Math.max(b.waste/b.len*100,2.5);h+='<div class="seg '+(b.off?'off':'wst')+'" style="width:'+w2+'%">'+fmtLen(b.waste)+'</div>'}
+  h+='</div></div>';
+  h+='<table class="data" style="margin-top:18px"><thead><tr><th>#</th><th>'+esc(t('length'))+'</th><th>'+esc(t('label'))+'</th></tr></thead><tbody>';
+  b.pieces.forEach(function(px,i){h+='<tr><td class="num">'+(i+1)+'</td><td class="num"><strong style="font-size:18px">'+fmtLen(px.len)+'</strong></td><td>'+esc(px.label||'\u2014')+'</td></tr>'});
+  h+='</tbody></table>';
+  $('wsModeBar').innerHTML=h;
+  $('wsModeProg').textContent=Object.keys(_wsDone).length+' / '+_wsBars.length+' '+esc(t('wsModeBarsDone'));
+  $('wsModeDone').innerHTML='\u2713 '+esc(t(_wsDone[_wsIdx]?'wsModeDone':'wsModeMarkDone'));
+  $('wsModePrev').disabled=_wsIdx===0;
+  $('wsModeNext').disabled=_wsIdx===_wsBars.length-1;
+}
+
+/* ---------- material modes (steel / timber / pipe) ---------- */
+function applyMaterial(){
+  var m=(S.settings&&S.settings.material)||'steel';
+  var sp=$('ws4ShapesPanel');if(sp)sp.style.display=(m==='steel')?'':'none';
+}
+function loadPreset(kind){
+  S.stock=kind==='timber'
+    ?[{id:uid(),len:4000,qty:20,unit:'mm',dia:null}]
+    :[{id:uid(),len:6000,qty:10,unit:'mm',dia:null}];
+  S.settings.material=kind;persist();fillForm();renderStock();applyMaterial();scheduleAutoCalc();
+  toast(t('wsPresetLoaded'));
+}
+
+/* ---------- voice input (Web Speech API) ---------- */
+function ws2cVoice(){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast(t('ws2cVoiceNoSup'));return}
+  var btn=$('voiceBtn'),lbl=btn.querySelector('[data-i18n]');
+  var rec=new SR();rec.lang=(LANG==='el'?'el-GR':'en-US');rec.interimResults=false;rec.maxAlternatives=1;
+  btn.disabled=true;if(lbl)lbl.textContent=t('ws2cListening');
+  rec.onresult=function(e){
+    var txt=e.results[0][0].transcript||'';
+    var dia=null,dm=/[Φφ]\s*(\d+)/.exec(txt);
+    if(dm)dia=+dm[1];else{var sv=$('voiceDia').value;if(sv)dia=+sv}
+    var norm=txt.replace(/,/g,'.');
+    var m=/(\d+(?:\.\d+)?)\s*(?:x|×|Χ|επί|epi|by)\s*(\d+(?:\.\d+)?)/i.exec(norm),line=null;
+    if(m)line=(dia?'Φ'+dia+': ':'')+m[1]+'x'+Math.round(+m[2]);
+    else{var nums=norm.match(/\d+(?:\.\d+)?/g);
+      if(nums&&nums.length)line=(dia?'Φ'+dia+': ':'')+nums.slice(0,2).join('x');}
+    if(line){var before=S.cuts.length;ws2cParseQuick(line);var added=S.cuts.length-before;
+      toast('\uD83C\uDFA4 \u201C'+txt+'\u201D \u2192 '+(added>0?added+' '+t('ws2cVoiceAdded'):t('ws2bImpNone')));}
+    else toast('\uD83C\uDFA4 \u201C'+txt+'\u201D');
+  };
+  var done=function(){btn.disabled=false;if(lbl)lbl.textContent=t('ws2cVoiceBtn')};
+  rec.onerror=done;rec.onend=done;
+  try{rec.start()}catch(e){done()}
+}
+$('voiceBtn').onclick=ws2cVoice;
+
+/* ---------- photo scan to cutting list (OCR, lazy-loaded) ---------- */
+function ws2cScanRun(file){
+  var btn=$('scanBtn'),lbl=btn.querySelector('[data-i18n]');
+  btn.disabled=true;if(lbl)lbl.textContent=t('ws2cScanning');
+  var finish=function(ok,n){
+    btn.disabled=false;if(lbl)lbl.textContent=t('ws2cScanBtn');$('scanFile').value='';
+    toast(ok?(n>0?t('ws2cQuickAdded')+' ('+n+')':t('ws2bImpNone')):t('ws2cScanErr'));
+  };
+  var run=function(){
+    try{
+      Tesseract.recognize(file,'eng+ell').then(function(res){
+        var before=S.cuts.length;
+        ws2cParseQuick(String((res&&res.data&&res.data.text)||''));
+        finish(true,S.cuts.length-before);
+      }).catch(function(){finish(false,0)});
+    }catch(e){finish(false,0)}
+  };
+  if(window.Tesseract&&window.Tesseract.recognize){run();return}
+  var s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+  s.onload=run;s.onerror=function(){finish(false,0)};
+  document.head.appendChild(s);
+}
+$('scanBtn').onclick=function(){
+  var f=$('scanFile');
+  f.onchange=function(){if(f.files[0])ws2cScanRun(f.files[0])};
+  f.click();
+};
 
 /* ================= init ================= */
 function init(){
@@ -1829,6 +1997,16 @@ function init(){
   ['sKerf','sMinOff','sPriceM','sCur','sJob','sRebar','sAngle','sAngleDeg','sTrimL','sTrimR','sGrip','sEndTrim','sMinLayouts','sWhFirst'].forEach(id=>{const e=$(id);if(e)e.addEventListener('change',readForm)});
   ['pClient','pCode','pDate','pNotes'].forEach(id=>$(id).addEventListener('input',readForm));
   $('calcBtn').onclick=calcAll;
+  $('wsModeBtn').onclick=wsModeOpen;
+  $('wsModeExit').onclick=wsModeClose;
+  $('wsModePrev').onclick=function(){wsModeGo(-1)};
+  $('wsModeNext').onclick=function(){wsModeGo(1)};
+  $('wsModeDone').onclick=wsModeDone;
+  $('presetTimberBtn').onclick=function(){loadPreset('timber')};
+  $('presetPipeBtn').onclick=function(){loadPreset('pipe')};
+  var _sm=$('sMaterial');if(_sm)_sm.onchange=function(){readForm();applyMaterial();scheduleAutoCalc()};
+  $('add12mBtn').onclick=()=>{var dias=[...new Set(S.cuts.map(c=>c.dia).filter(x=>x!=null))];if(!dias.length)dias=[null];var n=0;dias.forEach(dd=>{if(!S.stock.some(b=>b.dia===dd&&Math.abs(toMM(b.len,b.unit)-12000)<1)){S.stock.push({id:uid(),len:12000,qty:10,unit:'mm',dia:dd});n++}});persist();renderStock();scheduleAutoCalc();toast(n?t('ws12mAdded')+' ('+n+')':t('ws12mExists'))};
+  var _optView=$('v-optimizer');if(_optView){_optView.addEventListener('input',function(){scheduleAutoCalc()});_optView.addEventListener('change',function(){scheduleAutoCalc()})}
   $('demoBtn').onclick=loadDemo;$('heroDemo').onclick=()=>{show('optimizer');loadDemo()};
   $('tourBtn').onclick=startTour;
   $('saveJobBtn').onclick=()=>{if(!S.results){toast(t('msgNoResults'));return}const nm=S.settings.job||t('results');S.jobs.unshift({id:uid(),name:nm,date:new Date().toISOString(),project:{...S.project},stats:S.results.totals,results:S.results,snap:{stock:S.stock,cuts:S.cuts,project:{...S.project},settings:{...S.settings}}});persist();renderJobs();renderCmpSel();toast(t('msgSaved'))};
