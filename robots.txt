@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://6n9ymhsdr8-wq.github.io/Steelcut-/sitemap.xml
+Sitemap: https://getsteelcut.com/sitemap.xml
