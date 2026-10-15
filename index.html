@@ -976,16 +976,16 @@ function show(v){CUR=v;document.querySelectorAll('.view').forEach(e=>e.classList
   if(v==='dashboard')renderDashboard();if(v==='jobs'){renderJobs();renderHist();renderCmpSel();}if(v==='reports')renderQR();if(v==='labels')renderLabels();}
 document.addEventListener('click',e=>{const n=e.target.closest('[data-nav]');if(n){show(n.dataset.nav);var mm=$('mainnav');if(mm)mm.classList.remove('open');var nt2=$('navToggle');if(nt2)nt2.setAttribute('aria-expanded','false')}});
 var navToggle=$('navToggle');if(navToggle){navToggle.addEventListener('click',function(e){e.stopPropagation();var mn=$('mainnav');var isOpen=mn.classList.toggle('open');navToggle.setAttribute('aria-expanded',isOpen?'true':'false')});document.addEventListener('click',function(e){var mn=$('mainnav');if(mn&&mn.classList.contains('open')&&!e.target.closest('#mainnav')&&!e.target.closest('#navToggle')){mn.classList.remove('open');navToggle.setAttribute('aria-expanded','false')}})}
-function diaOptions(sel,allowAny){let h=allowAny?'<option value="">'+esc(t('diaAny'))+'</option>':'';REBAR.forEach(r=>{h+='<option value="'+r.d+'">Φ'+r.d+'</option>'});sel.innerHTML=h}
+function diaOptions(sel,allowAny,cur){let h=allowAny?'<option value="">'+esc(t('diaAny'))+'</option>':'';REBAR.forEach(r=>{h+='<option value="'+r.d+'">Φ'+r.d+'</option>'});if(cur!=null&&cur!==''&&!REBAR.some(r=>String(r.d)===String(cur))){h+='<option value="'+cur+'">Φ'+cur+'</option>'}sel.innerHTML=h}
 /* ---------- stock & cuts tables ---------- */
 function renderStock(){const tb=$('stockBody');tb.innerHTML='';S.stock.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML='<td><input type="number" min="1" step="any" value="'+esc(r.len)+'" data-f="len"></td><td><input type="number" min="1" step="1" value="'+esc(r.qty)+'" data-f="qty"></td><td><select data-f="unit">'+['mm','cm','m','in'].map(u=>'<option'+(u===r.unit?' selected':'')+'>'+u+'</option>').join('')+'</select></td><td><select data-f="dia"></select></td><td><button class="btn btn-ghost btn-sm" data-del>×</button></td>';
   tr.querySelectorAll('input,select').forEach(inp=>{inp.addEventListener('change',()=>{const f=inp.dataset.f;let v=inp.value;if(f==='len'||f==='qty')v=num(v);if(f==='dia')v=v===''?null:num(v);r[f]=v;persist()})});
-  const ds=tr.querySelector('[data-f="dia"]');diaOptions(ds,true);ds.value=r.dia==null?'':String(r.dia);
+  const ds=tr.querySelector('[data-f="dia"]');diaOptions(ds,true,r.dia);ds.value=r.dia==null?'':String(r.dia);
   tr.querySelector('[data-del]').addEventListener('click',()=>{S.stock=S.stock.filter(x=>x.id!==r.id);persist();renderStock()});
   tb.appendChild(tr)})}
 function renderCuts(){const tb=$('cutsBody');tb.innerHTML='';S.cuts.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML='<td><input type="number" min="1" step="any" value="'+esc(r.len)+'" data-f="len"></td><td><input type="number" min="1" step="1" value="'+esc(r.qty)+'" data-f="qty"></td><td><select data-f="unit">'+['mm','cm','m','in'].map(u=>'<option'+(u===r.unit?' selected':'')+'>'+u+'</option>').join('')+'</select></td><td><select data-f="dia"></select></td><td><input type="text" value="'+esc(r.label||'')+'" data-f="label" placeholder="—"></td><td><button class="btn btn-ghost btn-sm" data-del>×</button></td>';
   tr.querySelectorAll('input,select').forEach(inp=>{inp.addEventListener('input',()=>{const f=inp.dataset.f;let v=inp.value;if(f==='len'||f==='qty')v=num(v);if(f==='dia')v=v===''?null:num(v);r[f]=v;persist()})});
-  const ds=tr.querySelector('[data-f="dia"]');diaOptions(ds,true);ds.value=r.dia==null?'':String(r.dia);
+  const ds=tr.querySelector('[data-f="dia"]');diaOptions(ds,true,r.dia);ds.value=r.dia==null?'':String(r.dia);
   tr.querySelector('[data-del]').addEventListener('click',()=>{S.cuts=S.cuts.filter(x=>x.id!==r.id);persist();renderCuts()});
   tb.appendChild(tr)})}
 function buildRebarSel(){const s=$('sRebar');const cur=S.settings.rebar;s.innerHTML='<option value="">'+esc(t('none'))+'</option><option value="custom"'+(cur==='custom'?' selected':'')+'>'+esc(t('custom'))+'</option>'+REBAR.map(r=>'<option value="'+r.d+'"'+(String(cur)===String(r.d)?' selected':'')+'>Φ'+r.d+' — '+r.w+' kg/m</option>').join('')}
@@ -1437,7 +1437,20 @@ function addHistory(auto){
 function renderWarehouse(){const tb=$('whBody');if(!tb)return;tb.innerHTML='';
   if(!S.warehouse.length){tb.innerHTML='<tr><td colspan="6" class="muted">'+esc(t('noData'))+'</td></tr>';return}
   S.warehouse.forEach(r=>{const tr=document.createElement('tr');
-    tr.innerHTML='<td class="num">'+fmtLen(r.lenMM)+'</td><td class="num">'+r.qty+'</td><td>'+esc(diaName(r.dia))+'</td><td>'+esc(r.label||'—')+'</td><td class="small">'+esc(new Date(r.date).toLocaleDateString(LANG))+'</td><td><button class="btn btn-ghost btn-sm" data-del>×</button></td>';
+    tr.innerHTML='<td><input type="number" min="1" step="any" value="'+esc(r.lenMM)+'" data-f="lenMM" style="width:92px"></td>'
+      +'<td><input type="number" min="1" step="1" value="'+esc(r.qty)+'" data-f="qty" style="width:58px"></td>'
+      +'<td><select data-f="dia"></select> <input type="number" min="0.5" step="any" data-f="diaC" style="width:64px;display:none" placeholder="Φ"></td>'
+      +'<td><input type="text" value="'+esc(r.label||'')+'" data-f="label" placeholder="—" style="width:104px"></td>'
+      +'<td class="small">'+esc(new Date(r.date).toLocaleDateString(LANG))+'</td><td><button class="btn btn-ghost btn-sm" data-del>×</button></td>';
+    const ds=tr.querySelector('[data-f="dia"]');diaOptions(ds,true,r.dia);
+    const co=document.createElement('option');co.value='custom';co.textContent=t('custom')+'…';ds.appendChild(co);
+    const ci=tr.querySelector('[data-f="diaC"]');
+    const isStd=r.dia==null||REBAR.some(x=>String(x.d)===String(r.dia));
+    ds.value=r.dia==null?'':(isStd?String(r.dia):'custom');
+    if(!isStd&&r.dia!=null){ci.style.display='';ci.value=r.dia}
+    ds.addEventListener('change',()=>{if(ds.value==='custom'){ci.style.display='';ci.focus();r.dia=num(ci.value)||null}else{ci.style.display='none';r.dia=ds.value===''?null:num(ds.value)}persist()});
+    ci.addEventListener('input',()=>{r.dia=num(ci.value)||null;persist()});
+    tr.querySelectorAll('input[data-f="lenMM"],input[data-f="qty"],input[data-f="label"]').forEach(inp=>{inp.addEventListener('input',()=>{const f=inp.dataset.f;r[f]=f==='label'?inp.value:num(inp.value);persist()})});
     tr.querySelector('[data-del]').onclick=()=>{S.warehouse=S.warehouse.filter(x=>x.id!==r.id);persist();renderWarehouse()};
     tb.appendChild(tr)})}
 /* ================= jobs / history / compare ================= */
@@ -1980,7 +1993,7 @@ $('scanBtn').onclick=function(){
 
 /* ================= init ================= */
 function init(){
-  const sv=load();if(sv&&sv.S){S=Object.assign(S,sv.S)}
+  const sv=load();if(sv){S=Object.assign(S,sv.S||sv)}
   /* Offline support: service worker (no install prompt — website only) */
   if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}
   LANG=(S.lang&&I18N[S.lang])?S.lang:'en';S.lang=LANG;
@@ -2407,7 +2420,7 @@ ws4ShareTooLong:"\u03A0\u03C1\u03BF\u03C3\u03BF\u03C7\u03AE: \u03C4\u03BF link \
 });
 
 /* ---------- shared helpers ---------- */
-function ws4KgPm(dia,fbDia){var d=dia!=null?dia:fbDia;var r=REBAR.find(function(x){return x.d===d});return r?r.w:0}
+function ws4KgPm(dia,fbDia){var d=dia!=null?dia:fbDia;var r=REBAR.find(function(x){return x.d===d});return r?r.w:(d>0?0.006165*d*d:0)}
 function ws4PriceKg(){var p=0;(S.suppliers||[]).forEach(function(s){var v=num(s.price);if(v>0&&(p===0||v<p))p=v});if(p>0)return p;var m=(S.ws4&&num(S.ws4.priceKg))||0;return m>0?m:0}
 
 /* ================= 1) Rebar shape codes (BS 8666) =================
