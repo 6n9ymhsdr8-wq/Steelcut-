@@ -304,6 +304,21 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
    ===================================================================== */
 .ws2c-ta{width:100%;min-height:170px;border:1px solid var(--line);border-radius:6px;padding:10px 12px;font:inherit;resize:vertical;background:#fff;line-height:1.6}
 .ws2c-ta:focus{outline:2px solid #bcd6ef;border-color:var(--brand)}
+.ai-spin{display:inline-block;width:15px;height:15px;border:2px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:aiSp .8s linear infinite;vertical-align:-2px}
+@keyframes aiSp{to{transform:rotate(360deg)}}
+.ai-prev{max-height:230px;overflow:auto;margin-top:12px;border:1px solid var(--line);border-radius:8px}
+.ai-prev table{margin:0}
+#aiChatFab{position:fixed;right:18px;bottom:18px;z-index:180;width:52px;height:52px;border-radius:50%;border:none;background:var(--navy);color:#fff;font-size:24px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+#aiChatPanel{position:fixed;right:18px;bottom:80px;z-index:180;width:340px;max-width:calc(100vw - 36px);height:430px;max-height:calc(100vh - 130px);background:#fff;border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,.25);display:none;flex-direction:column;overflow:hidden}
+#aiChatPanel.open{display:flex}
+#aiChatHead{padding:12px 14px;background:var(--navy);color:#fff;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+#aiChatHead button{background:none;border:none;color:#fff;font-size:18px;cursor:pointer}
+#aiChatMsgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.ai-msg{max-width:88%;padding:8px 12px;border-radius:10px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.ai-msg.u{align-self:flex-end;background:var(--brand);color:#fff}
+.ai-msg.a{align-self:flex-start;background:#f1f4f8;color:var(--ink)}
+#aiChatForm{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}
+#aiChatForm input{flex:1;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit;min-width:0}
 .ws2c-hint{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5}
 
 /* ============ ws3 additions ============ */
@@ -548,8 +563,11 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 <button class="btn btn-ghost btn-sm" id="voiceBtn">🎤 <span data-i18n="ws2cVoiceBtn">Voice input</span></button>
 <select id="voiceDia" class="btn btn-ghost btn-sm" title="Φ" style="max-width:76px"><option value="">Φ?</option><option>8</option><option>10</option><option selected>12</option><option>14</option><option>16</option><option>20</option><option>25</option><option>32</option></select>
 <button class="btn btn-ghost btn-sm" id="scanBtn">📷 <span data-i18n="ws2cScanBtn">Scan list</span></button>
+<button class="btn btn-ghost btn-sm" id="aiImportBtn">✨ <span data-i18n="wsAiImportBtn">AI import</span></button>
+<button class="btn btn-ghost btn-sm" id="aiPlanBtn">📷 <span data-i18n="wsAiPlanBtn">Plan → BBS</span></button>
         <input type="file" id="importFile" accept=".csv,.txt,.xlsx,.xls" style="display:none">
         <input type="file" id="scanFile" accept="image/*" style="display:none">
+        <input type="file" id="aiPlanFile" accept="image/*" style="display:none">
       </div>
     </div>
 
@@ -577,11 +595,6 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
       <div class="formgrid">
         <div class="fg"><label data-i18n="kerf">Saw kerf (blade width)</label><input id="sKerf" type="number" min="0" step="0.5" value="3"><div class="hint">mm</div></div>
         <div class="fg"><label data-i18n="minOffcut">Min. reusable offcut</label><input id="sMinOff" type="number" min="0" step="10" value="300"><div class="hint">mm</div></div>
-<div class="fg"><label data-i18n="minOffcut">Min. reusable offcut</label><input id="sMinOff" type="number" min="0" step="10" value="300"><div class="hint">mm</div></div>
-     All labels use data-i18n keys prefixed "ws1" (see i18n-additions.json).
-     New input ids: sAngle, sAngleDeg, sTrimL, sTrimR, sGrip, sEndTrim,
-                    sMinLayouts, sWhFirst
-     ===================================================================== -->
         <div class="fg"><label data-i18n="ws1CutAngle">Cut angle</label><select id="sAngle"><option value="90">90°</option><option value="45">45°</option><option value="custom" data-i18n="ws1CustomAngle">Custom…</option></select><input id="sAngleDeg" type="number" min="1" max="179" step="1" value="90" style="margin-top:8px"><div class="hint" data-i18n="ws1AngleDeg">degrees</div></div>
         <div class="fg"><label data-i18n="ws1TrimL">Left trim</label><input id="sTrimL" type="number" min="0" step="10" value="0"><div class="hint">mm</div></div>
         <div class="fg"><label data-i18n="ws1TrimR">Right trim</label><input id="sTrimR" type="number" min="0" step="10" value="0"><div class="hint">mm</div></div>
@@ -821,6 +834,8 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 </div></div>
 <div id="toast"></div>
 <div class="modal-bg" id="modalBg"><div class="modal"><h3 id="mTitle"></h3><div id="mBody"></div><div class="mrow"><button class="btn btn-ghost btn-sm" id="mCancel" data-i18n="no">No</button><button class="btn btn-primary btn-sm" id="mOk" data-i18n="yes">Yes</button></div></div></div>
+<button id="aiChatFab" aria-label="SteelCut AI">🤖</button>
+<div id="aiChatPanel"><div id="aiChatHead"><span data-i18n="wsAiChatTitle">SteelCut AI</span><button id="aiChatX" aria-label="×">×</button></div><div id="aiChatMsgs"></div><div id="aiChatForm"><input id="aiChatIn" data-i18n-ph="wsAiChatPh" placeholder="Ask about cutting, waste, rebar…"><button class="btn btn-primary btn-sm" id="aiChatSend">→</button></div></div>
 <script>
 "use strict";
 /* ================= i18n ================= */
@@ -880,7 +895,7 @@ tour1t:"Welcome to SteelCut",tour1b:"This short tour shows the workflow: stock i
 tour2t:"1 · Stock bars",tour2b:"List the bars you own or plan to buy — length, quantity and diameter. You can also import reusable offcuts from the warehouse.",
 tour3t:"2 · Required cuts",tour3b:"List every piece you must cut, with its diameter. Tip: import a whole bar bending schedule from Excel/CSV in one click.",
 tour4t:"3 · Calculate",tour4b:"Set saw kerf and rebar type, then hit Calculate. SteelCut packs every bar for minimum waste and draws the cutting diagrams.",
-tour5t:"4 · Use the results",tour5b:"Export the PDF report, print cut labels, save the job, or send offcuts to the warehouse. That's it!","ws1AlgoBfd":"Best-fit decreasing","ws1AlgoExact":"Exact (branch & bound)","ws1AlgoFfd":"First-fit decreasing","ws1AlgoLabel":"Algorithm","ws1AlgoPattern":"Pattern reuse (min. layouts)","ws1AngleDeg":"degrees","ws1CustomAngle":"Custom…","ws1CutAngle":"Cut angle","ws1EndTrim":"End trim / bar","ws1Grip":"Grip allowance","ws1MinLayouts":"Minimize layout count","ws1MinLayoutsHint":"Fewer distinct cutting patterns","ws1QualityExact":"Optimal solution — the exact solver proved no better plan exists for this job size.","ws1QualityHeu":"Heuristic solution · lower bound {lb} bars → within {n} bars of optimal","ws1TrimL":"Left trim","ws1TrimR":"Right trim","ws1WhFirst":"Use warehouse offcuts first","ws1WhFirstHint":"Consume offcut stock before new bars","ws2aDxfBtn":"Export DXF","ws2bAdvBars":"Bars","ws2bAdvBest":"Cheapest:","ws2bAdvBtn":"Compare","ws2bAdvCost":"Total cost","ws2bAdvDesc":"Compare candidate stock lengths to find the cheapest option for the current cuts.","ws2bAdvHint":"Format: lengthMM:price — e.g. 12000:45.50, 6000:24.00","ws2bAdvLen":"Candidate stock (lengthMM:price)","ws2bAdvNeedCuts":"Add required cuts first.","ws2bAdvNeedRows":"Enter at least one candidate (lengthMM:price).","ws2bAdvNoFit":"a piece does not fit","ws2bAdvPh":"12000:45.50, 6000:24.00","ws2bAdvTitle":"Stock advisor","ws2bAdvTotal":"total","ws2bAdvWaste":"Waste %","ws2bBbsBtn":"Import BBS","ws2bBbsDesc":"Paste CSV rows (Mark,Dia,Length,Qty) or free-text lines like “Φ12: 2500x12” — one per line.","ws2bBbsPh":"B1,12,2450,14\nΦ12: 2500x12\nD16 5300x6","ws2bBbsTitle":"Import bending schedule (BBS)","ws2bCancel":"Cancel","ws2bEffBar":"Bar","ws2bEffBars":"Bars used","ws2bEffCutSeq":"Cutting sequence","ws2bEffDia":"Diameter","ws2bEffKept":"(kept)","ws2bEffLen":"Total length","ws2bEffOffcut":"offcut","ws2bEffPct":"Efficiency","ws2bEffTitle":"Efficiency report","ws2bEffWaste":"Waste","ws2bEffWastePct":"Waste %","ws2bImpDone":"Imported","ws2bImpNone":"No lines could be parsed.","ws2bParse":"Parse & import","ws2cNoLines":"Nothing to parse — type or paste cut lines first.","ws2cParse":"Parse & add","ws2cPdfHint":"For PDF cutting lists: select the text in the PDF, copy it, and paste it here.","ws2cQuickAdded":"Quick entries added.","ws2cQuickBtn":"Quick input","ws2cQuickPh":"One per line, e.g.:\n2500x12\nΦ12: 2450x14\n5300x6 C1 D16","ws2cQuickTitle":"Quick input","ws2cXlsxErr":"Could not read this Excel file. Try exporting it as CSV and import that instead.","ws2cXlsxNoRows":"No usable rows found in the Excel file (columns: length, qty, unit, label, diameter).","ws3Back":"← Back","ws3CalcT":"Run the optimizer and draw the cutting plan","ws3DiaT":"Rebar diameter, e.g. Φ12 — leave empty for generic bars","ws3Done":"Start optimizing","ws3Expert":"Expert mode","ws3ExpertOff":"Expert mode off","ws3ExpertOn":"Expert mode on — the intro wizard will be skipped","ws3ExpertTip":"Skip the first-run wizard and open the optimizer directly","ws3KerfH":"Material lost per cut — typically 2–4 mm","ws3KerfT":"Saw kerf — the width of material the saw blade removes on every cut","ws3LoadDemo":"Load demo data","ws3Next":"Next →","ws3OffH":"Longer leftovers are kept as reusable offcuts","ws3OffT":"Min. reusable offcut — shorter leftovers are counted as waste","ws3PriceH":"Feeds the total cost estimate","ws3PriceT":"Price per meter of stock bar — used to estimate the job cost","ws3RebarH":"Needed for weight & cost estimates","ws3RebarT":"Rebar type — sets the weight per meter (kg/m) used for weight & cost","ws3Skip":"Skip","ws3UnitT":"Unit of the length you typed","ws3W1b":"List the bars you have in stock — length, quantity and diameter. Most workshops buy 12 m bars: add one row and set the quantity.","ws3W1t":"1 · Your stock bars","ws3W2b":"List every piece you need to cut, with length, quantity and diameter. Tip: import a whole cut list from Excel/CSV in one click.","ws3W2t":"2 · Your required cuts","ws3W3b":"Press “Calculate cutting plan” and SteelCut packs every bar for minimum waste. Want to see it in action first?","ws3W3t":"3 · Calculate","ws3WizTitle":"Welcome to SteelCut"
+tour5t:"4 · Use the results",tour5b:"Export the PDF report, print cut labels, save the job, or send offcuts to the warehouse. That's it!","ws1AlgoBfd":"Best-fit decreasing","ws1AlgoExact":"Exact (branch & bound)","ws1AlgoFfd":"First-fit decreasing","ws1AlgoLabel":"Algorithm","ws1AlgoPattern":"Pattern reuse (min. layouts)","ws1AngleDeg":"degrees","ws1CustomAngle":"Custom…","ws1CutAngle":"Cut angle","ws1EndTrim":"End trim / bar","ws1Grip":"Grip allowance","ws1MinLayouts":"Minimize layout count","ws1MinLayoutsHint":"Fewer distinct cutting patterns","ws1QualityExact":"Optimal solution — the exact solver proved no better plan exists for this job size.","ws1QualityHeu":"Heuristic solution · lower bound {lb} bars → within {n} bars of optimal","ws1TrimL":"Left trim","ws1TrimR":"Right trim","ws1WhFirst":"Use warehouse offcuts first","ws1WhFirstHint":"Consume offcut stock before new bars","ws2aDxfBtn":"Export DXF","ws2bAdvBars":"Bars","ws2bAdvBest":"Cheapest:","ws2bAdvBtn":"Compare","ws2bAdvCost":"Total cost","ws2bAdvDesc":"Compare candidate stock lengths to find the cheapest option for the current cuts.","ws2bAdvHint":"Format: lengthMM:price — e.g. 12000:45.50, 6000:24.00","ws2bAdvLen":"Candidate stock (lengthMM:price)","ws2bAdvNeedCuts":"Add required cuts first.","ws2bAdvNeedRows":"Enter at least one candidate (lengthMM:price).","ws2bAdvNoFit":"a piece does not fit","ws2bAdvPh":"12000:45.50, 6000:24.00","ws2bAdvTitle":"Stock advisor","ws2bAdvTotal":"total","ws2bAdvWaste":"Waste %","ws2bBbsBtn":"Import BBS","ws2bBbsDesc":"Paste CSV rows (Mark,Dia,Length,Qty) or free-text lines like “Φ12: 2500x12” — one per line.","ws2bBbsPh":"B1,12,2450,14\nΦ12: 2500x12\nD16 5300x6","ws2bBbsTitle":"Import bending schedule (BBS)","ws2bCancel":"Cancel","ws2bEffBar":"Bar","ws2bEffBars":"Bars used","ws2bEffCutSeq":"Cutting sequence","ws2bEffDia":"Diameter","ws2bEffKept":"(kept)","ws2bEffLen":"Total length","ws2bEffOffcut":"offcut","ws2bEffPct":"Efficiency","ws2bEffTitle":"Efficiency report","ws2bEffWaste":"Waste","ws2bEffWastePct":"Waste %","ws2bImpDone":"Imported","ws2bImpNone":"No lines could be parsed.","ws2bParse":"Parse & import","ws2cNoLines":"Nothing to parse — type or paste cut lines first.","ws2cParse":"Parse & add","ws2cPdfHint":"For PDF cutting lists: select the text in the PDF, copy it, and paste it here.","ws2cQuickAdded":"Quick entries added.","ws2cQuickBtn":"Quick input","ws2cQuickPh":"One per line, e.g.:\n2500x12\nΦ12: 2450x14\n5300x6 C1 D16","ws2cQuickTitle":"Quick input","ws2cXlsxErr":"Could not read this Excel file. Try exporting it as CSV and import that instead.","ws2cXlsxNoRows":"No usable rows found in the Excel file (columns: length, qty, unit, label, diameter).","ws3Back":"← Back","ws3CalcT":"Run the optimizer and draw the cutting plan","ws3DiaT":"Rebar diameter, e.g. Φ12 — leave empty for generic bars","ws3Done":"Start optimizing","ws3Expert":"Expert mode","ws3ExpertOff":"Expert mode off","ws3ExpertOn":"Expert mode on — the intro wizard will be skipped","ws3ExpertTip":"Skip the first-run wizard and open the optimizer directly","ws3KerfH":"Material lost per cut — typically 2–4 mm","ws3KerfT":"Saw kerf — the width of material the saw blade removes on every cut","ws3LoadDemo":"Load demo data","ws3Next":"Next →","ws3OffH":"Longer leftovers are kept as reusable offcuts","ws3OffT":"Min. reusable offcut — shorter leftovers are counted as waste","ws3PriceH":"Feeds the total cost estimate","ws3PriceT":"Price per meter of stock bar — used to estimate the job cost","ws3RebarH":"Needed for weight & cost estimates","ws3RebarT":"Rebar type — sets the weight per meter (kg/m) used for weight & cost","ws3Skip":"Skip","ws3UnitT":"Unit of the length you typed","ws3W1b":"List the bars you have in stock — length, quantity and diameter. Most workshops buy 12 m bars: add one row and set the quantity.","ws3W1t":"1 · Your stock bars","ws3W2b":"List every piece you need to cut, with length, quantity and diameter. Tip: import a whole cut list from Excel/CSV in one click.","ws3W2t":"2 · Your required cuts","ws3W3b":"Press “Calculate cutting plan” and SteelCut packs every bar for minimum waste. Want to see it in action first?","ws3W3t":"3 · Calculate","ws3WizTitle":"Welcome to SteelCut","wsAiImportBtn":"AI import","wsAiPlanBtn":"Plan → BBS","wsAiNotConn":"AI not connected yet — deploy the SteelCut AI worker first.","wsAiImportTitle":"AI import — describe your cutting list","wsAiImportPh":"e.g. 20 pcs Φ12 3500mm, 10 stirrups Φ8 1500mm…","wsAiImportHint":"Write in any language — the AI extracts lengths, quantities, diameters and labels.","wsAiInterpret":"Interpret","wsAiThinking":"Thinking…","wsAiAddSel":"Add selected","wsAiErr":"AI request failed — please try again.","wsAiPlanTitle":"Plan → BBS — review extracted rows","wsAiMark":"Mark","wsAiTooBig":"Image too large — max 2 MB.","wsAiWorking":"Working…","wsAiChatTitle":"SteelCut AI","wsAiChatPh":"Ask about cutting, waste, rebar…"
 }};
 I18N.el={
 tagline:"Επαγγελματικός βελτιστοποιητής κοπής χαλύβδινων ράβδων",tour:"Ξενάγηση",loadDemo:"Φόρτωση demo",
@@ -938,7 +953,7 @@ tour1t:"Καλώς ήρθες στο SteelCut",tour1b:"Αυτή η σύντομ�
 tour2t:"1 · Διαθέσιμες ράβδοι",tour2b:"Κατέγραψε τις ράβδους σου — μήκος, ποσότητα και διάμετρο. Μπορείς και να εισάγεις ρέταλα από την αποθήκη.",
 tour3t:"2 · Απαιτούμενες κοπές",tour3b:"Κατέγραψε κάθε τεμάχιο με τη διάμετρό του. Συμβουλή: εισήγαγε ολόκληρο πίνακα οπλισμού από Excel/CSV με ένα κλικ.",
 tour4t:"3 · Υπολογισμός",tour4b:"Ρύθμισε το φάρδος λάμας και τον τύπο οπλισμού, πάτα Υπολογισμό. Το SteelCut γεμίζει κάθε ράβδο με ελάχιστη φύρα και σχεδιάζει τα διαγράμματα.",
-tour5t:"4 · Χρησιμοποίησε τα αποτελέσματα",tour5b:"Εξήγαγε την αναφορά PDF, εκτύπωσε ετικέτες, αποθήκευσε τη δουλειά ή στείλε τα ρέταλα στην αποθήκη. Τέλος!","ws1AlgoBfd":"Best-fit decreasing","ws1AlgoExact":"Ακριβής (branch & bound)","ws1AlgoFfd":"First-fit decreasing","ws1AlgoLabel":"Αλγόριθμος","ws1AlgoPattern":"Επανάχρηση διατάξεων (ελάχ. πλήθος)","ws1AngleDeg":"μοίρες","ws1CustomAngle":"Προσαρμοσμένη…","ws1CutAngle":"Γωνία κοπής","ws1EndTrim":"Τελικό κόψιμο / ράβδο","ws1Grip":"Περιθώριο σύσφιξης","ws1MinLayouts":"Ελαχιστοποίηση διατάξεων","ws1MinLayoutsHint":"Λιγότερες διαφορετικές διατάξεις κοπής","ws1QualityExact":"Βέλτιστη λύση — ο ακριβής επιλυτής απέδειξε ότι δεν υπάρχει καλύτερο πλάνο για αυτό το μέγεθος.","ws1QualityHeu":"Ευρετική λύση · κάτω φράγμα {lb} ράβδοι → εντός {n} ράβδων από το βέλτιστο","ws1TrimL":"Καθάρισμα αριστερού άκρου","ws1TrimR":"Καθάρισμα δεξιού άκρου","ws1WhFirst":"Προτεραιότητα ρετάλων αποθήκης","ws1WhFirstHint":"Κατανάλωση ρετάλων πριν τις νέες ράβδους","ws2aDxfBtn":"Εξαγωγή DXF","ws2bAdvBars":"Ράβδοι","ws2bAdvBest":"Φθηνότερο:","ws2bAdvBtn":"Σύγκρινε","ws2bAdvCost":"Συνολικό κόστος","ws2bAdvDesc":"Σύγκρινε υποψήφια μήκη ράβδων για να βρεις τη φθηνότερη επιλογή για τις τρέχουσες κοπές.","ws2bAdvHint":"Μορφή: μήκοςMM:τιμή — π.χ. 12000:45.50, 6000:24.00","ws2bAdvLen":"Υποψήφια μήκη (μήκοςMM:τιμή)","ws2bAdvNeedCuts":"Πρόσθεσε πρώτα απαιτούμενες κοπές.","ws2bAdvNeedRows":"Βάλε τουλάχιστον ένα υποψήφιο μήκος (μήκοςMM:τιμή).","ws2bAdvNoFit":"ένα τεμάχιο δεν χωράει","ws2bAdvPh":"12000:45.50, 6000:24.00","ws2bAdvTitle":"Σύμβουλος αποθέματος","ws2bAdvTotal":"σύνολο","ws2bAdvWaste":"Φύρα %","ws2bBbsBtn":"Εισαγωγή BBS","ws2bBbsDesc":"Επικόλλησε γραμμές CSV (Μάρκα,Διάμετρος,Μήκος,Τεμ.) ή ελεύθερο κείμενο όπως «Φ12: 2500x12» — μία γραμμή ανά εγγραφή.","ws2bBbsPh":"B1,12,2450,14\nΦ12: 2500x12\nD16 5300x6","ws2bBbsTitle":"Εισαγωγή πίνακα οπλισμού (BBS)","ws2bCancel":"Ακύρωση","ws2bEffBar":"Ράβδος","ws2bEffBars":"Ράβδοι","ws2bEffCutSeq":"Σειρά κοπής","ws2bEffDia":"Διάμετρος","ws2bEffKept":"(κρατήθηκε)","ws2bEffLen":"Συνολικό μήκος","ws2bEffOffcut":"ρέταλο","ws2bEffPct":"Απόδοση","ws2bEffTitle":"Αναφορά απόδοσης","ws2bEffWaste":"Φύρα","ws2bEffWastePct":"Φύρα %","ws2bImpDone":"Εισήχθησαν","ws2bImpNone":"Καμία γραμμή δεν αναλύθηκε.","ws2bParse":"Ανάλυση & εισαγωγή","ws2cNoLines":"Τίποτα για ανάλυση — γράψε ή επικόλλησε πρώτα γραμμές κοπής.","ws2cParse":"Ανάλυση & προσθήκη","ws2cPdfHint":"Για λίστες κοπής σε PDF: επίλεξε το κείμενο στο PDF, αντέγραψέ το και επικόλλησέ το εδώ.","ws2cQuickAdded":"Οι γρήγορες εγγραφές προστέθηκαν.","ws2cQuickBtn":"Γρήγορη εισαγωγή","ws2cQuickPh":"Ένα ανά γραμμή, π.χ.:\n2500x12\nΦ12: 2450x14\n5300x6 C1 D16","ws2cQuickTitle":"Γρήγορη εισαγωγή","ws2cXlsxErr":"Δεν ήταν δυνατή η ανάγνωση αυτού του αρχείου Excel. Δοκίμασε να το εξάγεις ως CSV και εισήγαγε εκείνο.","ws2cXlsxNoRows":"Δεν βρέθηκαν αξιοποιήσιμες γραμμές στο αρχείο Excel (στήλες: μήκος, ποσότητα, μονάδα, ετικέτα, διάμετρος).","ws3Back":"← Πίσω","ws3CalcT":"Εκτέλεση του βελτιστοποιητή και σχεδίαση του πλάνου κοπής","ws3DiaT":"Διάμετρος οπλισμού, π.χ. Φ12 — άφησέ το κενό για γενικές ράβδους","ws3Done":"Ξεκίνα βελτιστοποίηση","ws3Expert":"Λειτουργία ειδικού","ws3ExpertOff":"Η λειτουργία ειδικού απενεργοποιήθηκε","ws3ExpertOn":"Η λειτουργία ειδικού ενεργοποιήθηκε — ο οδηγός θα παραλείπεται","ws3ExpertTip":"Παράλειψη του οδηγού πρώτης χρήσης και άμεσο άνοιγμα του βελτιστοποιητή","ws3KerfH":"Υλικό που χάνεται σε κάθε κοπή — συνήθως 2–4 mm","ws3KerfT":"Φάρδος λάμας — το πλάτος υλικού που αφαιρεί η λεπίδα σε κάθε κοπή","ws3LoadDemo":"Φόρτωση demo δεδομένων","ws3Next":"Επόμενο →","ws3OffH":"Τα μεγαλύτερα ρέταλα κρατιούνται ως αξιοποιήσιμα","ws3OffT":"Ελάχιστο αξιοποιήσιμο ρέταλο — μικρότερα ρέταλα μετράνε ως φύρα","ws3PriceH":"Τροφοδοτεί την εκτίμηση του συνολικού κόστους","ws3PriceT":"Τιμή ανά μέτρο ράβδου — χρησιμοποιείται για την εκτίμηση του κόστους","ws3RebarH":"Απαραίτητο για εκτίμηση βάρους και κόστους","ws3RebarT":"Τύπος οπλισμού — ορίζει το βάρος ανά μέτρο (kg/m) για βάρος και κόστος","ws3Skip":"Παράλειψη","ws3UnitT":"Μονάδα του μήκους που έγραψες","ws3W1b":"Κατέγραψε τις ράβδους που έχεις — μήκος, ποσότητα και διάμετρο. Τα περισσότερα συνεργεία αγοράζουν 12άμετρες: βάλε μία γραμμή και ρύθμισε την ποσότητα.","ws3W1t":"1 · Οι ράβδοι σου","ws3W2b":"Κατέγραψε κάθε τεμάχιο που πρέπει να κόψεις, με μήκος, ποσότητα και διάμετρο. Συμβουλή: εισήγαγε ολόκληρη λίστα από Excel/CSV με ένα κλικ.","ws3W2t":"2 · Οι κοπές σου","ws3W3b":"Πάτα «Υπολογισμός πλάνου κοπής» και το SteelCut γεμίζει κάθε ράβδο με ελάχιστη φύρα. Θες να το δεις πρώτα σε δράση;","ws3W3t":"3 · Υπολόγισε","ws3WizTitle":"Καλώς ήρθες στο SteelCut"
+tour5t:"4 · Χρησιμοποίησε τα αποτελέσματα",tour5b:"Εξήγαγε την αναφορά PDF, εκτύπωσε ετικέτες, αποθήκευσε τη δουλειά ή στείλε τα ρέταλα στην αποθήκη. Τέλος!","ws1AlgoBfd":"Best-fit decreasing","ws1AlgoExact":"Ακριβής (branch & bound)","ws1AlgoFfd":"First-fit decreasing","ws1AlgoLabel":"Αλγόριθμος","ws1AlgoPattern":"Επανάχρηση διατάξεων (ελάχ. πλήθος)","ws1AngleDeg":"μοίρες","ws1CustomAngle":"Προσαρμοσμένη…","ws1CutAngle":"Γωνία κοπής","ws1EndTrim":"Τελικό κόψιμο / ράβδο","ws1Grip":"Περιθώριο σύσφιξης","ws1MinLayouts":"Ελαχιστοποίηση διατάξεων","ws1MinLayoutsHint":"Λιγότερες διαφορετικές διατάξεις κοπής","ws1QualityExact":"Βέλτιστη λύση — ο ακριβής επιλυτής απέδειξε ότι δεν υπάρχει καλύτερο πλάνο για αυτό το μέγεθος.","ws1QualityHeu":"Ευρετική λύση · κάτω φράγμα {lb} ράβδοι → εντός {n} ράβδων από το βέλτιστο","ws1TrimL":"Καθάρισμα αριστερού άκρου","ws1TrimR":"Καθάρισμα δεξιού άκρου","ws1WhFirst":"Προτεραιότητα ρετάλων αποθήκης","ws1WhFirstHint":"Κατανάλωση ρετάλων πριν τις νέες ράβδους","ws2aDxfBtn":"Εξαγωγή DXF","ws2bAdvBars":"Ράβδοι","ws2bAdvBest":"Φθηνότερο:","ws2bAdvBtn":"Σύγκρινε","ws2bAdvCost":"Συνολικό κόστος","ws2bAdvDesc":"Σύγκρινε υποψήφια μήκη ράβδων για να βρεις τη φθηνότερη επιλογή για τις τρέχουσες κοπές.","ws2bAdvHint":"Μορφή: μήκοςMM:τιμή — π.χ. 12000:45.50, 6000:24.00","ws2bAdvLen":"Υποψήφια μήκη (μήκοςMM:τιμή)","ws2bAdvNeedCuts":"Πρόσθεσε πρώτα απαιτούμενες κοπές.","ws2bAdvNeedRows":"Βάλε τουλάχιστον ένα υποψήφιο μήκος (μήκοςMM:τιμή).","ws2bAdvNoFit":"ένα τεμάχιο δεν χωράει","ws2bAdvPh":"12000:45.50, 6000:24.00","ws2bAdvTitle":"Σύμβουλος αποθέματος","ws2bAdvTotal":"σύνολο","ws2bAdvWaste":"Φύρα %","ws2bBbsBtn":"Εισαγωγή BBS","ws2bBbsDesc":"Επικόλλησε γραμμές CSV (Μάρκα,Διάμετρος,Μήκος,Τεμ.) ή ελεύθερο κείμενο όπως «Φ12: 2500x12» — μία γραμμή ανά εγγραφή.","ws2bBbsPh":"B1,12,2450,14\nΦ12: 2500x12\nD16 5300x6","ws2bBbsTitle":"Εισαγωγή πίνακα οπλισμού (BBS)","ws2bCancel":"Ακύρωση","ws2bEffBar":"Ράβδος","ws2bEffBars":"Ράβδοι","ws2bEffCutSeq":"Σειρά κοπής","ws2bEffDia":"Διάμετρος","ws2bEffKept":"(κρατήθηκε)","ws2bEffLen":"Συνολικό μήκος","ws2bEffOffcut":"ρέταλο","ws2bEffPct":"Απόδοση","ws2bEffTitle":"Αναφορά απόδοσης","ws2bEffWaste":"Φύρα","ws2bEffWastePct":"Φύρα %","ws2bImpDone":"Εισήχθησαν","ws2bImpNone":"Καμία γραμμή δεν αναλύθηκε.","ws2bParse":"Ανάλυση & εισαγωγή","ws2cNoLines":"Τίποτα για ανάλυση — γράψε ή επικόλλησε πρώτα γραμμές κοπής.","ws2cParse":"Ανάλυση & προσθήκη","ws2cPdfHint":"Για λίστες κοπής σε PDF: επίλεξε το κείμενο στο PDF, αντέγραψέ το και επικόλλησέ το εδώ.","ws2cQuickAdded":"Οι γρήγορες εγγραφές προστέθηκαν.","ws2cQuickBtn":"Γρήγορη εισαγωγή","ws2cQuickPh":"Ένα ανά γραμμή, π.χ.:\n2500x12\nΦ12: 2450x14\n5300x6 C1 D16","ws2cQuickTitle":"Γρήγορη εισαγωγή","ws2cXlsxErr":"Δεν ήταν δυνατή η ανάγνωση αυτού του αρχείου Excel. Δοκίμασε να το εξάγεις ως CSV και εισήγαγε εκείνο.","ws2cXlsxNoRows":"Δεν βρέθηκαν αξιοποιήσιμες γραμμές στο αρχείο Excel (στήλες: μήκος, ποσότητα, μονάδα, ετικέτα, διάμετρος).","ws3Back":"← Πίσω","ws3CalcT":"Εκτέλεση του βελτιστοποιητή και σχεδίαση του πλάνου κοπής","ws3DiaT":"Διάμετρος οπλισμού, π.χ. Φ12 — άφησέ το κενό για γενικές ράβδους","ws3Done":"Ξεκίνα βελτιστοποίηση","ws3Expert":"Λειτουργία ειδικού","ws3ExpertOff":"Η λειτουργία ειδικού απενεργοποιήθηκε","ws3ExpertOn":"Η λειτουργία ειδικού ενεργοποιήθηκε — ο οδηγός θα παραλείπεται","ws3ExpertTip":"Παράλειψη του οδηγού πρώτης χρήσης και άμεσο άνοιγμα του βελτιστοποιητή","ws3KerfH":"Υλικό που χάνεται σε κάθε κοπή — συνήθως 2–4 mm","ws3KerfT":"Φάρδος λάμας — το πλάτος υλικού που αφαιρεί η λεπίδα σε κάθε κοπή","ws3LoadDemo":"Φόρτωση demo δεδομένων","ws3Next":"Επόμενο →","ws3OffH":"Τα μεγαλύτερα ρέταλα κρατιούνται ως αξιοποιήσιμα","ws3OffT":"Ελάχιστο αξιοποιήσιμο ρέταλο — μικρότερα ρέταλα μετράνε ως φύρα","ws3PriceH":"Τροφοδοτεί την εκτίμηση του συνολικού κόστους","ws3PriceT":"Τιμή ανά μέτρο ράβδου — χρησιμοποιείται για την εκτίμηση του κόστους","ws3RebarH":"Απαραίτητο για εκτίμηση βάρους και κόστους","ws3RebarT":"Τύπος οπλισμού — ορίζει το βάρος ανά μέτρο (kg/m) για βάρος και κόστος","ws3Skip":"Παράλειψη","ws3UnitT":"Μονάδα του μήκους που έγραψες","ws3W1b":"Κατέγραψε τις ράβδους που έχεις — μήκος, ποσότητα και διάμετρο. Τα περισσότερα συνεργεία αγοράζουν 12άμετρες: βάλε μία γραμμή και ρύθμισε την ποσότητα.","ws3W1t":"1 · Οι ράβδοι σου","ws3W2b":"Κατέγραψε κάθε τεμάχιο που πρέπει να κόψεις, με μήκος, ποσότητα και διάμετρο. Συμβουλή: εισήγαγε ολόκληρη λίστα από Excel/CSV με ένα κλικ.","ws3W2t":"2 · Οι κοπές σου","ws3W3b":"Πάτα «Υπολογισμός πλάνου κοπής» και το SteelCut γεμίζει κάθε ράβδο με ελάχιστη φύρα. Θες να το δεις πρώτα σε δράση;","ws3W3t":"3 · Υπολόγισε","ws3WizTitle":"Καλώς ήρθες στο SteelCut","wsAiImportBtn":"AI εισαγωγή","wsAiPlanBtn":"Σχέδιο → BBS","wsAiNotConn":"Το AI δεν είναι συνδεδεμένο ακόμα — κάνε deploy τον SteelCut AI worker πρώτα.","wsAiImportTitle":"AI εισαγωγή — περιέγραψε τη λίστα κοπής","wsAiImportPh":"π.χ. 20 τεμ Φ12 3500mm, 10 συνδετήρες Φ8 1500mm…","wsAiImportHint":"Γράψε σε οποιαδήποτε γλώσσα — το AI εξάγει μήκη, ποσότητες, διαμέτρους και ετικέτες.","wsAiInterpret":"Ανάλυση","wsAiThinking":"Σκέφτομαι…","wsAiAddSel":"Προσθήκη επιλεγμένων","wsAiErr":"Το αίτημα AI απέτυχε — δοκίμασε ξανά.","wsAiPlanTitle":"Σχέδιο → BBS — έλεγξε τις γραμμές","wsAiMark":"Μάρκα","wsAiTooBig":"Η εικόνα είναι πολύ μεγάλη — max 2 MB.","wsAiWorking":"Επεξεργασία…","wsAiChatTitle":"SteelCut AI","wsAiChatPh":"Ρώτα για κοπές, φύρα, οπλισμό…"
 };
 /* ================= core ================= */
 const $=id=>document.getElementById(id);
@@ -1991,6 +2006,134 @@ $('scanBtn').onclick=function(){
   f.click();
 };
 
+/* ================= AI tools (Cloudflare Worker backend) ================= */
+var AI_WORKER_URL=(window.STEELCUT_AI_URL||'').trim();
+function aiReady(){if(AI_WORKER_URL)return true;toast(t('wsAiNotConn'));return false}
+function aiPost(path,body){
+  return fetch(AI_WORKER_URL+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){
+    if(!r.ok)throw new Error('ai'+r.status);
+    return r.json();
+  });
+}
+function wsAiOpenImport(){
+  if(!aiReady())return;
+  $('mTitle').textContent=t('wsAiImportTitle');
+  $('mBody').innerHTML='<textarea id="wsAiTa" class="ws2c-ta" rows="7"></textarea>'+
+    '<div class="ws2c-hint">'+esc(t('wsAiImportHint'))+'</div>'+
+    '<div id="wsAiPrev"></div>';
+  $('wsAiTa').placeholder=t('wsAiImportPh');
+  var ok=$('mOk'),cx=$('mCancel');
+  ok.textContent=t('wsAiInterpret');cx.textContent=t('closeBtn');
+  $('modalBg').classList.add('open');
+  ok.onclick=function(){wsAiInterpret()};
+  cx.onclick=ws2cCloseQuick;
+  setTimeout(function(){var ta=$('wsAiTa');if(ta)ta.focus()},50);
+}
+function wsAiInterpret(){
+  var ta=$('wsAiTa'),txt=ta?ta.value.trim():'';
+  if(!txt){toast(t('ws2cNoLines'));return}
+  var prev=$('wsAiPrev');
+  prev.innerHTML='<div style="padding:16px;text-align:center"><span class="ai-spin"></span> '+esc(t('wsAiThinking'))+'</div>';
+  aiPost('/ai/interpret',{text:txt,lang:LANG}).then(function(res){
+    var cuts=(res&&res.cuts)||[];
+    if(!cuts.length){prev.innerHTML='<p class="muted">'+esc(t('ws2bImpNone'))+'</p>';return}
+    var h='<div class="ai-prev"><table class="data"><thead><tr><th></th><th>'+esc(t('length'))+'</th><th>'+esc(t('qty'))+'</th><th>'+esc(t('diaCol'))+'</th><th>'+esc(t('label'))+'</th></tr></thead><tbody>';
+    cuts.forEach(function(c,i){
+      h+='<tr><td><input type="checkbox" data-ai-i="'+i+'" checked></td><td class="num">'+esc(fmtLen(c.lenMM))+'</td><td class="num">'+esc(c.qty)+'</td><td>'+esc(c.dia!=null?'Φ'+c.dia:'—')+'</td><td>'+esc(c.label||'—')+'</td></tr>';
+    });
+    prev.innerHTML=h+'</tbody></table></div>';
+    var ok=$('mOk');
+    ok.textContent=t('wsAiAddSel');
+    ok.onclick=function(){
+      var n=0;
+      prev.querySelectorAll('[data-ai-i]').forEach(function(cb){
+        if(!cb.checked)return;
+        var c=cuts[+cb.getAttribute('data-ai-i')];
+        if(c&&c.lenMM>0){S.cuts.push({id:uid(),len:c.lenMM,qty:Math.max(1,Math.round(c.qty)||1),unit:'mm',label:String(c.label||''),dia:c.dia!=null?num(c.dia):null});n++}
+      });
+      persist();renderCuts();scheduleAutoCalc();
+      ws2cCloseQuick();toast(n>0?t('ws2cQuickAdded')+' ('+n+')':t('ws2bImpNone'));
+    };
+  }).catch(function(){prev.innerHTML='<p class="muted">'+esc(t('wsAiErr'))+'</p>'});
+}
+function wsAiPlanPick(){if(!aiReady())return;$('aiPlanFile').click()}
+function wsAiPlanRun(file){
+  if(file.size>2*1024*1024){toast(t('wsAiTooBig'));$('aiPlanFile').value='';return}
+  var btn=$('aiPlanBtn'),lbl=btn.querySelector('[data-i18n]');
+  btn.disabled=true;if(lbl)lbl.textContent=t('wsAiWorking');
+  var done=function(msg){btn.disabled=false;if(lbl)lbl.textContent=t('wsAiPlanBtn');$('aiPlanFile').value='';if(msg)toast(msg)};
+  var img=new Image();
+  img.onload=function(){
+    try{
+      var max=1600,w=img.width,h=img.height,sc=Math.min(1,max/Math.max(w,h));
+      var cw=Math.max(1,Math.round(w*sc)),ch=Math.max(1,Math.round(h*sc));
+      var cv=document.createElement('canvas');cv.width=cw;cv.height=ch;
+      cv.getContext('2d').drawImage(img,0,0,cw,ch);
+      var du=cv.toDataURL('image/jpeg',0.85);
+      URL.revokeObjectURL(img.src);
+      aiPost('/ai/plan',{image:du,mimeType:'image/jpeg'}).then(function(res){
+        wsAiPlanPreview((res&&res.rows)||[],done);
+      }).catch(function(){done(t('wsAiErr'))});
+    }catch(e){done(t('wsAiErr'))}
+  };
+  img.onerror=function(){done(t('wsAiErr'))};
+  img.src=URL.createObjectURL(file);
+}
+function wsAiPlanPreview(rows,done){
+  if(!rows.length){done(t('ws2bImpNone'));return}
+  $('mTitle').textContent=t('wsAiPlanTitle');
+  var h='<div class="ai-prev"><table class="data"><thead><tr><th></th><th>'+esc(t('wsAiMark'))+'</th><th>'+esc(t('diaCol'))+'</th><th>'+esc(t('length'))+'</th><th>'+esc(t('qty'))+'</th></tr></thead><tbody>';
+  rows.forEach(function(r,i){
+    h+='<tr><td><input type="checkbox" data-ai-i="'+i+'" checked></td><td>'+esc(r.mark||'—')+'</td><td>'+esc(r.dia!=null?'Φ'+r.dia:'—')+'</td><td class="num">'+esc(fmtLen(r.lenMM))+'</td><td class="num">'+esc(r.qty)+'</td></tr>';
+  });
+  $('mBody').innerHTML=h+'</tbody></table></div>';
+  var ok=$('mOk'),cx=$('mCancel');
+  ok.textContent=t('wsAiAddSel');cx.textContent=t('closeBtn');
+  $('modalBg').classList.add('open');
+  ok.onclick=function(){
+    var n=0;
+    $('mBody').querySelectorAll('[data-ai-i]').forEach(function(cb){
+      if(!cb.checked)return;
+      var r=rows[+cb.getAttribute('data-ai-i')];
+      if(r&&r.lenMM>0){S.cuts.push({id:uid(),len:r.lenMM,qty:Math.max(1,Math.round(r.qty)||1),unit:'mm',label:String(r.mark||''),dia:r.dia!=null?num(r.dia):null});n++}
+    });
+    persist();renderCuts();scheduleAutoCalc();
+    ws2cCloseQuick();done(n>0?t('ws2cQuickAdded')+' ('+n+')':t('ws2bImpNone'));
+  };
+  cx.onclick=function(){ws2cCloseQuick();done()};
+}
+function wsAiChatToggle(){
+  if(!aiReady())return;
+  var p=$('aiChatPanel');
+  p.classList.toggle('open');
+  if(p.classList.contains('open'))setTimeout(function(){var i=$('aiChatIn');if(i)i.focus()},50);
+}
+function wsAiChatJob(){
+  var w=null;
+  if(S.results&&S.results.totals&&S.results.totals.waste!=null)w=Math.round(S.results.totals.waste);
+  return {cuts:S.cuts.length,stock:S.stock.length,wasteMM:w,lang:LANG};
+}
+function wsAiChatAdd(who,txt){
+  var box=$('aiChatMsgs'),d=document.createElement('div');
+  d.className='ai-msg '+who;d.textContent=txt;
+  box.appendChild(d);box.scrollTop=box.scrollHeight;
+}
+function wsAiChatSend(){
+  var inp=$('aiChatIn'),msg=inp.value.trim();
+  if(!msg)return;
+  inp.value='';
+  wsAiChatAdd('u',msg);
+  wsAiChatAdd('a','…');
+  var box=$('aiChatMsgs');
+  aiPost('/ai/chat',{message:msg,jobContext:wsAiChatJob()}).then(function(res){
+    box.removeChild(box.lastChild);
+    wsAiChatAdd('a',String((res&&res.reply)||t('wsAiErr')));
+  }).catch(function(){
+    box.removeChild(box.lastChild);
+    wsAiChatAdd('a',t('wsAiErr'));
+  });
+}
+
 /* ================= init ================= */
 function init(){
   const sv=load();if(sv){S=Object.assign(S,sv.S||sv)}
@@ -2008,6 +2151,13 @@ function init(){
   $('importBtn').onclick=()=>$('importFile').click();
   $('importFile').addEventListener('change',e=>{const f=e.target.files[0];if(f)ws2cDispatchFile(f);e.target.value=''});
   $('quickBtn').onclick=ws2cOpenQuick;
+  $('aiImportBtn').onclick=wsAiOpenImport;
+  $('aiPlanBtn').onclick=wsAiPlanPick;
+  $('aiPlanFile').addEventListener('change',function(e){var f=e.target.files[0];if(f)wsAiPlanRun(f)});
+  $('aiChatFab').onclick=wsAiChatToggle;
+  $('aiChatX').onclick=wsAiChatToggle;
+  $('aiChatSend').onclick=wsAiChatSend;
+  $('aiChatIn').addEventListener('keydown',function(e){if(e.key==='Enter')wsAiChatSend()});
   ['sKerf','sMinOff','sPriceM','sCur','sJob','sRebar','sAngle','sAngleDeg','sTrimL','sTrimR','sGrip','sEndTrim','sMinLayouts','sWhFirst'].forEach(id=>{const e=$(id);if(e)e.addEventListener('change',readForm)});
   ['pClient','pCode','pDate','pNotes'].forEach(id=>$(id).addEventListener('input',readForm));
   $('calcBtn').onclick=calcAll;
