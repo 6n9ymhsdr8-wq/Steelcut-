@@ -168,6 +168,21 @@ select,input,textarea{font:inherit;color:var(--ink)}
 .apphead h2{font-size:26px}.apphead p{color:var(--muted);margin-top:6px}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:24px;margin-bottom:22px}
 .panel h3{font-size:16.5px;margin-bottom:4px}
+.panel>h3{display:flex;align-items:center;gap:10px}
+.ui-eye{margin-left:auto;flex:0 0 auto;padding:2px 9px;font-size:14px;line-height:1.5}
+.panel.ui-hidden>:not(h3){display:none}
+.panel.ui-hidden>h3{opacity:.55}
+.panel.ui-fading>:not(h3){opacity:0;transition:opacity .17s ease}
+.panel.ui-fadein>:not(h3){animation:uiFadeIn .22s ease}
+@keyframes uiFadeIn{from{opacity:0}to{opacity:1}}
+.panel.ui-simpleform .formgrid{display:none}
+.ui-viewwrap{position:relative;display:inline-block;margin:10px 0 4px}
+.ui-viewmenu{position:absolute;top:calc(100% + 6px);left:0;min-width:240px;max-width:300px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:12px 14px;z-index:60}
+.ui-viewpresets{display:flex;gap:8px;margin-bottom:8px}
+.ui-viewhead{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:4px 0 4px}
+.ui-viewitem{display:flex;align-items:center;gap:9px;padding:5px 2px;font-size:14px;cursor:pointer;border-radius:6px}
+.ui-viewitem:hover{background:#f2f6fa}
+.ui-viewitem input{accent-color:var(--brand);width:15px;height:15px}
 .panel .desc{color:var(--muted);font-size:13.5px;margin-bottom:16px}
 table.data{width:100%;border-collapse:collapse;font-size:14px;background:#fff}
 table.data th{background:#f2f5f8;text-align:left;padding:10px 12px;font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:2px solid var(--line);white-space:nowrap}
@@ -356,7 +371,6 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
   button{min-height:44px}
   input,select,textarea{min-height:44px}
   #langSel{min-height:44px;font-size:14px}
-  #expertMode{min-height:0;width:auto}            /* keep the header checkbox small */
   /* 16px+ input text stops iOS Safari auto-zooming on focus.
      !important is required to beat the more specific table/form selectors. */
   table.data input,table.data select,
@@ -393,7 +407,6 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
     </nav>
     <div class="bar-cta">
       <select id="langSel" aria-label="Language"></select>
-<label class="expert-wrap" id="expertWrap"><input type="checkbox" id="expertMode"><span data-i18n="ws3Expert">Expert mode</span></label>
       <button class="btn btn-primary btn-sm" data-nav="optimizer" data-i18n="openApp">Open app</button>
     </div>
   </div>
@@ -511,7 +524,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 </section>
 <!-- ================= OPTIMIZER ================= -->
 <section class="view" id="v-optimizer">
-  <div class="apphead"><div class="wrap"><h2 data-i18n="navOptimizer">Cut Optimizer</h2><p data-i18n="optSub">Enter stock, cuts and project info — get the optimal cutting plan.</p></div></div>
+  <div class="apphead"><div class="wrap"><h2 data-i18n="navOptimizer">Cut Optimizer</h2><p data-i18n="optSub">Enter stock, cuts and project info — get the optimal cutting plan.</p><div class="ui-viewwrap no-print"><button type="button" class="btn btn-ghost btn-sm" id="uiViewBtn">👁 <span data-i18n="uiView">View</span> ▾</button><div class="ui-viewmenu" id="uiViewMenu" style="display:none"><div class="ui-viewpresets"><button type="button" class="btn btn-ghost btn-sm" id="uiSimpleBtn" data-i18n="uiSimple">Simple</button><button type="button" class="btn btn-ghost btn-sm" id="uiAdvBtn" data-i18n="uiAdvanced">Advanced</button></div><div class="ui-viewhead" data-i18n="uiSections">Sections</div><div id="uiViewList"></div></div></div></div></div>
   <div class="wrap">
     <div class="panel no-print" id="ws4TplPanel">
       <h3 data-i18n="ws4TplT">Templates</h3>
@@ -526,7 +539,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
       <div id="ws4TplMineCards" class="tpl-cards"></div>
       <p class="muted small" id="ws4TplMineEmpty" data-i18n="ws4TplEmptyMine">No custom templates yet — save the current job above.</p>
     </div>
-    <div class="panel no-print">
+    <div class="panel no-print" id="uiProjPanel">
       <h3 data-i18n="projTitle">Project info</h3>
       <p class="desc" data-i18n="projDesc">Attached to saved jobs, PDF reports and labels.</p>
       <div class="formgrid">
@@ -539,10 +552,10 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
       </div>
     </div>
 
-    <div class="panel no-print">
+    <div class="panel no-print" id="uiStockPanel">
       <h3 data-i18n="stockBars">Stock bars</h3>
       <p class="desc" data-i18n="stockDesc">Bars you have available (or plan to buy).</p>
-      <table class="data"><thead><tr><th data-i18n="length">Length</th><th data-i18n="qty">Qty</th><th data-i18n="unit">Unit</th><th data-i18n="diaCol">Diameter</th><th></th></tr></thead><tbody id="stockBody"></tbody></table>
+      <table class="data"><thead><tr><th data-i18n="length">Length</th><th data-i18n="qty">Qty</th><th data-i18n="unit">Unit</th><th data-i18n="diaCol">Diameter</th><th data-i18n="cuUnlimited">Unlimited</th><th></th></tr></thead><tbody id="stockBody"></tbody></table>
       <div class="row-actions">
         <button class="btn btn-ghost btn-sm" id="addStockBtn" data-i18n="addStock">+ Add stock bar</button>
         <button class="btn btn-ghost btn-sm" id="add12mBtn" data-i18n="wsAdd12m">+ 12 m bars</button>
@@ -552,10 +565,10 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
       </div>
     </div>
 
-    <div class="panel no-print">
+    <div class="panel no-print" id="uiCutsPanel">
       <h3 data-i18n="reqCuts">Required cuts</h3>
       <p class="desc" data-i18n="cutsDesc">Pieces you need to cut.</p>
-      <table class="data"><thead><tr><th data-i18n="length">Length</th><th data-i18n="qty">Qty</th><th data-i18n="unit">Unit</th><th data-i18n="diaCol">Diameter</th><th data-i18n="label">Label</th><th></th></tr></thead><tbody id="cutsBody"></tbody></table>
+      <table class="data"><thead><tr><th data-i18n="length">Length</th><th data-i18n="qty">Qty</th><th data-i18n="unit">Unit</th><th data-i18n="diaCol">Diameter</th><th data-i18n="cuKerfCol">Kerf</th><th data-i18n="label">Label</th><th></th></tr></thead><tbody id="cutsBody"></tbody></table>
       <div class="row-actions">
         <button class="btn btn-ghost btn-sm" id="addCutBtn" data-i18n="addCut">+ Add cut</button>
         <button class="btn btn-ghost btn-sm" id="importBtn" data-i18n="importExcel">Import Excel / CSV</button>
@@ -564,8 +577,8 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 <button class="btn btn-ghost btn-sm" id="voiceBtn">🎤 <span data-i18n="ws2cVoiceBtn">Voice input</span></button>
 <select id="voiceDia" class="btn btn-ghost btn-sm" title="Φ" style="max-width:76px"><option value="">Φ?</option><option>8</option><option>10</option><option selected>12</option><option>14</option><option>16</option><option>20</option><option>25</option><option>32</option></select>
 <button class="btn btn-ghost btn-sm" id="scanBtn">📷 <span data-i18n="ws2cScanBtn">Scan list</span></button>
-<button class="btn btn-ghost btn-sm" id="aiImportBtn">✨ <span data-i18n="wsAiImportBtn">AI import</span></button>
-<button class="btn btn-ghost btn-sm" id="aiPlanBtn">📷 <span data-i18n="wsAiPlanBtn">Plan → BBS</span></button>
+<span id="uiAiRow"><button class="btn btn-ghost btn-sm" id="aiImportBtn">✨ <span data-i18n="wsAiImportBtn">AI import</span></button>
+<button class="btn btn-ghost btn-sm" id="aiPlanBtn">📷 <span data-i18n="wsAiPlanBtn">Plan → BBS</span></button></span>
         <input type="file" id="importFile" accept=".csv,.txt,.xlsx,.xls" style="display:none">
         <input type="file" id="scanFile" accept="image/*" style="display:none">
         <input type="file" id="aiPlanFile" accept="image/*" style="display:none">
@@ -590,7 +603,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
         <button class="btn btn-primary btn-sm" id="ws4ShapeAdd" data-i18n="ws4AddShapes">Add as cuts</button>
       </div>
     </div>
-    <div class="panel no-print">
+    <div class="panel no-print" id="uiSetPanel">
       <h3 data-i18n="settings">Settings</h3>
       <p class="desc" data-i18n="setDesc">Cutting parameters and costing.</p>
       <div class="formgrid">
@@ -608,13 +621,32 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
 
         <div class="fg"><label data-i18n="rebarType">Rebar type (weight &amp; price)</label><select id="sRebar"></select></div>
         <div class="fg"><label data-i18n="pricePerM">Price per meter</label><input id="sPriceM" type="number" min="0" step="0.01" value="0"></div>
-        <div class="fg"><label data-i18n="currency">Currency</label><select id="sCur"><option>€</option><option>$</option><option>£</option><option>CHF</option><option>lei</option><option>₺</option></select></div>
+        <div class="fg"><label data-i18n="currency">Currency</label><input id="sCur" type="text" value="€" maxlength="8" style="max-width:90px"></div>
         <div class="fg"><label data-i18n="jobNameL">Job name</label><input id="sJob" data-i18n-ph="jobPh" placeholder="e.g. Slab B2"></div>
       </div>
       <div class="row-actions" style="margin-top:18px">
         <button class="btn btn-primary" id="calcBtn" data-i18n="calculate">Calculate cutting plan</button>
         <button class="btn btn-ghost" id="demoBtn" data-i18n="loadDemo">Load demo</button>
         <button class="btn btn-ghost" id="tourBtn" data-i18n="tour">Guided tour</button>
+      </div>
+    </div>
+
+    <div class="panel no-print" id="cuPanel">
+      <h3 id="cuHead" style="cursor:pointer"><span data-i18n="cuTitle">Custom settings</span> <span class="muted small" id="cuArrow">▾</span></h3>
+      <div id="cuBody">
+        <p class="desc" data-i18n="cuDesc">Fine-tune every parameter of the optimizer — saved automatically.</p>
+        <div class="formgrid">
+          <div class="fg"><label data-i18n="cuPriceT">Steel price per ton</label><input id="sPriceT" type="number" min="0" step="any" value="0"><div class="hint">/t</div></div>
+          <div class="fg"><label data-i18n="cuCo2">CO₂ factor</label><input id="sCo2" type="number" min="0" step="any" value="1.85"><div class="hint" data-i18n="cuCo2Hint">kg CO₂e per kg steel</div></div>
+          <div class="fg"><label data-i18n="cuDefDia">Default diameter for new cuts</label><input id="sDefDia" type="number" min="0" step="any" placeholder="Φ"><div class="hint">mm</div></div>
+          <div class="fg"><label data-i18n="cuWeightOv">Weight overrides (kg/m per diameter)</label><textarea id="sWeightOv" rows="2" data-i18n-ph="cuWeightOvPh" placeholder="e.g. 12:0.89, 16:1.60"></textarea></div>
+        </div>
+        <h4 data-i18n="cuBarPresets" style="margin:16px 0 8px">Custom bar lengths</h4>
+        <div id="cuPresets" style="margin-bottom:10px"></div>
+        <div class="row-actions">
+          <span class="fg" style="display:inline-block;min-width:200px"><input id="cuPresetIn" data-i18n-ph="cuPresetPh" placeholder="meters, e.g. 6 or 6, 9"></span>
+          <button class="btn btn-ghost btn-sm" id="cuPresetAdd" data-i18n="cuPresetAdd">Add</button>
+        </div>
       </div>
     </div>
 
@@ -643,7 +675,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;font-si
       <div class="legend"><span><i style="background:var(--brand)"></i><span data-i18n="lgCut">Cut piece</span></span><span><i style="background:#7d8fa3"></i><span data-i18n="lgOffcut">Reusable offcut</span></span><span><i style="background:#d5dce3"></i><span data-i18n="lgWaste">Waste</span></span></div>
       <div id="diagrams"></div>
 <div id="ws2bEffReport" style="margin-top:8px"></div>
-      <div class="row-actions no-print">
+      <div class="row-actions no-print" id="uiExpRow">
         <button class="btn btn-primary btn-sm" id="saveJobBtn" data-i18n="saveJob">Save job</button>
         <button class="btn btn-ghost btn-sm" id="pdfBtn" data-i18n="pdfBtn">Export PDF</button>
         <button class="btn btn-ghost btn-sm" id="labelsBtn" data-i18n="labelsBtn">Cut labels</button>
@@ -896,7 +928,8 @@ tour1t:"Welcome to SteelCut",tour1b:"This short tour shows the workflow: stock i
 tour2t:"1 · Stock bars",tour2b:"List the bars you own or plan to buy — length, quantity and diameter. You can also import reusable offcuts from the warehouse.",
 tour3t:"2 · Required cuts",tour3b:"List every piece you must cut, with its diameter. Tip: import a whole bar bending schedule from Excel/CSV in one click.",
 tour4t:"3 · Calculate",tour4b:"Set saw kerf and rebar type, then hit Calculate. SteelCut packs every bar for minimum waste and draws the cutting diagrams.",
-tour5t:"4 · Use the results",tour5b:"Export the PDF report, print cut labels, save the job, or send offcuts to the warehouse. That's it!","ws1AlgoBfd":"Best-fit decreasing","ws1AlgoExact":"Exact (branch & bound)","ws1AlgoFfd":"First-fit decreasing","ws1AlgoLabel":"Algorithm","ws1AlgoPattern":"Pattern reuse (min. layouts)","ws1AngleDeg":"degrees","ws1CustomAngle":"Custom…","ws1CutAngle":"Cut angle","ws1EndTrim":"End trim / bar","ws1Grip":"Grip allowance","ws1MinLayouts":"Minimize layout count","ws1MinLayoutsHint":"Fewer distinct cutting patterns","ws1QualityExact":"Optimal solution — the exact solver proved no better plan exists for this job size.","ws1QualityHeu":"Heuristic solution · lower bound {lb} bars → within {n} bars of optimal","ws1TrimL":"Left trim","ws1TrimR":"Right trim","ws1WhFirst":"Use warehouse offcuts first","ws1WhFirstHint":"Consume offcut stock before new bars","ws2aDxfBtn":"Export DXF","ws2bAdvBars":"Bars","ws2bAdvBest":"Cheapest:","ws2bAdvBtn":"Compare","ws2bAdvCost":"Total cost","ws2bAdvDesc":"Compare candidate stock lengths to find the cheapest option for the current cuts.","ws2bAdvHint":"Format: lengthMM:price — e.g. 12000:45.50, 6000:24.00","ws2bAdvLen":"Candidate stock (lengthMM:price)","ws2bAdvNeedCuts":"Add required cuts first.","ws2bAdvNeedRows":"Enter at least one candidate (lengthMM:price).","ws2bAdvNoFit":"a piece does not fit","ws2bAdvPh":"12000:45.50, 6000:24.00","ws2bAdvTitle":"Stock advisor","ws2bAdvTotal":"total","ws2bAdvWaste":"Waste %","ws2bBbsBtn":"Import BBS","ws2bBbsDesc":"Paste CSV rows (Mark,Dia,Length,Qty) or free-text lines like “Φ12: 2500x12” — one per line.","ws2bBbsPh":"B1,12,2450,14\nΦ12: 2500x12\nD16 5300x6","ws2bBbsTitle":"Import bending schedule (BBS)","ws2bCancel":"Cancel","ws2bEffBar":"Bar","ws2bEffBars":"Bars used","ws2bEffCutSeq":"Cutting sequence","ws2bEffDia":"Diameter","ws2bEffKept":"(kept)","ws2bEffLen":"Total length","ws2bEffOffcut":"offcut","ws2bEffPct":"Efficiency","ws2bEffTitle":"Efficiency report","ws2bEffWaste":"Waste","ws2bEffWastePct":"Waste %","ws2bImpDone":"Imported","ws2bImpNone":"No lines could be parsed.","ws2bParse":"Parse & import","ws2cNoLines":"Nothing to parse — type or paste cut lines first.","ws2cParse":"Parse & add","ws2cPdfHint":"For PDF cutting lists: select the text in the PDF, copy it, and paste it here.","ws2cQuickAdded":"Quick entries added.","ws2cQuickBtn":"Quick input","ws2cQuickPh":"One per line, e.g.:\n2500x12\nΦ12: 2450x14\n5300x6 C1 D16","ws2cQuickTitle":"Quick input","ws2cXlsxErr":"Could not read this Excel file. Try exporting it as CSV and import that instead.","ws2cXlsxNoRows":"No usable rows found in the Excel file (columns: length, qty, unit, label, diameter).","ws3Back":"← Back","ws3CalcT":"Run the optimizer and draw the cutting plan","ws3DiaT":"Rebar diameter, e.g. Φ12 — leave empty for generic bars","ws3Done":"Start optimizing","ws3Expert":"Expert mode","ws3ExpertOff":"Expert mode off","ws3ExpertOn":"Expert mode on — the intro wizard will be skipped","ws3ExpertTip":"Skip the first-run wizard and open the optimizer directly","ws3KerfH":"Material lost per cut — typically 2–4 mm","ws3KerfT":"Saw kerf — the width of material the saw blade removes on every cut","ws3LoadDemo":"Load demo data","ws3Next":"Next →","ws3OffH":"Longer leftovers are kept as reusable offcuts","ws3OffT":"Min. reusable offcut — shorter leftovers are counted as waste","ws3PriceH":"Feeds the total cost estimate","ws3PriceT":"Price per meter of stock bar — used to estimate the job cost","ws3RebarH":"Needed for weight & cost estimates","ws3RebarT":"Rebar type — sets the weight per meter (kg/m) used for weight & cost","ws3Skip":"Skip","ws3UnitT":"Unit of the length you typed","ws3W1b":"List the bars you have in stock — length, quantity and diameter. Most workshops buy 12 m bars: add one row and set the quantity.","ws3W1t":"1 · Your stock bars","ws3W2b":"List every piece you need to cut, with length, quantity and diameter. Tip: import a whole cut list from Excel/CSV in one click.","ws3W2t":"2 · Your required cuts","ws3W3b":"Press “Calculate cutting plan” and SteelCut packs every bar for minimum waste. Want to see it in action first?","ws3W3t":"3 · Calculate","ws3WizTitle":"Welcome to SteelCut","wsAiImportBtn":"AI import","wsAiPlanBtn":"Plan → BBS","wsAiNotConn":"AI not connected yet — deploy the SteelCut AI worker first.","wsAiImportTitle":"AI import — describe your cutting list","wsAiImportPh":"e.g. 20 pcs Φ12 3500mm, 10 stirrups Φ8 1500mm…","wsAiImportHint":"Write in any language — the AI extracts lengths, quantities, diameters and labels.","wsAiInterpret":"Interpret","wsAiThinking":"Thinking…","wsAiAddSel":"Add selected","wsAiErr":"AI request failed — please try again.","wsAiPlanTitle":"Plan → BBS — review extracted rows","wsAiMark":"Mark","wsAiTooBig":"Image too large — max 2 MB.","wsAiWorking":"Working…","wsAiChatTitle":"SteelCut AI","wsAiChatPh":"Ask about cutting, waste, rebar…"
+tour5t:"4 · Use the results",tour5b:"Export the PDF report, print cut labels, save the job, or send offcuts to the warehouse. That's it!","ws1AlgoBfd":"Best-fit decreasing","ws1AlgoExact":"Exact (branch & bound)","ws1AlgoFfd":"First-fit decreasing","ws1AlgoLabel":"Algorithm","ws1AlgoPattern":"Pattern reuse (min. layouts)","ws1AngleDeg":"degrees","ws1CustomAngle":"Custom…","ws1CutAngle":"Cut angle","ws1EndTrim":"End trim / bar","ws1Grip":"Grip allowance","ws1MinLayouts":"Minimize layout count","ws1MinLayoutsHint":"Fewer distinct cutting patterns","ws1QualityExact":"Optimal solution — the exact solver proved no better plan exists for this job size.","ws1QualityHeu":"Heuristic solution · lower bound {lb} bars → within {n} bars of optimal","ws1TrimL":"Left trim","ws1TrimR":"Right trim","ws1WhFirst":"Use warehouse offcuts first","ws1WhFirstHint":"Consume offcut stock before new bars","ws2aDxfBtn":"Export DXF","ws2bAdvBars":"Bars","ws2bAdvBest":"Cheapest:","ws2bAdvBtn":"Compare","ws2bAdvCost":"Total cost","ws2bAdvDesc":"Compare candidate stock lengths to find the cheapest option for the current cuts.","ws2bAdvHint":"Format: lengthMM:price — e.g. 12000:45.50, 6000:24.00","ws2bAdvLen":"Candidate stock (lengthMM:price)","ws2bAdvNeedCuts":"Add required cuts first.","ws2bAdvNeedRows":"Enter at least one candidate (lengthMM:price).","ws2bAdvNoFit":"a piece does not fit","ws2bAdvPh":"12000:45.50, 6000:24.00","ws2bAdvTitle":"Stock advisor","ws2bAdvTotal":"total","ws2bAdvWaste":"Waste %","ws2bBbsBtn":"Import BBS","ws2bBbsDesc":"Paste CSV rows (Mark,Dia,Length,Qty) or free-text lines like “Φ12: 2500x12” — one per line.","ws2bBbsPh":"B1,12,2450,14\nΦ12: 2500x12\nD16 5300x6","ws2bBbsTitle":"Import bending schedule (BBS)","ws2bCancel":"Cancel","ws2bEffBar":"Bar","ws2bEffBars":"Bars used","ws2bEffCutSeq":"Cutting sequence","ws2bEffDia":"Diameter","ws2bEffKept":"(kept)","ws2bEffLen":"Total length","ws2bEffOffcut":"offcut","ws2bEffPct":"Efficiency","ws2bEffTitle":"Efficiency report","ws2bEffWaste":"Waste","ws2bEffWastePct":"Waste %","ws2bImpDone":"Imported","ws2bImpNone":"No lines could be parsed.","ws2bParse":"Parse & import","ws2cNoLines":"Nothing to parse — type or paste cut lines first.","ws2cParse":"Parse & add","ws2cPdfHint":"For PDF cutting lists: select the text in the PDF, copy it, and paste it here.","ws2cQuickAdded":"Quick entries added.","ws2cQuickBtn":"Quick input","ws2cQuickPh":"One per line, e.g.:\n2500x12\nΦ12: 2450x14\n5300x6 C1 D16","ws2cQuickTitle":"Quick input","ws2cXlsxErr":"Could not read this Excel file. Try exporting it as CSV and import that instead.","ws2cXlsxNoRows":"No usable rows found in the Excel file (columns: length, qty, unit, label, diameter).","ws3Back":"← Back","ws3CalcT":"Run the optimizer and draw the cutting plan","ws3DiaT":"Rebar diameter, e.g. Φ12 — leave empty for generic bars","ws3Done":"Start optimizing","ws3Expert":"Expert mode","ws3ExpertOff":"Expert mode off","ws3ExpertOn":"Expert mode on — the intro wizard will be skipped","ws3ExpertTip":"Skip the first-run wizard and open the optimizer directly","ws3KerfH":"Material lost per cut — typically 2–4 mm","ws3KerfT":"Saw kerf — the width of material the saw blade removes on every cut","ws3LoadDemo":"Load demo data","ws3Next":"Next →","ws3OffH":"Longer leftovers are kept as reusable offcuts","ws3OffT":"Min. reusable offcut — shorter leftovers are counted as waste","ws3PriceH":"Feeds the total cost estimate","ws3PriceT":"Price per meter of stock bar — used to estimate the job cost","ws3RebarH":"Needed for weight & cost estimates","ws3RebarT":"Rebar type — sets the weight per meter (kg/m) used for weight & cost","ws3Skip":"Skip","ws3UnitT":"Unit of the length you typed","ws3W1b":"List the bars you have in stock — length, quantity and diameter. Most workshops buy 12 m bars: add one row and set the quantity.","ws3W1t":"1 · Your stock bars","ws3W2b":"List every piece you need to cut, with length, quantity and diameter. Tip: import a whole cut list from Excel/CSV in one click.","ws3W2t":"2 · Your required cuts","ws3W3b":"Press “Calculate cutting plan” and SteelCut packs every bar for minimum waste. Want to see it in action first?","ws3W3t":"3 · Calculate","ws3WizTitle":"Welcome to SteelCut","wsAiImportBtn":"AI import","wsAiPlanBtn":"Plan → BBS","wsAiNotConn":"AI not connected yet — deploy the SteelCut AI worker first.","wsAiImportTitle":"AI import — describe your cutting list","wsAiImportPh":"e.g. 20 pcs Φ12 3500mm, 10 stirrups Φ8 1500mm…","wsAiImportHint":"Write in any language — the AI extracts lengths, quantities, diameters and labels.","wsAiInterpret":"Interpret","wsAiThinking":"Thinking…","wsAiAddSel":"Add selected","wsAiErr":"AI request failed — please try again.","wsAiPlanTitle":"Plan → BBS — review extracted rows","wsAiMark":"Mark","wsAiTooBig":"Image too large — max 2 MB.","wsAiWorking":"Working…","wsAiChatTitle":"SteelCut AI","wsAiChatPh":"Ask about cutting, waste, rebar…",
+cuTitle:"Custom settings",cuDesc:"Fine-tune every parameter of the optimizer — saved automatically.",cuPriceT:"Steel price per ton",cuCo2:"CO₂ factor",cuCo2Hint:"kg CO₂e per kg steel",cuDefDia:"Default diameter for new cuts",cuWeightOv:"Weight overrides (kg/m per diameter)",cuWeightOvPh:"e.g. 12:0.89, 16:1.60 — empty = standard",cuBarPresets:"Custom bar lengths",cuPresetPh:"meters, e.g. 6 or 6, 9",cuPresetAdd:"Add",cuUnlimited:"Unlimited",cuUnlHint:"Never runs out",cuKerfCol:"Kerf",cuWasteCost:"Waste cost",cuCustomDia:"Custom…",
 }};
 I18N.el={
 tagline:"Επαγγελματικός βελτιστοποιητής κοπής χαλύβδινων ράβδων",tour:"Ξενάγηση",loadDemo:"Φόρτωση demo",
@@ -954,7 +987,8 @@ tour1t:"Καλώς ήρθες στο SteelCut",tour1b:"Αυτή η σύντομ�
 tour2t:"1 · Διαθέσιμες ράβδοι",tour2b:"Κατέγραψε τις ράβδους σου — μήκος, ποσότητα και διάμετρο. Μπορείς και να εισάγεις ρέταλα από την αποθήκη.",
 tour3t:"2 · Απαιτούμενες κοπές",tour3b:"Κατέγραψε κάθε τεμάχιο με τη διάμετρό του. Συμβουλή: εισήγαγε ολόκληρο πίνακα οπλισμού από Excel/CSV με ένα κλικ.",
 tour4t:"3 · Υπολογισμός",tour4b:"Ρύθμισε το φάρδος λάμας και τον τύπο οπλισμού, πάτα Υπολογισμό. Το SteelCut γεμίζει κάθε ράβδο με ελάχιστη φύρα και σχεδιάζει τα διαγράμματα.",
-tour5t:"4 · Χρησιμοποίησε τα αποτελέσματα",tour5b:"Εξήγαγε την αναφορά PDF, εκτύπωσε ετικέτες, αποθήκευσε τη δουλειά ή στείλε τα ρέταλα στην αποθήκη. Τέλος!","ws1AlgoBfd":"Best-fit decreasing","ws1AlgoExact":"Ακριβής (branch & bound)","ws1AlgoFfd":"First-fit decreasing","ws1AlgoLabel":"Αλγόριθμος","ws1AlgoPattern":"Επανάχρηση διατάξεων (ελάχ. πλήθος)","ws1AngleDeg":"μοίρες","ws1CustomAngle":"Προσαρμοσμένη…","ws1CutAngle":"Γωνία κοπής","ws1EndTrim":"Τελικό κόψιμο / ράβδο","ws1Grip":"Περιθώριο σύσφιξης","ws1MinLayouts":"Ελαχιστοποίηση διατάξεων","ws1MinLayoutsHint":"Λιγότερες διαφορετικές διατάξεις κοπής","ws1QualityExact":"Βέλτιστη λύση — ο ακριβής επιλυτής απέδειξε ότι δεν υπάρχει καλύτερο πλάνο για αυτό το μέγεθος.","ws1QualityHeu":"Ευρετική λύση · κάτω φράγμα {lb} ράβδοι → εντός {n} ράβδων από το βέλτιστο","ws1TrimL":"Καθάρισμα αριστερού άκρου","ws1TrimR":"Καθάρισμα δεξιού άκρου","ws1WhFirst":"Προτεραιότητα ρετάλων αποθήκης","ws1WhFirstHint":"Κατανάλωση ρετάλων πριν τις νέες ράβδους","ws2aDxfBtn":"Εξαγωγή DXF","ws2bAdvBars":"Ράβδοι","ws2bAdvBest":"Φθηνότερο:","ws2bAdvBtn":"Σύγκρινε","ws2bAdvCost":"Συνολικό κόστος","ws2bAdvDesc":"Σύγκρινε υποψήφια μήκη ράβδων για να βρεις τη φθηνότερη επιλογή για τις τρέχουσες κοπές.","ws2bAdvHint":"Μορφή: μήκοςMM:τιμή — π.χ. 12000:45.50, 6000:24.00","ws2bAdvLen":"Υποψήφια μήκη (μήκοςMM:τιμή)","ws2bAdvNeedCuts":"Πρόσθεσε πρώτα απαιτούμενες κοπές.","ws2bAdvNeedRows":"Βάλε τουλάχιστον ένα υποψήφιο μήκος (μήκοςMM:τιμή).","ws2bAdvNoFit":"ένα τεμάχιο δεν χωράει","ws2bAdvPh":"12000:45.50, 6000:24.00","ws2bAdvTitle":"Σύμβουλος αποθέματος","ws2bAdvTotal":"σύνολο","ws2bAdvWaste":"Φύρα %","ws2bBbsBtn":"Εισαγωγή BBS","ws2bBbsDesc":"Επικόλλησε γραμμές CSV (Μάρκα,Διάμετρος,Μήκος,Τεμ.) ή ελεύθερο κείμενο όπως «Φ12: 2500x12» — μία γραμμή ανά εγγραφή.","ws2bBbsPh":"B1,12,2450,14\nΦ12: 2500x12\nD16 5300x6","ws2bBbsTitle":"Εισαγωγή πίνακα οπλισμού (BBS)","ws2bCancel":"Ακύρωση","ws2bEffBar":"Ράβδος","ws2bEffBars":"Ράβδοι","ws2bEffCutSeq":"Σειρά κοπής","ws2bEffDia":"Διάμετρος","ws2bEffKept":"(κρατήθηκε)","ws2bEffLen":"Συνολικό μήκος","ws2bEffOffcut":"ρέταλο","ws2bEffPct":"Απόδοση","ws2bEffTitle":"Αναφορά απόδοσης","ws2bEffWaste":"Φύρα","ws2bEffWastePct":"Φύρα %","ws2bImpDone":"Εισήχθησαν","ws2bImpNone":"Καμία γραμμή δεν αναλύθηκε.","ws2bParse":"Ανάλυση & εισαγωγή","ws2cNoLines":"Τίποτα για ανάλυση — γράψε ή επικόλλησε πρώτα γραμμές κοπής.","ws2cParse":"Ανάλυση & προσθήκη","ws2cPdfHint":"Για λίστες κοπής σε PDF: επίλεξε το κείμενο στο PDF, αντέγραψέ το και επικόλλησέ το εδώ.","ws2cQuickAdded":"Οι γρήγορες εγγραφές προστέθηκαν.","ws2cQuickBtn":"Γρήγορη εισαγωγή","ws2cQuickPh":"Ένα ανά γραμμή, π.χ.:\n2500x12\nΦ12: 2450x14\n5300x6 C1 D16","ws2cQuickTitle":"Γρήγορη εισαγωγή","ws2cXlsxErr":"Δεν ήταν δυνατή η ανάγνωση αυτού του αρχείου Excel. Δοκίμασε να το εξάγεις ως CSV και εισήγαγε εκείνο.","ws2cXlsxNoRows":"Δεν βρέθηκαν αξιοποιήσιμες γραμμές στο αρχείο Excel (στήλες: μήκος, ποσότητα, μονάδα, ετικέτα, διάμετρος).","ws3Back":"← Πίσω","ws3CalcT":"Εκτέλεση του βελτιστοποιητή και σχεδίαση του πλάνου κοπής","ws3DiaT":"Διάμετρος οπλισμού, π.χ. Φ12 — άφησέ το κενό για γενικές ράβδους","ws3Done":"Ξεκίνα βελτιστοποίηση","ws3Expert":"Λειτουργία ειδικού","ws3ExpertOff":"Η λειτουργία ειδικού απενεργοποιήθηκε","ws3ExpertOn":"Η λειτουργία ειδικού ενεργοποιήθηκε — ο οδηγός θα παραλείπεται","ws3ExpertTip":"Παράλειψη του οδηγού πρώτης χρήσης και άμεσο άνοιγμα του βελτιστοποιητή","ws3KerfH":"Υλικό που χάνεται σε κάθε κοπή — συνήθως 2–4 mm","ws3KerfT":"Φάρδος λάμας — το πλάτος υλικού που αφαιρεί η λεπίδα σε κάθε κοπή","ws3LoadDemo":"Φόρτωση demo δεδομένων","ws3Next":"Επόμενο →","ws3OffH":"Τα μεγαλύτερα ρέταλα κρατιούνται ως αξιοποιήσιμα","ws3OffT":"Ελάχιστο αξιοποιήσιμο ρέταλο — μικρότερα ρέταλα μετράνε ως φύρα","ws3PriceH":"Τροφοδοτεί την εκτίμηση του συνολικού κόστους","ws3PriceT":"Τιμή ανά μέτρο ράβδου — χρησιμοποιείται για την εκτίμηση του κόστους","ws3RebarH":"Απαραίτητο για εκτίμηση βάρους και κόστους","ws3RebarT":"Τύπος οπλισμού — ορίζει το βάρος ανά μέτρο (kg/m) για βάρος και κόστος","ws3Skip":"Παράλειψη","ws3UnitT":"Μονάδα του μήκους που έγραψες","ws3W1b":"Κατέγραψε τις ράβδους που έχεις — μήκος, ποσότητα και διάμετρο. Τα περισσότερα συνεργεία αγοράζουν 12άμετρες: βάλε μία γραμμή και ρύθμισε την ποσότητα.","ws3W1t":"1 · Οι ράβδοι σου","ws3W2b":"Κατέγραψε κάθε τεμάχιο που πρέπει να κόψεις, με μήκος, ποσότητα και διάμετρο. Συμβουλή: εισήγαγε ολόκληρη λίστα από Excel/CSV με ένα κλικ.","ws3W2t":"2 · Οι κοπές σου","ws3W3b":"Πάτα «Υπολογισμός πλάνου κοπής» και το SteelCut γεμίζει κάθε ράβδο με ελάχιστη φύρα. Θες να το δεις πρώτα σε δράση;","ws3W3t":"3 · Υπολόγισε","ws3WizTitle":"Καλώς ήρθες στο SteelCut","wsAiImportBtn":"AI εισαγωγή","wsAiPlanBtn":"Σχέδιο → BBS","wsAiNotConn":"Το AI δεν είναι συνδεδεμένο ακόμα — κάνε deploy τον SteelCut AI worker πρώτα.","wsAiImportTitle":"AI εισαγωγή — περιέγραψε τη λίστα κοπής","wsAiImportPh":"π.χ. 20 τεμ Φ12 3500mm, 10 συνδετήρες Φ8 1500mm…","wsAiImportHint":"Γράψε σε οποιαδήποτε γλώσσα — το AI εξάγει μήκη, ποσότητες, διαμέτρους και ετικέτες.","wsAiInterpret":"Ανάλυση","wsAiThinking":"Σκέφτομαι…","wsAiAddSel":"Προσθήκη επιλεγμένων","wsAiErr":"Το αίτημα AI απέτυχε — δοκίμασε ξανά.","wsAiPlanTitle":"Σχέδιο → BBS — έλεγξε τις γραμμές","wsAiMark":"Μάρκα","wsAiTooBig":"Η εικόνα είναι πολύ μεγάλη — max 2 MB.","wsAiWorking":"Επεξεργασία…","wsAiChatTitle":"SteelCut AI","wsAiChatPh":"Ρώτα για κοπές, φύρα, οπλισμό…"
+tour5t:"4 · Χρησιμοποίησε τα αποτελέσματα",tour5b:"Εξήγαγε την αναφορά PDF, εκτύπωσε ετικέτες, αποθήκευσε τη δουλειά ή στείλε τα ρέταλα στην αποθήκη. Τέλος!","ws1AlgoBfd":"Best-fit decreasing","ws1AlgoExact":"Ακριβής (branch & bound)","ws1AlgoFfd":"First-fit decreasing","ws1AlgoLabel":"Αλγόριθμος","ws1AlgoPattern":"Επανάχρηση διατάξεων (ελάχ. πλήθος)","ws1AngleDeg":"μοίρες","ws1CustomAngle":"Προσαρμοσμένη…","ws1CutAngle":"Γωνία κοπής","ws1EndTrim":"Τελικό κόψιμο / ράβδο","ws1Grip":"Περιθώριο σύσφιξης","ws1MinLayouts":"Ελαχιστοποίηση διατάξεων","ws1MinLayoutsHint":"Λιγότερες διαφορετικές διατάξεις κοπής","ws1QualityExact":"Βέλτιστη λύση — ο ακριβής επιλυτής απέδειξε ότι δεν υπάρχει καλύτερο πλάνο για αυτό το μέγεθος.","ws1QualityHeu":"Ευρετική λύση · κάτω φράγμα {lb} ράβδοι → εντός {n} ράβδων από το βέλτιστο","ws1TrimL":"Καθάρισμα αριστερού άκρου","ws1TrimR":"Καθάρισμα δεξιού άκρου","ws1WhFirst":"Προτεραιότητα ρετάλων αποθήκης","ws1WhFirstHint":"Κατανάλωση ρετάλων πριν τις νέες ράβδους","ws2aDxfBtn":"Εξαγωγή DXF","ws2bAdvBars":"Ράβδοι","ws2bAdvBest":"Φθηνότερο:","ws2bAdvBtn":"Σύγκρινε","ws2bAdvCost":"Συνολικό κόστος","ws2bAdvDesc":"Σύγκρινε υποψήφια μήκη ράβδων για να βρεις τη φθηνότερη επιλογή για τις τρέχουσες κοπές.","ws2bAdvHint":"Μορφή: μήκοςMM:τιμή — π.χ. 12000:45.50, 6000:24.00","ws2bAdvLen":"Υποψήφια μήκη (μήκοςMM:τιμή)","ws2bAdvNeedCuts":"Πρόσθεσε πρώτα απαιτούμενες κοπές.","ws2bAdvNeedRows":"Βάλε τουλάχιστον ένα υποψήφιο μήκος (μήκοςMM:τιμή).","ws2bAdvNoFit":"ένα τεμάχιο δεν χωράει","ws2bAdvPh":"12000:45.50, 6000:24.00","ws2bAdvTitle":"Σύμβουλος αποθέματος","ws2bAdvTotal":"σύνολο","ws2bAdvWaste":"Φύρα %","ws2bBbsBtn":"Εισαγωγή BBS","ws2bBbsDesc":"Επικόλλησε γραμμές CSV (Μάρκα,Διάμετρος,Μήκος,Τεμ.) ή ελεύθερο κείμενο όπως «Φ12: 2500x12» — μία γραμμή ανά εγγραφή.","ws2bBbsPh":"B1,12,2450,14\nΦ12: 2500x12\nD16 5300x6","ws2bBbsTitle":"Εισαγωγή πίνακα οπλισμού (BBS)","ws2bCancel":"Ακύρωση","ws2bEffBar":"Ράβδος","ws2bEffBars":"Ράβδοι","ws2bEffCutSeq":"Σειρά κοπής","ws2bEffDia":"Διάμετρος","ws2bEffKept":"(κρατήθηκε)","ws2bEffLen":"Συνολικό μήκος","ws2bEffOffcut":"ρέταλο","ws2bEffPct":"Απόδοση","ws2bEffTitle":"Αναφορά απόδοσης","ws2bEffWaste":"Φύρα","ws2bEffWastePct":"Φύρα %","ws2bImpDone":"Εισήχθησαν","ws2bImpNone":"Καμία γραμμή δεν αναλύθηκε.","ws2bParse":"Ανάλυση & εισαγωγή","ws2cNoLines":"Τίποτα για ανάλυση — γράψε ή επικόλλησε πρώτα γραμμές κοπής.","ws2cParse":"Ανάλυση & προσθήκη","ws2cPdfHint":"Για λίστες κοπής σε PDF: επίλεξε το κείμενο στο PDF, αντέγραψέ το και επικόλλησέ το εδώ.","ws2cQuickAdded":"Οι γρήγορες εγγραφές προστέθηκαν.","ws2cQuickBtn":"Γρήγορη εισαγωγή","ws2cQuickPh":"Ένα ανά γραμμή, π.χ.:\n2500x12\nΦ12: 2450x14\n5300x6 C1 D16","ws2cQuickTitle":"Γρήγορη εισαγωγή","ws2cXlsxErr":"Δεν ήταν δυνατή η ανάγνωση αυτού του αρχείου Excel. Δοκίμασε να το εξάγεις ως CSV και εισήγαγε εκείνο.","ws2cXlsxNoRows":"Δεν βρέθηκαν αξιοποιήσιμες γραμμές στο αρχείο Excel (στήλες: μήκος, ποσότητα, μονάδα, ετικέτα, διάμετρος).","ws3Back":"← Πίσω","ws3CalcT":"Εκτέλεση του βελτιστοποιητή και σχεδίαση του πλάνου κοπής","ws3DiaT":"Διάμετρος οπλισμού, π.χ. Φ12 — άφησέ το κενό για γενικές ράβδους","ws3Done":"Ξεκίνα βελτιστοποίηση","ws3Expert":"Λειτουργία ειδικού","ws3ExpertOff":"Η λειτουργία ειδικού απενεργοποιήθηκε","ws3ExpertOn":"Η λειτουργία ειδικού ενεργοποιήθηκε — ο οδηγός θα παραλείπεται","ws3ExpertTip":"Παράλειψη του οδηγού πρώτης χρήσης και άμεσο άνοιγμα του βελτιστοποιητή","ws3KerfH":"Υλικό που χάνεται σε κάθε κοπή — συνήθως 2–4 mm","ws3KerfT":"Φάρδος λάμας — το πλάτος υλικού που αφαιρεί η λεπίδα σε κάθε κοπή","ws3LoadDemo":"Φόρτωση demo δεδομένων","ws3Next":"Επόμενο →","ws3OffH":"Τα μεγαλύτερα ρέταλα κρατιούνται ως αξιοποιήσιμα","ws3OffT":"Ελάχιστο αξιοποιήσιμο ρέταλο — μικρότερα ρέταλα μετράνε ως φύρα","ws3PriceH":"Τροφοδοτεί την εκτίμηση του συνολικού κόστους","ws3PriceT":"Τιμή ανά μέτρο ράβδου — χρησιμοποιείται για την εκτίμηση του κόστους","ws3RebarH":"Απαραίτητο για εκτίμηση βάρους και κόστους","ws3RebarT":"Τύπος οπλισμού — ορίζει το βάρος ανά μέτρο (kg/m) για βάρος και κόστος","ws3Skip":"Παράλειψη","ws3UnitT":"Μονάδα του μήκους που έγραψες","ws3W1b":"Κατέγραψε τις ράβδους που έχεις — μήκος, ποσότητα και διάμετρο. Τα περισσότερα συνεργεία αγοράζουν 12άμετρες: βάλε μία γραμμή και ρύθμισε την ποσότητα.","ws3W1t":"1 · Οι ράβδοι σου","ws3W2b":"Κατέγραψε κάθε τεμάχιο που πρέπει να κόψεις, με μήκος, ποσότητα και διάμετρο. Συμβουλή: εισήγαγε ολόκληρη λίστα από Excel/CSV με ένα κλικ.","ws3W2t":"2 · Οι κοπές σου","ws3W3b":"Πάτα «Υπολογισμός πλάνου κοπής» και το SteelCut γεμίζει κάθε ράβδο με ελάχιστη φύρα. Θες να το δεις πρώτα σε δράση;","ws3W3t":"3 · Υπολόγισε","ws3WizTitle":"Καλώς ήρθες στο SteelCut","wsAiImportBtn":"AI εισαγωγή","wsAiPlanBtn":"Σχέδιο → BBS","wsAiNotConn":"Το AI δεν είναι συνδεδεμένο ακόμα — κάνε deploy τον SteelCut AI worker πρώτα.","wsAiImportTitle":"AI εισαγωγή — περιέγραψε τη λίστα κοπής","wsAiImportPh":"π.χ. 20 τεμ Φ12 3500mm, 10 συνδετήρες Φ8 1500mm…","wsAiImportHint":"Γράψε σε οποιαδήποτε γλώσσα — το AI εξάγει μήκη, ποσότητες, διαμέτρους και ετικέτες.","wsAiInterpret":"Ανάλυση","wsAiThinking":"Σκέφτομαι…","wsAiAddSel":"Προσθήκη επιλεγμένων","wsAiErr":"Το αίτημα AI απέτυχε — δοκίμασε ξανά.","wsAiPlanTitle":"Σχέδιο → BBS — έλεγξε τις γραμμές","wsAiMark":"Μάρκα","wsAiTooBig":"Η εικόνα είναι πολύ μεγάλη — max 2 MB.","wsAiWorking":"Επεξεργασία…","wsAiChatTitle":"SteelCut AI","wsAiChatPh":"Ρώτα για κοπές, φύρα, οπλισμό…",
+cuTitle:"Προσαρμοσμένες ρυθμίσεις",cuDesc:"Ρύθμισε κάθε παράμετρο του βελτιστοποιητή — αποθηκεύονται αυτόματα.",cuPriceT:"Τιμή χάλυβα ανά τόνο",cuCo2:"Συντελεστής CO₂",cuCo2Hint:"kg CO₂e ανά kg χάλυβα",cuDefDia:"Προεπιλεγμένη διάμετρος για νέες κοπές",cuWeightOv:"Παρακάμψεις βάρους (kg/m ανά διάμετρο)",cuWeightOvPh:"π.χ. 12:0.89, 16:1.60 — άδειο = κανονικά",cuBarPresets:"Προσαρμοσμένα μήκη ράβδων",cuPresetPh:"μέτρα, π.χ. 6 ή 6, 9",cuPresetAdd:"Προσθήκη",cuUnlimited:"Απεριόριστο",cuUnlHint:"Δεν τελειώνει ποτέ",cuKerfCol:"Φάρδος λάμας",cuWasteCost:"Κόστος φύρας",cuCustomDia:"Προσαρμοσμένη…",
 };
 /* ================= core ================= */
 const $=id=>document.getElementById(id);
@@ -964,7 +998,7 @@ const UNITS={mm:1,cm:10,m:1000,in:25.4};
 let LANG='en';
 let S={lang:'en',stock:[],cuts:[],warehouse:[],jobs:[],history:[],suppliers:[],results:null,
   project:{client:'',code:'',date:'',notes:''},
-  settings:{kerf:3,minOff:300,rebar:'',priceM:0,currency:'€',job:'',angleDeg:90,trimL:0,trimR:0,grip:0,endTrim:0,minLayouts:false,whFirst:false}};
+  settings:{kerf:3,minOff:300,rebar:'',priceM:0,priceT:0,co2:1.85,defDia:'',weightOv:{},barPresets:[6000,12000],currency:'€',job:'',angleDeg:90,trimL:0,trimR:0,grip:0,endTrim:0,minLayouts:false,whFirst:false}};
 function load(){try{const r=localStorage.getItem(LSKEY);return r?JSON.parse(r):null}catch(e){return null}}
 function persist(){try{localStorage.setItem(LSKEY,JSON.stringify(S))}catch(e){}}
 function t(k){const d=I18N[LANG]||{};if(d[k]!==undefined)return d[k];const e=I18N.en||{};return e[k]!==undefined?e[k]:k}
@@ -994,14 +1028,47 @@ document.addEventListener('click',e=>{const n=e.target.closest('[data-nav]');if(
 var navToggle=$('navToggle');if(navToggle){navToggle.addEventListener('click',function(e){e.stopPropagation();var mn=$('mainnav');var isOpen=mn.classList.toggle('open');navToggle.setAttribute('aria-expanded',isOpen?'true':'false')});document.addEventListener('click',function(e){var mn=$('mainnav');if(mn&&mn.classList.contains('open')&&!e.target.closest('#mainnav')&&!e.target.closest('#navToggle')){mn.classList.remove('open');navToggle.setAttribute('aria-expanded','false')}})}
 function diaOptions(sel,allowAny,cur){let h=allowAny?'<option value="">'+esc(t('diaAny'))+'</option>':'';REBAR.forEach(r=>{h+='<option value="'+r.d+'">Φ'+r.d+'</option>'});if(cur!=null&&cur!==''&&!REBAR.some(r=>String(r.d)===String(cur))){h+='<option value="'+cur+'">Φ'+cur+'</option>'}sel.innerHTML=h}
 /* ---------- stock & cuts tables ---------- */
-function renderStock(){const tb=$('stockBody');tb.innerHTML='';S.stock.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML='<td><input type="number" min="1" step="any" value="'+esc(r.len)+'" data-f="len"></td><td><input type="number" min="1" step="1" value="'+esc(r.qty)+'" data-f="qty"></td><td><select data-f="unit">'+['mm','cm','m','in'].map(u=>'<option'+(u===r.unit?' selected':'')+'>'+u+'</option>').join('')+'</select></td><td><select data-f="dia"></select></td><td><button class="btn btn-ghost btn-sm" data-del>×</button></td>';
-  tr.querySelectorAll('input,select').forEach(inp=>{inp.addEventListener('change',()=>{const f=inp.dataset.f;let v=inp.value;if(f==='len'||f==='qty')v=num(v);if(f==='dia')v=v===''?null:num(v);r[f]=v;persist()})});
-  const ds=tr.querySelector('[data-f="dia"]');diaOptions(ds,true,r.dia);ds.value=r.dia==null?'':String(r.dia);
+function cuWireDia(tr,r){
+  const ds=tr.querySelector('[data-f="dia"]'),ci=tr.querySelector('[data-f="diaC"]');
+  diaOptions(ds,true,r.dia);
+  const co=document.createElement('option');co.value='custom';co.textContent=t('custom')+'…';ds.appendChild(co);
+  const isStd=r.dia==null||REBAR.some(x=>String(x.d)===String(r.dia));
+  ds.value=r.dia==null?'':(isStd?String(r.dia):'custom');
+  if(!isStd&&r.dia!=null){ci.style.display='';ci.value=r.dia}
+  ds.addEventListener('change',()=>{if(ds.value==='custom'){ci.style.display='';ci.focus();r.dia=num(ci.value)||null}else{ci.style.display='none';r.dia=ds.value===''?null:num(ds.value)}persist()});
+  ci.addEventListener('input',()=>{r.dia=num(ci.value)||null;persist()});
+}
+function cuParseWeightOv(txt){const o={};String(txt||'').split(',').forEach(p=>{const m=/([\d.,]+)\s*:\s*([\d.,]+)/.exec(p);if(m){const d=num(m[1].replace(',','.')),w=num(m[2].replace(',','.'));if(d>0&&w>0)o[String(d)]=w}});return o}
+function cuWeightOvText(o){return Object.keys(o||{}).map(d=>d+':'+o[d]).join(', ')}
+function cuKgPm(dia){
+  const ov=(S.settings&&S.settings.weightOv)||{};
+  if(dia!=null){if(ov[String(dia)]>0)return ov[String(dia)];return ws4KgPm(dia)}
+  const rb=S.settings.rebar;
+  if(rb&&rb!=='custom'){const r=REBAR.find(x=>String(x.d)===String(rb));if(r)return r.w}
+  return 0;
+}
+function cuBarPresets(){let pr=S.settings.barPresets;if(!Array.isArray(pr)||!pr.length){pr=[6000,12000];S.settings.barPresets=pr}return pr}
+function cuRenderPresets(){
+  const el=$('cuPresets');if(!el)return;el.innerHTML='';
+  cuBarPresets().forEach(L=>{
+    const w=document.createElement('span');w.style.cssText='display:inline-flex;gap:4px;margin:0 8px 8px 0;align-items:center';
+    const b=document.createElement('button');b.className='btn btn-ghost btn-sm';b.textContent='+ '+(L>=1000?(Math.round(L/100)/10)+' m':L+' mm');b.onclick=()=>cuPresetAddStock(L);
+    const x=document.createElement('button');x.className='btn btn-ghost btn-sm';x.textContent='×';x.title=t('del');x.onclick=()=>{S.settings.barPresets=cuBarPresets().filter(v=>v!==L);persist();cuRenderPresets()};
+    w.appendChild(b);w.appendChild(x);el.appendChild(w)});
+}
+function cuPresetAddStock(L){
+  const dias=[...new Set(S.cuts.map(c=>c.dia).filter(x=>x!=null))];const ds=dias.length?dias:[null];let n=0;
+  ds.forEach(dd=>{if(!S.stock.some(b=>b.dia===dd&&Math.abs(toMM(b.len,b.unit)-L)<1)){S.stock.push({id:uid(),len:L,qty:10,unit:'mm',dia:dd,unlimited:false});n++}});
+  persist();renderStock();scheduleAutoCalc();toast(n?t('ws12mAdded')+' ('+n+')':t('ws12mExists'));
+}
+function renderStock(){const tb=$('stockBody');tb.innerHTML='';S.stock.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML='<td><input type="number" min="1" step="any" value="'+esc(r.len)+'" data-f="len"></td><td><input type="number" min="1" step="1" value="'+esc(r.qty)+'" data-f="qty"></td><td><select data-f="unit">'+['mm','cm','m','in'].map(u=>'<option'+(u===r.unit?' selected':'')+'>'+u+'</option>').join('')+'</select></td><td><select data-f="dia"></select> <input type="number" min="0.5" step="any" data-f="diaC" style="width:60px;display:none" placeholder="Φ"></td><td><input type="checkbox" data-f="unlimited" title="'+esc(t('cuUnlHint'))+'"'+(r.unlimited?' checked':'')+'></td><td><button class="btn btn-ghost btn-sm" data-del>×</button></td>';
+  tr.querySelectorAll('input,select').forEach(inp=>{const f=inp.dataset.f;if(f==='dia'||f==='diaC')return;inp.addEventListener('change',()=>{let v=inp.value;if(f==='len'||f==='qty')v=num(v);if(f==='unlimited')v=inp.checked;r[f]=v;persist()})});
+  cuWireDia(tr,r);
   tr.querySelector('[data-del]').addEventListener('click',()=>{S.stock=S.stock.filter(x=>x.id!==r.id);persist();renderStock()});
   tb.appendChild(tr)})}
-function renderCuts(){const tb=$('cutsBody');tb.innerHTML='';S.cuts.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML='<td><input type="number" min="1" step="any" value="'+esc(r.len)+'" data-f="len"></td><td><input type="number" min="1" step="1" value="'+esc(r.qty)+'" data-f="qty"></td><td><select data-f="unit">'+['mm','cm','m','in'].map(u=>'<option'+(u===r.unit?' selected':'')+'>'+u+'</option>').join('')+'</select></td><td><select data-f="dia"></select></td><td><input type="text" value="'+esc(r.label||'')+'" data-f="label" placeholder="—"></td><td><button class="btn btn-ghost btn-sm" data-del>×</button></td>';
-  tr.querySelectorAll('input,select').forEach(inp=>{inp.addEventListener('input',()=>{const f=inp.dataset.f;let v=inp.value;if(f==='len'||f==='qty')v=num(v);if(f==='dia')v=v===''?null:num(v);r[f]=v;persist()})});
-  const ds=tr.querySelector('[data-f="dia"]');diaOptions(ds,true,r.dia);ds.value=r.dia==null?'':String(r.dia);
+function renderCuts(){const tb=$('cutsBody');tb.innerHTML='';S.cuts.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML='<td><input type="number" min="1" step="any" value="'+esc(r.len)+'" data-f="len"></td><td><input type="number" min="1" step="1" value="'+esc(r.qty)+'" data-f="qty"></td><td><select data-f="unit">'+['mm','cm','m','in'].map(u=>'<option'+(u===r.unit?' selected':'')+'>'+u+'</option>').join('')+'</select></td><td><select data-f="dia"></select> <input type="number" min="0.5" step="any" data-f="diaC" style="width:60px;display:none" placeholder="Φ"></td><td><input type="number" min="0" step="0.5" value="'+esc(r.kerf==null?'':r.kerf)+'" data-f="kerf" placeholder="0" style="width:64px"></td><td><input type="text" value="'+esc(r.label||'')+'" data-f="label" placeholder="—"></td><td><button class="btn btn-ghost btn-sm" data-del>×</button></td>';
+  tr.querySelectorAll('input,select').forEach(inp=>{const f=inp.dataset.f;if(f==='dia'||f==='diaC')return;inp.addEventListener('input',()=>{let v=inp.value;if(f==='len'||f==='qty'||f==='kerf')v=num(v);r[f]=v;persist()})});
+  cuWireDia(tr,r);
   tr.querySelector('[data-del]').addEventListener('click',()=>{S.cuts=S.cuts.filter(x=>x.id!==r.id);persist();renderCuts()});
   tb.appendChild(tr)})}
 function buildRebarSel(){const s=$('sRebar');const cur=S.settings.rebar;s.innerHTML='<option value="">'+esc(t('none'))+'</option><option value="custom"'+(cur==='custom'?' selected':'')+'>'+esc(t('custom'))+'</option>'+REBAR.map(r=>'<option value="'+r.d+'"'+(String(cur)===String(r.d)?' selected':'')+'>Φ'+r.d+' — '+r.w+' kg/m</option>').join('')}
@@ -1010,7 +1077,11 @@ function readForm(){
   const ws1el=id=>$(id);
   const angSel=ws1el('sAngle'),angMode=angSel?angSel.value:'90';
   const angleDeg=angMode==='custom'?(ws1el('sAngleDeg')?num(ws1el('sAngleDeg').value):90):(num(angMode)||90);
+  const oldBP=(S.settings&&S.settings.barPresets)||[6000,12000];
   S.settings={kerf:num($('sKerf').value),minOff:num($('sMinOff').value),rebar:$('sRebar').value,priceM:num($('sPriceM').value),currency:$('sCur').value,job:$('sJob').value.trim(),
+    priceT:num($('sPriceT').value),co2:(function(){const v=num($('sCo2').value);return v>0?v:1.85})(),
+    defDia:(function(){const v=$('sDefDia').value;return v===''?'':num(v)})(),
+    weightOv:cuParseWeightOv($('sWeightOv').value),barPresets:oldBP,
     angleDeg:angleDeg,
     trimL:ws1el('sTrimL')?num(ws1el('sTrimL').value):0,trimR:ws1el('sTrimR')?num(ws1el('sTrimR').value):0,
     grip:ws1el('sGrip')?num(ws1el('sGrip').value):0,endTrim:ws1el('sEndTrim')?num(ws1el('sEndTrim').value):0,
@@ -1020,16 +1091,17 @@ function readForm(){
     material:ws1el('sMaterial')?ws1el('sMaterial').value:'steel'};
   persist();
 }
-function fillForm(){const p=S.project||{},s=S.settings||{};$('pClient').value=p.client||'';$('pCode').value=p.code||'';$('pDate').value=p.date||'';$('pNotes').value=p.notes||'';$('sKerf').value=s.kerf==null?3:s.kerf;$('sMinOff').value=s.minOff==null?300:s.minOff;$('sPriceM').value=s.priceM||0;$('sCur').value=s.currency||'€';$('sJob').value=s.job||'';buildRebarSel();$('sRebar').value=s.rebar||'';var ac=$('sAutoCalc');if(ac)ac.checked=s.autoCalc!==false;var sm=$('sMaterial');if(sm)sm.value=s.material||'steel';applyMaterial();ws1FillForm(s)}
+function fillForm(){const p=S.project||{},s=S.settings||{};$('pClient').value=p.client||'';$('pCode').value=p.code||'';$('pDate').value=p.date||'';$('pNotes').value=p.notes||'';$('sKerf').value=s.kerf==null?3:s.kerf;$('sMinOff').value=s.minOff==null?300:s.minOff;$('sPriceM').value=s.priceM||0;$('sCur').value=s.currency||'€';$('sJob').value=s.job||'';$('sPriceT').value=s.priceT||0;var sc2=$('sCo2');if(sc2)sc2.value=s.co2>0?s.co2:1.85;var sd2=$('sDefDia');if(sd2)sd2.value=(s.defDia===''||s.defDia==null)?'':s.defDia;var swo2=$('sWeightOv');if(swo2)swo2.value=cuWeightOvText(s.weightOv);cuRenderPresets();var vd=$('voiceDia');if(vd&&s.defDia!=='')vd.value=String(s.defDia);buildRebarSel();$('sRebar').value=s.rebar||'';var ac=$('sAutoCalc');if(ac)ac.checked=s.autoCalc!==false;var sm=$('sMaterial');if(sm)sm.value=s.material||'steel';applyMaterial();ws1FillForm(s)}
 /* ================= optimizer (multi-diameter) ================= */
 function toMM(v,u){return num(v)*(UNITS[u]||1)}
+function pkf(p,kerf){const k=num(p&&p.kerf);return k>0?k:kerf}
 function bfd(pieces,pool,kerf){
   const bars=[];
   const sorted=[...pieces].sort((a,b)=>b.len-a.len);
   for(const p of sorted){
     let best=null,bestRem=Infinity;
     for(const b of bars){
-      const need=p.len+(b.pieces.length?kerf:0),rem=b.len-b.used;
+      const need=p.len+(b.pieces.length?pkf(p,kerf):0),rem=b.len-b.used;
       if(need<=rem&&rem-need<bestRem){best=b;bestRem=rem-need}
     }
     if(!best){
@@ -1038,7 +1110,7 @@ function bfd(pieces,pool,kerf){
       if(!cand)return{error:'noFit',piece:p};
       cand.qty--;best={len:cand.len,pieces:[],used:0,dia:cand.dia};bars.push(best);
     }
-    if(best.pieces.length)best.used+=kerf;
+    if(best.pieces.length)best.used+=pkf(p,kerf);
     best.used+=p.len;best.pieces.push(p);
   }
   return{bars};
@@ -1094,7 +1166,7 @@ function ffd(pieces,pool,kerf,opts){
   for(const p of sorted){
     let target=null;
     for(const b of bars){
-      const need=p.len+(b.pieces.length?kerf:0),rem=b.len-b.used;
+      const need=p.len+(b.pieces.length?pkf(p,kerf):0),rem=b.len-b.used;
       if(need<=rem){target=b;break}
     }
     if(!target){
@@ -1102,7 +1174,7 @@ function ffd(pieces,pool,kerf,opts){
       if(!cand)return{error:'noFit',piece:p};
       cand.qty--;target={len:cand.len,pieces:[],used:0,dia:cand.dia,wh:!!cand.wh};bars.push(target);
     }
-    if(target.pieces.length)target.used+=kerf;
+    if(target.pieces.length)target.used+=pkf(p,kerf);
     target.used+=p.len;target.pieces.push(p);
   }
   return{bars};
@@ -1167,12 +1239,12 @@ function ws1Exact(pieces,pool,kerf,opts){
       return;
     }
     if(lb(i)>bestBars)return;
-    const pl=items[i].len;
+    const pl=items[i].len,pk=pkf(items[i],kerf);
     /* existing bins, dedup by remaining space (symmetry) */
     const seen=new Set();
     for(let bi=0;bi<bins.length;bi++){
       const b=bins[bi],L=insts[b.si].len;
-      const need=pl+(b.items.length?kerf:0),rem=L-b.used;
+      const need=pl+(b.items.length?pk:0),rem=L-b.used;
       if(need>rem)continue;
       const key=Math.round(rem*100);
       if(seen.has(key))continue;seen.add(key);
@@ -1269,8 +1341,9 @@ function ws1PackPatterns(pieces,pool,kerf,opts){
       for(const k of keysDesc()){
         const v=bySize.get(k);
         while(v.items.length){
-          if(usedB+v.len+(bp.length?kerf:0)>inst.len+1e-9)break;
-          const p=v.items.pop();if(bp.length)usedB+=kerf;usedB+=p.len;bp.push(p);prog=true;
+          const nx=v.items[v.items.length-1],nxk=nx?pkf(nx,kerf):kerf;
+          if(usedB+v.len+(bp.length?nxk:0)>inst.len+1e-9)break;
+          const p=v.items.pop();if(bp.length)usedB+=pkf(p,kerf);usedB+=p.len;bp.push(p);prog=true;
         }
       }
     }
@@ -1373,15 +1446,15 @@ function calcAll(){
   const effKerf=ws1EffKerf(kerf,angleDeg);
   const trimL=num(st.trimL),trimR=num(st.trimR),grip=num(st.grip),endTrim=num(st.endTrim);
   const preferWh=!!st.whFirst,minLayouts=!!st.minLayouts;
-  const bars=S.stock.filter(b=>num(b.len)>0&&num(b.qty)>0).map(b=>({len:ws1EffLen(toMM(b.len,b.unit),trimL,trimR,grip,endTrim),qty:Math.round(num(b.qty)),dia:b.dia==null?null:num(b.dia)}));
-  const cuts=S.cuts.filter(c=>num(c.len)>0&&num(c.qty)>0).map(c=>({lenMM:toMM(c.len,c.unit),qty:Math.round(num(c.qty)),label:(c.label||'').trim(),dia:c.dia==null?null:num(c.dia)}));
+  const bars=S.stock.filter(b=>num(b.len)>0&&(num(b.qty)>0||b.unlimited)).map(b=>({len:ws1EffLen(toMM(b.len,b.unit),trimL,trimR,grip,endTrim),qty:b.unlimited?999999999:Math.round(num(b.qty)),dia:b.dia==null?null:num(b.dia)}));
+  const cuts=S.cuts.filter(c=>num(c.len)>0&&num(c.qty)>0).map(c=>({lenMM:toMM(c.len,c.unit),kerf:num(c.kerf)>0?num(c.kerf):effKerf,qty:Math.round(num(c.qty)),label:(c.label||'').trim(),dia:c.dia==null?null:num(c.dia)}));
   if(!cuts.length){toast(t('msgNeedCuts'));return}
   if(!bars.length){toast(t('msgNeedStock'));return}
   // warehouse offcuts pool (shared references across groups, like universal stock)
   const whAll=preferWh?(S.warehouse||[]).filter(w=>num(w.qty)>0&&num(w.lenMM)>0).map(w=>({len:ws1EffLen(num(w.lenMM),trimL,trimR,grip,endTrim),qty:Math.round(num(w.qty)),dia:w.dia==null?null:num(w.dia),wh:true})):[];
   // group cuts by diameter
   const gmap={};
-  cuts.forEach(c=>{const k=c.dia==null?'std':'d'+c.dia;(gmap[k]=gmap[k]||{dia:c.dia,pieces:[]});for(let i=0;i<c.qty;i++)gmap[k].pieces.push({len:c.lenMM,label:c.label})});
+  cuts.forEach(c=>{const k=c.dia==null?'std':'d'+c.dia;(gmap[k]=gmap[k]||{dia:c.dia,pieces:[]});for(let i=0;i<c.qty;i++)gmap[k].pieces.push({len:c.lenMM,kerf:c.kerf,label:c.label})});
   const keys=Object.keys(gmap).sort((a,b)=>a==='std'?1:b==='std'?-1:num(a.slice(1))-num(b.slice(1)));
   const universal=bars.filter(b=>b.dia==null).map(b=>({...b}));
   const groups=[];let lbBars=0;const algos=[];
@@ -1403,11 +1476,13 @@ function calcAll(){
     totBars++;totBarLen+=b.len;b.pieces.forEach(p=>{totPieceLen+=p.len;totPieces++});totWaste+=b.waste;if(b.off)offKept++;
   })});
   const eff=totBarLen?totPieceLen/totBarLen*100:0;
-  const rb=S.settings.rebar==='custom'?null:REBAR.find(r=>String(r.d)===String(S.settings.rebar));
   const matM=totBarLen/1000;
-  const cost=S.settings.priceM>0?matM*S.settings.priceM:0;
-  const weight=rb?matM*rb.w:0;
-  S.results={groups,totals:{bars:totBars,eff,waste:totWaste,material:totBarLen,cost,weight,offKept,pieces:totPieces},
+  let weight=0,wasteWeight=0;
+  groups.forEach(g=>{const kgm=cuKgPm(g.dia);g.bars.forEach(b=>{weight+=b.len/1000*kgm;wasteWeight+=b.waste/1000*kgm})});
+  const priceT=num(S.settings.priceT);
+  const cost=priceT>0?weight*priceT/1000:(S.settings.priceM>0?matM*S.settings.priceM:0);
+  const wasteCost=priceT>0?wasteWeight*priceT/1000:(S.settings.priceM>0?totWaste/1000*S.settings.priceM:0);
+  S.results={groups,totals:{bars:totBars,eff,waste:totWaste,material:totBarLen,cost,weight,wasteCost,offKept,pieces:totPieces},
     kerf,minOff,settings:{...S.settings},project:{...S.project},date:new Date().toISOString(),
     ws1:{angleDeg:angleDeg,effKerf:effKerf,trimL:trimL,trimR:trimR,grip:grip,endTrim:endTrim,preferWh:preferWh,minLayouts:minLayouts,lbBars:lbBars,algos:[...new Set(algos)]}};
   persist();renderResults();addHistory(_autoQuiet);
@@ -1423,7 +1498,7 @@ function renderResults(){
   const T=R.totals,cur=R.settings.currency||'€';
   const m=$('metrics');m.innerHTML='';
   const card=(k,v,cls)=>'<div class="metric"><div class="k">'+esc(k)+'</div><div class="v'+(cls?' '+cls:'')+'">'+v+'</div></div>';
-  m.innerHTML=card(t('barsNeeded'),fmt(T.bars,0))+card(t('efficiency'),fmt(T.eff,1)+'%',T.eff>=90?'good':T.eff>=75?'':'warn')+card(t('waste'),fmtLen(T.waste))+card(t('totalMaterial'),fmtLen(T.material))+card(t('totalCost'),esc(cur)+' '+fmt(T.cost,2))+card(t('totalWeight'),fmt(T.weight,1)+' kg')+card(t('offcutsKept'),fmt(T.offKept,0),'good')+card(t('pieces'),fmt(T.pieces,0))+card(t('wsCo2'),fmt(T.material>0?T.weight*T.waste/T.material*1.85:0,1)+' kg');
+  m.innerHTML=card(t('barsNeeded'),fmt(T.bars,0))+card(t('efficiency'),fmt(T.eff,1)+'%',T.eff>=90?'good':T.eff>=75?'':'warn')+card(t('waste'),fmtLen(T.waste))+card(t('totalMaterial'),fmtLen(T.material))+card(t('totalCost'),esc(cur)+' '+fmt(T.cost,2))+card(t('cuWasteCost'),esc(cur)+' '+fmt(T.wasteCost||0,2))+card(t('totalWeight'),fmt(T.weight,1)+' kg')+card(t('offcutsKept'),fmt(T.offKept,0),'good')+card(t('pieces'),fmt(T.pieces,0))+card(t('wsCo2'),fmt(T.material>0?T.weight*T.waste/T.material*((R.settings&&R.settings.co2>0)?R.settings.co2:1.85):0,1)+' kg');
   let h='';
   R.groups.forEach(g=>{
     h+='<h4 style="margin:20px 0 6px">'+esc(t('diaCol'))+': '+esc(diaName(g.dia))+' <span class="muted small">· '+g.bars.length+' '+esc(t('bar'))+'</span></h4>';
@@ -1535,7 +1610,7 @@ function exportDXF(){
         const pl=Math.round(p.len);
         dLine(x,y-TICK,x,y+TICK);
         dText(x+1,y+TICK+0.5,TH,pl+(p.label?' ['+p.label+']':''));
-        x+=pl+kerf;
+        x+=pl+pkf(p,kerf);
       });
       dLine(x-kerf,y-TICK,x-kerf,y+TICK); /* end of last piece */
       if(b.waste>0)dText(x,y-TICK-4.5,TH,'waste '+Math.round(b.waste)+' mm'+(b.off?' (reusable)':''));
@@ -2011,9 +2086,14 @@ $('scanBtn').onclick=function(){
 var AI_WORKER_URL=(window.STEELCUT_AI_URL||'').trim();
 function aiReady(){if(AI_WORKER_URL)return true;toast(t('wsAiNotConn'));return false}
 function aiPost(path,body){
-  return fetch(AI_WORKER_URL+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){
-    if(!r.ok)throw new Error('ai'+r.status);
-    return r.json();
+  function once(){
+    return fetch(AI_WORKER_URL+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){
+      if(!r.ok)throw new Error('ai'+r.status);
+      return r.json();
+    });
+  }
+  return once().catch(function(e){
+    return new Promise(function(res,rej){setTimeout(function(){once().then(res,rej)},1500)});
   });
 }
 function wsAiOpenImport(){
@@ -2147,7 +2227,7 @@ function init(){
   $('langSel').addEventListener('change',e=>{LANG=e.target.value;S.lang=LANG;persist();applyI18n();renderResults();toast(t('msgLang'))});
   document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.nav)));
   $('addStockBtn').onclick=()=>{S.stock.push({id:uid(),len:6000,qty:10,unit:'mm',dia:null});persist();renderStock()};
-  $('addCutBtn').onclick=()=>{S.cuts.push({id:uid(),len:1000,qty:5,unit:'mm',label:'',dia:null});persist();renderCuts()};
+  $('addCutBtn').onclick=()=>{const dd=S.settings.defDia;S.cuts.push({id:uid(),len:1000,qty:5,unit:'mm',label:'',dia:(dd===''||dd==null)?null:num(dd),kerf:0});persist();renderCuts()};
   $('fromWhBtn').onclick=()=>{if(!S.warehouse.length){toast(t('noData'));return}S.warehouse.forEach(w=>{for(let i=0;i<w.qty;i++)S.stock.push({id:uid(),len:w.lenMM,qty:1,unit:'mm',dia:w.dia})});persist();renderStock();toast(t('msgWhImported'))};
   $('importBtn').onclick=()=>$('importFile').click();
   $('importFile').addEventListener('change',e=>{const f=e.target.files[0];if(f)ws2cDispatchFile(f);e.target.value=''});
@@ -2159,7 +2239,9 @@ function init(){
   $('aiChatX').onclick=wsAiChatToggle;
   $('aiChatSend').onclick=wsAiChatSend;
   $('aiChatIn').addEventListener('keydown',function(e){if(e.key==='Enter')wsAiChatSend()});
-  ['sKerf','sMinOff','sPriceM','sCur','sJob','sRebar','sAngle','sAngleDeg','sTrimL','sTrimR','sGrip','sEndTrim','sMinLayouts','sWhFirst'].forEach(id=>{const e=$(id);if(e)e.addEventListener('change',readForm)});
+  ['sKerf','sMinOff','sPriceM','sPriceT','sCo2','sDefDia','sWeightOv','sCur','sJob','sRebar','sAngle','sAngleDeg','sTrimL','sTrimR','sGrip','sEndTrim','sMinLayouts','sWhFirst'].forEach(id=>{const e=$(id);if(e)e.addEventListener('change',readForm)});
+  $('cuHead').onclick=()=>{const b=$('cuBody');const open=b.style.display!=='none';b.style.display=open?'none':'';$('cuArrow').textContent=open?'▸':'▾'};
+  $('cuPresetAdd').onclick=()=>{const raw=$('cuPresetIn').value;let pr=cuBarPresets().slice();raw.split(',').forEach(p=>{const m=Math.round(num(String(p).replace(',','.'))*1000);if(m>=100&&pr.indexOf(m)<0)pr.push(m)});pr.sort((a,b)=>a-b);S.settings.barPresets=pr;$('cuPresetIn').value='';persist();cuRenderPresets()};
   ['pClient','pCode','pDate','pNotes'].forEach(id=>$(id).addEventListener('input',readForm));
   $('calcBtn').onclick=calcAll;
   $('wsModeBtn').onclick=wsModeOpen;
@@ -2448,25 +2530,8 @@ function ws3IsExpert(){try{return localStorage.getItem('sc_expert')==='1'}catch(
 
 /* ---------- init (runs after the main init) ---------- */
 function ws3Init(){
-  // 1) Expert-mode toggle in the header
-  var em=document.getElementById('expertMode');
-  if(em){
-    em.checked=ws3IsExpert();
-    var tip=function(){
-      var x=t('ws3ExpertTip');em.title=x;
-      var w=document.getElementById('expertWrap');if(w)w.title=x;
-    };
-    tip();
-    em.addEventListener('change',function(){
-      try{
-        if(em.checked){localStorage.setItem('sc_expert','1');localStorage.setItem('sc_seen','1')}
-        else{localStorage.removeItem('sc_expert')}
-      }catch(e){}
-      toast(t(em.checked?'ws3ExpertOn':'ws3ExpertOff'));
-    });
-    var lsTip=document.getElementById('langSel');
-    if(lsTip)lsTip.addEventListener('change',tip);
-  }
+  // 1) Expert-mode toggle was removed from the header (legacy localStorage
+  //    flag sc_expert is still honored by ws3IsExpert for existing users)
 
   // 2) Horizontal-scroll wrappers for data tables (no-op on desktop where
   //    nothing overflows; keeps columns usable on small screens)
@@ -2518,6 +2583,7 @@ document.addEventListener('DOMContentLoaded',ws3Init);
    No new external dependencies. New UI strings: EN + EL only
    (other languages fall back to English via t()). */
 Object.assign(I18N.en,{
+uiView:"View",uiSections:"Sections",uiSimple:"Simple",uiAdvanced:"Advanced",uiHide:"Hide section",uiShow:"Show section",uiAiTools:"AI tools",uiExpRow:"Export buttons",
 navTools:"Tools",ws4ToolsSub:"Engineering calculators for rebar work.",
 ws4TplT:"Templates",ws4TplD:"One click loads a realistic job \u2014 edit freely afterwards.",
 ws4TplLoad:"Load",ws4TplLoaded:"Template loaded.",
@@ -2544,6 +2610,7 @@ ws4ShareCopyFail:"Copy failed \u2014 the link is shown below.",ws4ShareImported:
 ws4ShareTooLong:"Warning: the link is long and may not work in every app."
 });
 Object.assign(I18N.el,{
+uiView:"\u03A0\u03C1\u03BF\u03B2\u03BF\u03BB\u03AE",uiSections:"\u0395\u03BD\u03CC\u03C4\u03B7\u03C4\u03B5\u03C2",uiSimple:"\u0391\u03C0\u03BB\u03AE",uiAdvanced:"\u03A0\u03C1\u03BF\u03C7\u03C9\u03C1\u03B7\u03BC\u03AD\u03BD\u03B7",uiHide:"\u0391\u03C0\u03CC\u03BA\u03C1\u03C5\u03C8\u03B7 \u03B5\u03BD\u03CC\u03C4\u03B7\u03C4\u03B1\u03C2",uiShow:"\u0395\u03BC\u03C6\u03AC\u03BD\u03B9\u03C3\u03B7 \u03B5\u03BD\u03CC\u03C4\u03B7\u03C4\u03B1\u03C2",uiAiTools:"\u0395\u03C1\u03B3\u03B1\u03BB\u03B5\u03AF\u03B1 AI",uiExpRow:"\u039A\u03BF\u03C5\u03BC\u03C0\u03B9\u03AC \u03B5\u03BE\u03B1\u03B3\u03C9\u03B3\u03AE\u03C2",
 navTools:"\u0395\u03C1\u03B3\u03B1\u03BB\u03B5\u03AF\u03B1",ws4ToolsSub:"\u039C\u03B7\u03C7\u03B1\u03BD\u03B9\u03BA\u03BF\u03AF \u03C5\u03C0\u03BF\u03BB\u03BF\u03B3\u03B9\u03C3\u03C4\u03AD\u03C2 \u03B3\u03B9\u03B1 \u03BF\u03C0\u03BB\u03B9\u03C3\u03BC\u03CC.",
 ws4TplT:"\u03A0\u03C1\u03CC\u03C4\u03C5\u03C0\u03B1",ws4TplD:"\u039C\u03B5 \u03AD\u03BD\u03B1 \u03BA\u03BB\u03B9\u03BA \u03C6\u03BF\u03C1\u03C4\u03CE\u03BD\u03B5\u03B9 \u03BC\u03B9\u03B1 \u03C1\u03B5\u03B1\u03BB\u03B9\u03C3\u03C4\u03B9\u03BA\u03AE \u03B4\u03BF\u03C5\u03BB\u03B5\u03B9\u03AC \u2014 \u03B5\u03C0\u03B5\u03BE\u03B5\u03C1\u03B3\u03AC\u03C3\u03BF\u03C5 \u03B5\u03BB\u03B5\u03CD\u03B8\u03B5\u03C1\u03B1 \u03BC\u03B5\u03C4\u03AC.",
 ws4TplLoad:"\u03A6\u03CC\u03C1\u03C4\u03C9\u03C3\u03B7",ws4TplLoaded:"\u03A4\u03BF \u03C0\u03C1\u03CC\u03C4\u03C5\u03C0\u03BF \u03C6\u03BF\u03C1\u03C4\u03CE\u03B8\u03B7\u03BA\u03B5.",
@@ -2948,6 +3015,109 @@ function ws4Init(){
   var ws4AHO=addHistory;
   addHistory=function(){ws4AHO();try{var h=S.history[0],R=S.results;if(h&&R&&h.date===R.date){var w=ws4WasteStats(R);h.stats.wasteKg=w.wasteKg;h.stats.wasteEur=w.wasteEur;h.stats.savedEur=w.savedEur;persist()}}catch(e){}};
   ws4ImportHash();
+  uiViewInit();
+}
+/* ---------- per-panel visibility: eye toggles + View menu ---------- */
+var UIPANELS=[
+ {key:'templates',panel:'ws4TplPanel',label:'ws4TplT'},
+ {key:'project',panel:'uiProjPanel',label:'projTitle'},
+ {key:'stock',panel:'uiStockPanel',label:'stockBars'},
+ {key:'cuts',panel:'uiCutsPanel',label:'reqCuts'},
+ {key:'shapes',panel:'ws4ShapesPanel',label:'ws4ShapesT'},
+ {key:'settings',panel:'uiSetPanel',label:'settings'},
+ {key:'custom',panel:'cuPanel',label:'cuTitle'},
+ {key:'advisor',panel:'ws2bAdvisor',label:'ws2bAdvTitle'},
+ {key:'results',panel:'resultsPanel',label:'results'},
+ {key:'airow',el:'uiAiRow',label:'uiAiTools',row:true},
+ {key:'exprow',el:'uiExpRow',label:'uiExpRow',row:true}
+];
+var UI_SIMPLE_HIDE=['templates','project','shapes','custom','advisor','airow','exprow'];
+function uiDef(key){for(var i=0;i<UIPANELS.length;i++)if(UIPANELS[i].key===key)return UIPANELS[i];return null}
+function uiHiddenMap(){S.ui=S.ui||{};S.ui.hidden=S.ui.hidden||{};return S.ui.hidden}
+function uiIsHidden(k){return !!uiHiddenMap()[k]}
+function uiApplyOne(def,hide,animate){
+  if(!def)return;
+  var node=def.row?document.getElementById(def.el):document.getElementById(def.panel);
+  if(!node)return;
+  if(def.row){node.style.display=hide?'none':'';return}
+  var eye=node.querySelector('h3 .ui-eye');
+  var setEye=function(){if(eye){eye.textContent=hide?'🚫':'👁';eye.title=t(hide?'uiShow':'uiHide');eye.setAttribute('aria-label',eye.title)}};
+  if(hide){
+    if(animate){node.classList.add('ui-fading');setTimeout(function(){node.classList.remove('ui-fading');node.classList.add('ui-hidden');setEye()},170)}
+    else{node.classList.add('ui-hidden');setEye()}
+  }else{
+    node.classList.remove('ui-hidden');setEye();
+    if(animate){node.classList.add('ui-fadein');setTimeout(function(){node.classList.remove('ui-fadein')},240)}
+  }
+}
+function uiSyncMenu(){
+  var boxes=document.querySelectorAll('#uiViewList input[data-ui-key]');
+  for(var i=0;i<boxes.length;i++)boxes[i].checked=!uiIsHidden(boxes[i].getAttribute('data-ui-key'));
+}
+function uiSetHidden(key,hide,animate){
+  uiHiddenMap()[key]=hide?1:0;persist();
+  uiApplyOne(uiDef(key),hide,animate!==false);
+  uiSyncMenu();
+}
+function uiToggle(key){
+  if(key==='settings'){
+    var sp=document.getElementById('uiSetPanel');
+    if(sp&&sp.classList.contains('ui-simpleform')&&!uiIsHidden('settings')){
+      sp.classList.remove('ui-simpleform');S.ui.simple=false;persist();uiSyncMenu();return;
+    }
+  }
+  uiSetHidden(key,!uiIsHidden(key),true);
+}
+function uiApplySimple(){
+  for(var i=0;i<UIPANELS.length;i++)uiSetHidden(UIPANELS[i].key,UI_SIMPLE_HIDE.indexOf(UIPANELS[i].key)>=0,false);
+  var sp=document.getElementById('uiSetPanel');if(sp)sp.classList.add('ui-simpleform');
+  S.ui.simple=true;persist();uiSyncMenu();
+}
+function uiApplyAdvanced(){
+  for(var i=0;i<UIPANELS.length;i++)uiSetHidden(UIPANELS[i].key,false,false);
+  var sp=document.getElementById('uiSetPanel');if(sp)sp.classList.remove('ui-simpleform');
+  S.ui.simple=false;persist();uiSyncMenu();
+}
+function uiBuildMenu(){
+  var list=document.getElementById('uiViewList');if(!list)return;
+  list.innerHTML='';
+  UIPANELS.forEach(function(d){
+    var lab=document.createElement('label');lab.className='ui-viewitem';
+    var cb=document.createElement('input');cb.type='checkbox';cb.checked=!uiIsHidden(d.key);
+    cb.setAttribute('data-ui-key',d.key);
+    cb.addEventListener('change',function(){uiSetHidden(d.key,!cb.checked,true)});
+    var sp=document.createElement('span');sp.setAttribute('data-i18n',d.label);sp.textContent=t(d.label);
+    lab.appendChild(cb);lab.appendChild(sp);list.appendChild(lab);
+  });
+}
+function uiInjectEyes(){
+  UIPANELS.forEach(function(d){
+    if(d.row)return;
+    var p=document.getElementById(d.panel);if(!p)return;
+    var h=p.querySelector('h3');if(!h||h.querySelector('.ui-eye'))return;
+    var b=document.createElement('button');
+    b.type='button';b.className='btn btn-ghost btn-sm ui-eye';
+    var hid=uiIsHidden(d.key);
+    b.textContent=hid?'🚫':'👁';b.title=t(hid?'uiShow':'uiHide');b.setAttribute('aria-label',b.title);
+    b.addEventListener('click',function(e){e.stopPropagation();uiToggle(d.key)});
+    h.appendChild(b);
+  });
+}
+function uiViewInit(){
+  S.ui=S.ui||{};S.ui.hidden=S.ui.hidden||{};
+  uiInjectEyes();
+  uiBuildMenu();
+  for(var i=0;i<UIPANELS.length;i++)uiApplyOne(UIPANELS[i],uiIsHidden(UIPANELS[i].key),false);
+  if(S.ui.simple){var sp=document.getElementById('uiSetPanel');if(sp)sp.classList.add('ui-simpleform')}
+  var btn=document.getElementById('uiViewBtn'),menu=document.getElementById('uiViewMenu');
+  if(btn&&menu){
+    btn.addEventListener('click',function(e){e.stopPropagation();menu.style.display=menu.style.display==='none'?'':'none'});
+    document.addEventListener('click',function(e){if(menu.style.display!=='none'&&!e.target.closest('.ui-viewwrap'))menu.style.display='none'});
+  }
+  var sb=document.getElementById('uiSimpleBtn');if(sb)sb.addEventListener('click',function(){uiApplySimple()});
+  var ab=document.getElementById('uiAdvBtn');if(ab)ab.addEventListener('click',function(){uiApplyAdvanced()});
+  var uiAIO=applyI18n;
+  applyI18n=function(){uiAIO();var es=document.querySelectorAll('.ui-eye');for(var j=0;j<es.length;j++){var p=es[j].closest('.panel');var hid=p&&p.classList.contains('ui-hidden');es[j].title=t(hid?'uiShow':'uiHide');es[j].setAttribute('aria-label',es[j].title)}};
 }
 document.addEventListener('DOMContentLoaded',ws4Init);
 
