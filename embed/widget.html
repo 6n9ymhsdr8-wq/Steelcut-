@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>SteelCut Rebar Calculator — Embeddable Widget</title>
+<style>
+  :root{
+    --accent:#e8590c; --accent-d:#c94808;
+    --brand:#0e4d8a; --brand-d:#0a3a68; --navy:#0d2b4d;
+    --bg:#edf0f4; --card:#ffffff; --ink:#17222f; --muted:#5c6f83;
+    --line:#d9e1e9; --ok:#18794e;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:14px; line-height:1.45;
+    display:flex; justify-content:center; align-items:flex-start; padding:10px;
+  }
+  .w{
+    width:100%; max-width:420px; background:var(--card);
+    border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .w-head{
+    background:linear-gradient(135deg,var(--navy),var(--brand-d));
+    color:#fff; padding:10px 14px; display:flex; align-items:center; gap:10px;
+  }
+  .w-logo{
+    width:30px; height:30px; border-radius:8px; flex:0 0 auto;
+    background:var(--accent); color:#fff; font-weight:800; font-size:15px;
+    display:flex; align-items:center; justify-content:center; letter-spacing:-.5px;
+  }
+  .w-head h1{font-size:15px; font-weight:700; line-height:1.2}
+  .w-head p{font-size:11px; opacity:.75}
+  .w-body{padding:12px 14px; display:flex; flex-direction:column; gap:10px}
+  .w-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px}
+  .w-field label{display:block; font-size:11px; font-weight:600; color:var(--muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:.4px}
+  .w-field select,.w-field input{
+    width:100%; padding:8px 9px; font-size:14px; color:var(--ink);
+    border:1px solid var(--line); border-radius:8px; background:#fff;
+  }
+  .w-field select:focus,.w-field input:focus{outline:2px solid var(--brand); outline-offset:-1px; border-color:var(--brand)}
+  .w-results{background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:6px}
+  .w-row{display:flex; justify-content:space-between; align-items:baseline; font-size:13px}
+  .w-row .k{color:var(--muted)}
+  .w-row .v{font-weight:700; font-variant-numeric:tabular-nums}
+  .w-row.big .v{font-size:17px; color:var(--brand-d)}
+  .w-row .v.accent{color:var(--accent-d)}
+  .w-note{font-size:11px; color:var(--muted)}
+  .w-cta{
+    display:block; text-align:center; background:var(--accent); color:#fff; text-decoration:none;
+    font-weight:700; font-size:13.5px; padding:10px; border-radius:9px;
+  }
+  .w-cta:hover{background:var(--accent-d)}
+  .w-foot{
+    border-top:1px solid var(--line); padding:8px 14px; text-align:center;
+    font-size:11.5px; color:var(--muted); background:#fff;
+  }
+  .w-foot a{color:var(--brand); font-weight:700; text-decoration:none}
+  .w-foot a:hover{text-decoration:underline}
+  @media (max-width:340px){
+    .w-grid{grid-template-columns:1fr 1fr}
+    .w-head h1{font-size:13.5px}
+  }
+</style>
+</head>
+<body>
+<div class="w" role="region" aria-label="SteelCut rebar weight calculator">
+  <div class="w-head">
+    <div class="w-logo" aria-hidden="true">SC</div>
+    <div>
+      <h1>Rebar Weight Calculator</h1>
+      <p>Weight &amp; stock bars in seconds</p>
+    </div>
+  </div>
+  <div class="w-body">
+    <div class="w-grid">
+      <div class="w-field">
+        <label for="wDia">Diameter</label>
+        <select id="wDia">
+          <option value="6">6 mm</option><option value="8">8 mm</option>
+          <option value="10">10 mm</option><option value="12" selected>12 mm</option>
+          <option value="14">14 mm</option><option value="16">16 mm</option>
+          <option value="20">20 mm</option><option value="25">25 mm</option>
+          <option value="28">28 mm</option><option value="32">32 mm</option>
+          <option value="40">40 mm</option>
+        </select>
+      </div>
+      <div class="w-field">
+        <label for="wLen">Length (m)</label>
+        <input id="wLen" type="number" min="0.1" step="0.1" value="6" inputmode="decimal">
+      </div>
+      <div class="w-field">
+        <label for="wN">Pieces</label>
+        <input id="wN" type="number" min="1" step="1" value="50" inputmode="numeric">
+      </div>
+    </div>
+    <div class="w-results" aria-live="polite">
+      <div class="w-row"><span class="k">Weight per metre</span><span class="v" id="wPerM">–</span></div>
+      <div class="w-row big"><span class="k">Total steel</span><span class="v" id="wTotal">–</span></div>
+      <div class="w-row"><span class="k">12 m stock bars needed</span><span class="v accent" id="wBars">–</span></div>
+    </div>
+    <div class="w-note">Unit weight = 0.006165 × d² kg/m (7850 kg/m³). Bar count is a quick estimate from 12 m stock.</div>
+    <a class="w-cta" href="https://getsteelcut.com" target="_blank" rel="noopener">Open the free cutting optimizer →</a>
+  </div>
+  <div class="w-foot">Powered by <a href="https://getsteelcut.com" target="_blank" rel="noopener">SteelCut</a> — free rebar cutting optimizer</div>
+</div>
+<script>
+(function(){
+  "use strict";
+  var KG_PER_M = 0.006165, STOCK = 12;
+  var dia = document.getElementById('wDia'),
+      len = document.getElementById('wLen'),
+      n   = document.getElementById('wN'),
+      perM = document.getElementById('wPerM'),
+      total = document.getElementById('wTotal'),
+      bars = document.getElementById('wBars');
+
+  function num(el, fb){ var v = parseFloat(el.value); return (isFinite(v) && v > 0) ? v : fb; }
+
+  function calc(){
+    var d = num(dia, 12), L = num(len, 0), N = Math.max(1, Math.round(num(n, 0)));
+    var wpm = KG_PER_M * d * d;
+    var totLen = L * N, kg = wpm * totLen;
+    perM.textContent = wpm.toFixed(3) + ' kg/m';
+    total.textContent = kg >= 1000 ? (kg/1000).toFixed(2) + ' t  (' + Math.round(kg) + ' kg)'
+                                   : kg.toFixed(1) + ' kg';
+    bars.textContent = L > 0 ? Math.ceil(totLen / STOCK) + ' bars' : '–';
+  }
+
+  // Optional presets via query string, e.g. widget.html?d=16&len=6&n=50
+  try{
+    var q = new URLSearchParams(window.location.search);
+    if(q.get('d')) dia.value = q.get('d');
+    if(q.get('len')) len.value = q.get('len');
+    if(q.get('n')) n.value = q.get('n');
+  }catch(e){}
+
+  ['input','change'].forEach(function(ev){
+    dia.addEventListener(ev, calc); len.addEventListener(ev, calc); n.addEventListener(ev, calc);
+  });
+  calc();
+})();
+</script>
+</body>
+</html>

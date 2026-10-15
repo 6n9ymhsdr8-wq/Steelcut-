@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Embed SteelCut — Free Rebar Calculator Widget for Your Website | SteelCut</title>
+<meta name="description" content="Add a free rebar weight calculator to your website in 30 seconds. One line of HTML, no signup, mobile-friendly. Powered by SteelCut.">
+<link rel="canonical" href="https://getsteelcut.com/embed/">
+<meta property="og:title" content="Embed SteelCut — Free Rebar Calculator Widget">
+<meta property="og:description" content="One line of HTML puts a free rebar weight calculator on your site.">
+<meta property="og:url" content="https://getsteelcut.com/embed/">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --accent:#e8590c; --accent-d:#c94808;
+    --brand:#0e4d8a; --brand-d:#0a3a68; --navy:#0d2b4d;
+    --bg:#edf0f4; --card:#ffffff; --ink:#17222f; --muted:#5c6f83;
+    --line:#d9e1e9; --ok:#18794e;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.6;
+  }
+  .topbar{background:var(--navy); color:#fff; padding:12px 20px}
+  .topbar .in{max-width:1060px; margin:0 auto; display:flex; align-items:center; justify-content:space-between}
+  .brand{color:#fff; text-decoration:none; font-weight:800; font-size:18px; letter-spacing:-.5px}
+  .brand span{color:var(--accent)}
+  .topbar a.home{color:#fff; opacity:.8; text-decoration:none; font-size:14px}
+  .topbar a.home:hover{opacity:1; text-decoration:underline}
+  .hero{background:linear-gradient(135deg,var(--navy),var(--brand-d)); color:#fff; padding:56px 20px 48px; text-align:center}
+  .hero h1{font-size:clamp(26px,4.5vw,40px); font-weight:800; letter-spacing:-.5px; margin-bottom:12px}
+  .hero h1 span{color:var(--accent)}
+  .hero p{max-width:640px; margin:0 auto; opacity:.85; font-size:17px}
+  .wrap{max-width:1060px; margin:0 auto; padding:36px 20px}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:start; margin-bottom:44px}
+  @media (max-width:820px){ .grid2{grid-template-columns:1fr} }
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px}
+  .card h2{font-size:20px; margin-bottom:10px}
+  .card p{color:var(--muted); font-size:14.5px; margin-bottom:12px}
+  .preview-frame{display:flex; justify-content:center; background:var(--bg); border:1px dashed var(--line); border-radius:12px; padding:18px}
+  .preview-frame iframe{border:1px solid var(--line); border-radius:12px; background:#fff}
+  pre.code{
+    background:var(--navy); color:#e8eef5; border-radius:10px; padding:14px 16px;
+    font-size:12.5px; line-height:1.55; overflow-x:auto; white-space:pre-wrap; word-break:break-all;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; margin-bottom:12px;
+  }
+  .btn{
+    display:inline-block; background:var(--accent); color:#fff; border:none; cursor:pointer;
+    font-weight:700; font-size:14px; padding:11px 20px; border-radius:9px; text-decoration:none;
+  }
+  .btn:hover{background:var(--accent-d)}
+  .btn.ghost{background:#fff; color:var(--brand-d); border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--brand)}
+  .copied{color:var(--ok); font-size:13px; font-weight:600; margin-left:10px; display:none}
+  table.opts{width:100%; border-collapse:collapse; font-size:14px; margin-top:6px}
+  table.opts th,table.opts td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+  table.opts th{color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.4px}
+  table.opts code{background:var(--bg); padding:2px 6px; border-radius:5px; font-size:12.5px}
+  .benefits{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:44px}
+  @media (max-width:820px){ .benefits{grid-template-columns:1fr} }
+  .benefit{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px}
+  .benefit .ic{font-size:26px; margin-bottom:8px}
+  .benefit h3{font-size:16px; margin-bottom:6px}
+  .benefit p{font-size:13.5px; color:var(--muted)}
+  .faq h3{font-size:15px; margin:14px 0 4px}
+  .faq p{font-size:14px; color:var(--muted); margin-bottom:4px}
+  footer{border-top:1px solid var(--line); padding:22px 20px; text-align:center; color:var(--muted); font-size:13px; background:#fff}
+  footer a{color:var(--brand); text-decoration:none; font-weight:600}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="in">
+      <a class="brand" href="https://getsteelcut.com">STEEL<span>CUT</span></a>
+      <a class="home" href="https://getsteelcut.com">← Back to SteelCut</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Put a free rebar calculator <span>on your website</span></h1>
+    <p>One line of HTML. Your visitors get a handy rebar weight &amp; bar-count tool, you get a more useful page — free forever, no signup.</p>
+  </div>
+
+  <div class="wrap">
+    <div class="grid2">
+      <div class="card">
+        <h2>Live preview</h2>
+        <p>This is exactly what your visitors will see. Try it:</p>
+        <div class="preview-frame">
+          <iframe src="widget.html" width="100%" height="480" style="max-width:380px" loading="lazy" title="SteelCut rebar weight calculator"></iframe>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Install in 30 seconds</h2>
+        <p>Paste this where you want the calculator to appear on your page:</p>
+        <pre class="code" id="snippet">&lt;iframe src="https://getsteelcut.com/embed/widget.html" width="100%" height="480" style="border:1px solid #d9e1e9;border-radius:12px;max-width:420px" loading="lazy" title="SteelCut rebar weight calculator"&gt;&lt;/iframe&gt;</pre>
+        <button class="btn" id="copyBtn" type="button">Copy code</button><span class="copied" id="copiedMsg">✓ Copied!</span>
+        <p style="margin-top:14px">That's it — no JavaScript, no API keys, works on any website builder (WordPress, Wix, plain HTML).</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:44px">
+      <h2>Customization</h2>
+      <p>Adjust the size, or pre-fill values for your customers with URL parameters:</p>
+      <table class="opts">
+        <tr><th>Option</th><th>How</th><th>Example</th></tr>
+        <tr><td>Width / height</td><td>Change the <code>width</code>, <code>height</code> and <code>max-width</code> in the snippet. Minimum recommended: 300px wide, 480px tall.</td><td><code>height="520"</code></td></tr>
+        <tr><td>Preset diameter</td><td>Append <code>?d=16</code> to the widget URL (6–40 mm).</td><td><code>widget.html?d=16</code></td></tr>
+        <tr><td>Preset length &amp; pieces</td><td>Append <code>&amp;len=6&amp;n=50</code>.</td><td><code>widget.html?d=16&amp;len=6&amp;n=50</code></td></tr>
+      </table>
+      <p style="margin-top:12px">The widget is fully responsive and works on phones, tablets and desktops.</p>
+    </div>
+
+    <div class="benefits">
+      <div class="benefit"><div class="ic">🆓</div><h3>Free forever</h3><p>No fees, no trial, no signup for you or your visitors. It just works.</p></div>
+      <div class="benefit"><div class="ic">⚡</div><h3>Lightweight</h3><p>Under 15 KB, lazy-loads, zero dependencies. Won't slow down your page.</p></div>
+      <div class="benefit"><div class="ic">🤝</div><h3>Keeps visitors engaged</h3><p>An interactive tool keeps people on your page longer — and the "Powered by SteelCut" link sends curious ones to the full free optimizer.</p></div>
+    </div>
+
+    <div class="card faq" style="margin-bottom:0">
+      <h2>FAQ</h2>
+      <h3>Can I remove the "Powered by SteelCut" link?</h3>
+      <p>Please don't — that link is what keeps the widget free. It also gives your visitors one click to the full cutting optimizer.</p>
+      <h3>Does it collect any data?</h3>
+      <p>No. Everything runs in the visitor's browser; nothing is sent anywhere.</p>
+      <h3>Can I change the colours to match my site?</h3>
+      <p>Not currently — the SteelCut branding stays consistent everywhere. If you need a white-label version, <a href="https://getsteelcut.com">contact us</a>.</p>
+    </div>
+  </div>
+
+  <footer>
+    <a href="https://getsteelcut.com">SteelCut</a> — free rebar cutting optimizer · <a href="https://getsteelcut.com/embed/">Embed this widget</a>
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+  var btn = document.getElementById('copyBtn'),
+      msg = document.getElementById('copiedMsg'),
+      code = document.getElementById('snippet').textContent;
+  btn.addEventListener('click', function(){
+    function done(){ msg.style.display = 'inline'; setTimeout(function(){ msg.style.display = 'none'; }, 2000); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(code).then(done, function(){ fallback(); });
+    } else { fallback(); }
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = code; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch(e){}
+      document.body.removeChild(ta);
+    }
+  });
+})();
+</script>
+</body>
+</html>
