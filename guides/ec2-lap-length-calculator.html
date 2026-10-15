@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EC2 Lap Length Calculator — Rebar Lap Length per EN 1992-1-1 — SteelCut Guide</title>
+<meta name="description" content="Free interactive EC2 lap length calculator: rebar lap lengths per EN 1992-1-1 §8.7 with the exact formula, bond conditions, a worked example and a reference table.">
+<meta name="author" content="SteelCut">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://getsteelcut.com/guides/ec2-lap-length-calculator.html">
+<meta property="og:title" content="EC2 Lap Length Calculator — Rebar Lap Length per EN 1992-1-1 — SteelCut Guide">
+<meta property="og:description" content="Free interactive EC2 lap length calculator: rebar lap lengths per EN 1992-1-1 §8.7 with the exact formula, bond conditions, a worked example and a reference table.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://getsteelcut.com/guides/ec2-lap-length-calculator.html">
+<meta property="og:image" content="https://getsteelcut.com/og-image-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="EC2 Lap Length Calculator — Rebar Lap Length per EN 1992-1-1 — SteelCut Guide">
+<meta name="twitter:description" content="Free interactive EC2 lap length calculator: rebar lap lengths per EN 1992-1-1 §8.7 with the exact formula, bond conditions, a worked example and a reference table.">
+<meta name="twitter:image" content="https://getsteelcut.com/og-image-en.png">
+<meta name="theme-color" content="#0d2b4d">
+<style>:root{--bg:#edf0f4;--card:#fff;--ink:#17222f;--muted:#5c6f83;--line:#d9e1e9;--brand:#0e4d8a;--brand-d:#0a3a68;--accent:#e8590c;--accent-d:#c94808;--navy:#0d2b4d;--ok:#18794e;--r:8px;--sh:0 1px 2px rgba(16,34,51,.06),0 4px 14px rgba(16,34,51,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.phead{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+.phead .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.06em;color:var(--navy);text-decoration:none;font-size:17px}
+.pnav{display:flex;gap:2px;align-items:center}
+.pnav a{color:var(--muted);text-decoration:none;font-size:14.5px;padding:8px 12px;border-radius:6px;font-weight:500}
+.pnav a:hover{color:var(--brand);background:#f0f5fa}
+.btn{display:inline-block;border:0;border-radius:8px;padding:11px 22px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-primary:hover{background:var(--brand-d)}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-accent:hover{background:var(--accent-d)}
+.btn-sm{padding:8px 16px;font-size:14px}
+.pagehero{background:linear-gradient(135deg,#0d2b4d 0%,#144a7e 100%);color:#fff;padding:54px 0}
+.eyebrow{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ffb37e;margin-bottom:12px}
+.pagehero h1{font-size:clamp(28px,4vw,40px);line-height:1.15;letter-spacing:-.01em;margin-bottom:12px}
+.pagehero p{color:#c7d6e8;font-size:17px;max-width:640px}
+.prose{max-width:780px;margin:0 auto;padding:48px 20px}
+.prose h2{font-size:22px;margin:34px 0 12px;letter-spacing:-.01em}
+.prose h2:first-child{margin-top:0}
+.prose p{margin:0 0 16px;color:#33475c}
+.prose ul,.prose ol{margin:0 0 18px 22px;color:#33475c}
+.prose li{margin-bottom:8px}
+.prose a{color:var(--brand)}
+.prose .note{background:#f2f6fb;border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:6px;padding:14px 18px;margin:22px 0;font-size:15px}
+.prose .warn{background:#fff8f0;border:1px solid #f0d9bd;border-left:4px solid var(--accent);border-radius:6px;padding:14px 18px;margin:22px 0;font-size:15px}
+.meta{color:var(--muted);font-size:14px;margin-bottom:26px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin:26px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px;box-shadow:var(--sh)}
+.card h3{font-size:18px;margin-bottom:8px}
+.card p{color:var(--muted);font-size:15px;margin:0}
+.card .n{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;margin-bottom:12px}
+footer{background:var(--navy);color:#a9bdd4;padding:52px 0 30px;margin-top:70px}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:28px;margin-bottom:32px}
+.fbrand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.06em;color:#fff;margin-bottom:10px}
+footer h4{color:#fff;font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+footer a{color:#a9bdd4;text-decoration:none;display:block;margin-bottom:8px;font-size:14.5px}
+footer a:hover{color:#fff}
+footer .small{font-size:14px;line-height:1.6}
+.copy{border-top:1px solid rgba(255,255,255,.12);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:13.5px}
+.ph{color:#7d93ab;font-style:italic}
+.cta-band{background:#fff;border-top:1px solid var(--line);padding:52px 0;text-align:center}
+.cta-band h2{font-size:26px;margin-bottom:10px}
+.cta-band p{color:var(--muted);margin-bottom:22px}
+table.spec{width:100%;border-collapse:collapse;margin:18px 0;font-size:15px}
+table.spec th,table.spec td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+table.spec th{color:var(--muted);font-weight:600;font-size:13.5px;text-transform:uppercase;letter-spacing:.06em}
+@media(max-width:760px){.fgrid{grid-template-columns:1fr 1fr}.pnav a:not(.keep){display:none}.prose{padding:36px 20px}}
+</style>
+
+<style>
+.calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:18px 0}
+.calc-grid label{display:block;font-size:13.5px;font-weight:600;color:var(--muted)}
+.calc-grid select{display:block;width:100%;margin-top:6px;padding:10px 12px;font-size:15px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+.calc-result{background:#f2f6fb;border:1px solid var(--line);border-radius:10px;padding:20px 22px;margin:6px 0 4px}
+.calc-l0{font-size:32px;font-weight:800;color:var(--navy);letter-spacing:-.01em}
+.calc-l0 small{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-top:2px}
+.calc-break{margin-top:10px;font-size:14.5px;color:#33475c}
+.calc-note{font-size:13.5px;color:var(--muted);margin-top:12px}
+#lapcalc-card{margin:0 0 8px}
+#lapcalc-card h3{font-size:20px}
+</style>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is the lap length formula in Eurocode 2?","acceptedAnswer":{"@type":"Answer","text":"l\u2080 = \u03b1\u2081\u00b7\u03b1\u2082\u00b7\u03b1\u2083\u00b7\u03b1\u2085\u00b7\u03b1\u2086\u00b7l_b,rqd \u2265 l_0,min, where l_b,rqd = (\u03a6/4)\u00b7(\u03c3_sd/f_bd) and f_bd = 2.25\u00b7\u03b7\u2081\u00b7\u03b7\u2082\u00b7f_ctd (EN 1992-1-1 \u00a78.7.3)."}},
+{"@type":"Question","name":"How does the percentage of lapped bars change the lap length?","acceptedAnswer":{"@type":"Answer","text":"Through \u03b1\u2086 = \u221a(\u03c1_l/25), between 1.0 and 1.5. Lapping 100% of bars at one section needs a lap 50% longer than staggering them (\u03b1\u2086 = 1.5 vs 1.0)."}},
+{"@type":"Question","name":"What is the minimum lap length in Eurocode 2?","acceptedAnswer":{"@type":"Answer","text":"l_0,min = max(0.3\u00b7\u03b1\u2086\u00b7l_b,rqd, 15\u03a6, 200 mm) per EN 1992-1-1 \u00a78.7.3."}}
+]}
+</script>
+</head><body>
+<header class="phead"><div class="wrap">
+<a class="brand" href="../index.html"><svg viewBox="0 0 32 32" width="26" height="26"><rect width="32" height="32" rx="6" fill="#0e4d8a"/><path d="M8 12h16M8 16h11M8 20h16" stroke="white" stroke-width="2.6"/></svg>STEELCUT</a>
+<nav class="pnav"><a href="../index.html">Home</a><a href="../index.html">Cut Optimizer</a><a href="waste-below-3-percent.html">Guides</a><a href="../index.html" class="btn btn-primary btn-sm keep">Open app</a></nav>
+</div></header>
+<div class="pagehero"><div class="wrap">
+<span class="eyebrow">Guide &middot; Eurocode 2</span>
+<h1>EC2 lap length calculator</h1>
+<p>Compute rebar lap lengths per EN 1992-1-1 &sect;8.7 &mdash; the exact formula, bond conditions, a worked example, and a free interactive calculator.</p>
+</div></div>
+<main class="prose">
+
+<p class="meta">Practical guide &middot; 6 min read &middot; EN 1992-1-1 &sect;8.4 / &sect;8.7</p>
+
+<div class="card" id="lapcalc-card">
+<h3>Interactive lap length calculator</h3>
+<p>Simplified EC2 method: straight bars in tension, full steel utilisation (&sigma;<sub>sd</sub> = f<sub>yd</sub>), &alpha;<sub>1</sub>=&alpha;<sub>2</sub>=&alpha;<sub>3</sub>=&alpha;<sub>5</sub>=1.0.</p>
+<div class="calc-grid">
+<label>Bar diameter &Phi; (mm)<select id="lc-phi">
+<option>8</option><option>10</option><option>12</option><option>14</option>
+<option selected>16</option><option>20</option><option>25</option><option>28</option>
+<option>32</option><option>40</option></select></label>
+<label>Concrete class<select id="lc-conc">
+<option value="12">C12/15</option><option value="16">C16/20</option>
+<option value="20">C20/25</option><option value="25" selected>C25/30</option>
+<option value="30">C30/37</option><option value="35">C35/45</option>
+<option value="40">C40/50</option><option value="45">C45/55</option>
+<option value="50">C50/60</option></select></label>
+<label>Bond conditions<select id="lc-bond">
+<option value="good" selected>Good</option><option value="poor">Poor (other)</option></select></label>
+<label>Steel grade<select id="lc-steel">
+<option value="500" selected>B500 (f<sub>yk</sub> = 500 MPa)</option>
+<option value="400">B400 (f<sub>yk</sub> = 400 MPa)</option></select></label>
+<label>Bars lapped at section<select id="lc-rho">
+<option value="25">&le; 25%</option><option value="50" selected>50%</option>
+<option value="100">100% (&gt; 50%)</option></select></label>
+</div>
+<div class="calc-result">
+<div class="calc-l0"><span id="lc-out">&mdash;</span><small>design lap length l<sub>0</sub> (rounded up to 5 mm)</small></div>
+<div class="calc-break" id="lc-break"></div>
+</div>
+<p class="calc-note">For the full check &mdash; hooks, bends, compression laps, cover and spacing effects, custom f<sub>ck</sub>/f<sub>yk</sub> &mdash; use SteelCut&rsquo;s built-in EC2 anchorage &amp; lap calculator in the app.</p>
+</div>
+
+<h2>The formula (EN 1992-1-1 &sect;8.7.3)</h2>
+<p>A lap transfers force from one bar to the next through bond with the concrete. EC2 computes the design lap length in five steps:</p>
+<ol>
+<li><strong>Design tensile strength of concrete:</strong> f<sub>ctd</sub> = f<sub>ctk,0.05</sub> / &gamma;<sub>c</sub>, with f<sub>ctk,0.05</sub> = 0.7 &middot; f<sub>ctm</sub> and f<sub>ctm</sub> = 0.3 &middot; f<sub>ck</sub><sup>2/3</sup> (classes up to C50/60). &gamma;<sub>c</sub> = 1.5.</li>
+<li><strong>Design bond stress:</strong> f<sub>bd</sub> = 2.25 &middot; &eta;<sub>1</sub> &middot; &eta;<sub>2</sub> &middot; f<sub>ctd</sub>, where &eta;<sub>1</sub> = 1.0 for good bond (0.7 for poor) and &eta;<sub>2</sub> = 1.0 for &Phi; &le; 32 mm, otherwise (132 &minus; &Phi;)/100.</li>
+<li><strong>Basic required anchorage length:</strong> l<sub>b,rqd</sub> = (&Phi;/4) &middot; (&sigma;<sub>sd</sub> / f<sub>bd</sub>), with &sigma;<sub>sd</sub> = f<sub>yd</sub> = f<sub>yk</sub>/1.15 at full utilisation.</li>
+<li><strong>Design lap length:</strong> l<sub>0</sub> = &alpha;<sub>1</sub>&alpha;<sub>2</sub>&alpha;<sub>3</sub>&alpha;<sub>5</sub>&alpha;<sub>6</sub> &middot; l<sub>b,rqd</sub>. For straight bars the first four factors are 1.0, so l<sub>0</sub> = &alpha;<sub>6</sub> &middot; l<sub>b,rqd</sub>, with &alpha;<sub>6</sub> = &radic;(&rho;<sub>l</sub>/25), limited to 1.0&ndash;1.5 (&rho;<sub>l</sub> = % of bars lapped at the section).</li>
+<li><strong>Minimum:</strong> l<sub>0</sub> &ge; l<sub>0,min</sub> = max(0.3&middot;&alpha;<sub>6</sub>&middot;l<sub>b,rqd</sub>, 15&Phi;, 200 mm).</li>
+</ol>
+
+<h2>Worked example</h2>
+<p>&Phi;16, C25/30, good bond, B500, 100% of bars lapped at the section, tension:</p>
+<ol>
+<li>f<sub>ctd</sub> = 0.7 &middot; 0.3 &middot; 25<sup>2/3</sup> / 1.5 = <strong>1.20 MPa</strong></li>
+<li>f<sub>bd</sub> = 2.25 &middot; 1.0 &middot; 1.0 &middot; 1.20 = <strong>2.69 MPa</strong></li>
+<li>l<sub>b,rqd</sub> = (16/4) &middot; (434.8/2.69) = <strong>646 mm</strong> (40.4&Phi;)</li>
+<li>&alpha;<sub>6</sub> = 1.5 (100% lapped) &rarr; l<sub>0</sub> = 1.5 &middot; 646 = <strong>969 mm</strong></li>
+<li>l<sub>0,min</sub> = max(291, 240, 200) = 291 mm &lt; 969 mm &mdash; does not govern</li>
+</ol>
+<div class="note"><strong>Result: design lap length 970 mm</strong> (rounded up to 5 mm). On site this is usually specified as 970 mm or 1000 mm.</div>
+
+<h2>Quick reference table</h2>
+<p>Lap lengths in mm &mdash; tension, B500, good bond, 100% lapped at the section (&alpha;<sub>6</sub> = 1.5), straight bars, rounded up to 5 mm:</p>
+<table class="spec">
+<tr><th>&Phi; (mm)</th><th>C20/25</th><th>C25/30</th><th>C30/37</th></tr>
+<tr><td>8</td><td>565</td><td>485</td><td>430</td></tr>
+<tr><td>10</td><td>705</td><td>610</td><td>540</td></tr>
+<tr><td>12</td><td>845</td><td>730</td><td>645</td></tr>
+<tr><td>16</td><td>1125</td><td>970</td><td>860</td></tr>
+<tr><td>20</td><td>1405</td><td>1215</td><td>1075</td></tr>
+<tr><td>25</td><td>1760</td><td>1515</td><td>1345</td></tr>
+<tr><td>32</td><td>2250</td><td>1940</td><td>1720</td></tr>
+</table>
+
+<h2>Common mistakes</h2>
+<ul>
+<li><strong>Forgetting &alpha;<sub>6</sub>.</strong> Lapping every bar at one section without the 1.5 factor under-designs the lap by a third. Stagger laps where you can.</li>
+<li><strong>Assuming good bond everywhere.</strong> Bars in the top zone of deep pours (and sections over 600 mm) are &ldquo;poor&rdquo; bond: &eta;<sub>1</sub> = 0.7, which makes laps ~43% longer.</li>
+<li><strong>Ignoring l<sub>0,min</sub>.</strong> For small diameters the minimum can govern &mdash; always check it.</li>
+<li><strong>Mixing up anchorage and lap.</strong> The lap (l<sub>0</sub>) is longer than the anchorage (l<sub>bd</sub>) because &alpha;<sub>6</sub> &ge; 1.0. They are not interchangeable.</li>
+</ul>
+
+<div class="warn"><strong>Assumptions &amp; limits:</strong> this page uses the simplified method &mdash; straight bars, tension, full steel utilisation, &alpha;<sub>1</sub>=&alpha;<sub>2</sub>=&alpha;<sub>3</sub>=&alpha;<sub>5</sub>=1.0, &gamma;<sub>c</sub>=1.5, &gamma;<sub>s</sub>=1.15. National annexes can modify values &mdash; always check yours. For hooks, bends, compression laps and cover/spacing effects, use SteelCut&rsquo;s full EC2 calculator in the app or consult your structural engineer.</div>
+
+<p>Related: <a href="bbs-to-cutting-plan.html">From bending schedule to cutting plan &rarr;</a> &middot; <a href="waste-below-3-percent.html">How to cut rebar waste below 3% &rarr;</a></p>
+
+</main>
+<div class="cta-band"><div class="wrap">
+<h2>Stop guessing your cuts.</h2>
+<p>Calculate your first optimized cutting plan in under a minute &mdash; free, no account needed.</p>
+<a class="btn btn-accent" href="../index.html">Open SteelCut</a>
+</div></div>
+<footer><div class="wrap">
+<div class="fgrid">
+<div><div class="fbrand"><svg viewBox="0 0 32 32" width="26" height="26"><rect width="32" height="32" rx="6" fill="#0e4d8a"/><path d="M8 12h16M8 16h11M8 20h16" stroke="white" stroke-width="2.6"/></svg>STEELCUT</div><p class="small">Professional steel bar cutting optimizer for metal fabricators and contractors.</p></div>
+<div><h4>Product</h4><a href="../index.html">Cut Optimizer</a><a href="../index.html">Pricing</a><a href="waste-below-3-percent.html">Cutting guides</a></div>
+<div><h4>Company</h4><a href="../about.html">About</a><a href="../changelog.html">Changelog</a></div>
+<div><h4>Legal</h4><a href="../privacy.html">Privacy Policy</a><a href="../terms.html">Terms of Service</a></div>
+</div>
+<div class="copy"><span>&copy; 2026 SteelCut. All rights reserved.</span><span>Made for metal professionals.</span></div>
+</div></footer>
+<script>
+(function(){
+  function $(id){return document.getElementById(id)}
+  function calc(){
+    var phi=parseFloat($('lc-phi').value),
+        fck=parseFloat($('lc-conc').value),
+        bond=$('lc-bond').value,
+        fyk=parseFloat($('lc-steel').value),
+        rho=parseFloat($('lc-rho').value),
+        fctm=0.3*Math.pow(fck,2/3),
+        fctd=0.7*fctm/1.5,
+        eta1=(bond==='good')?1.0:0.7,
+        eta2=(phi<=32)?1.0:(132-phi)/100,
+        fbd=2.25*eta1*eta2*fctd,
+        sig=fyk/1.15,
+        lbrqd=(phi/4)*(sig/fbd),
+        a6=Math.min(1.5,Math.max(1.0,Math.sqrt(rho/25))),
+        l0=a6*lbrqd,
+        l0min=Math.max(0.3*a6*lbrqd,15*phi,200),
+        res=Math.max(l0,l0min),
+        rounded=Math.ceil(res/5)*5;
+    $('lc-out').textContent=rounded+' mm  (≈ '+(rounded/phi).toFixed(1)+'Φ)';
+    $('lc-break').innerHTML=
+      'f<sub>bd</sub> = '+fbd.toFixed(2)+' MPa &nbsp;·&nbsp; '+
+      'l<sub>b,rqd</sub> = '+Math.round(lbrqd)+' mm &nbsp;·&nbsp; '+
+      'α₆ = '+a6.toFixed(2)+' &nbsp;·&nbsp; '+
+      'l<sub>0,min</sub> = '+Math.round(l0min)+' mm'+(res===l0min?' (governs)':'');
+  }
+  ['lc-phi','lc-conc','lc-bond','lc-steel','lc-rho'].forEach(function(id){$(id).addEventListener('change',calc)});
+  calc();
+})();
+</script>
+</body>
+</html>
